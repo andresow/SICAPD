@@ -1,0 +1,351 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+{% block main %}
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div id=divCreate class="container-fluid">
+    <h1 class="mt-4">Lista de informes</h1>
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Lista de informes</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <button data-toggle="modal" data-target="#myModalInform" type="button" class="genric-btn primary small">Añadir informe</button>              
+                <table class="table table-bordered dataTable" id="dataTableInform" width="100%" cellspacing="0"
+                      role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                    
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Dígito</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Dígito</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if object_list %}
+                        {% for inform in object_list %}                        
+                              <tr>                          
+                                <td>{{inform.nameI}}</td>                        
+                                <td>{{inform.category}}</td>
+                                <td>{{inform.digitI}}</td>
+                                <td>
+                        </div>
+                      </div>
+
+                      <a href="#" data-toggle="tooltip"   title="Registrar Detalle">
+                        <button data-toggle="modal" data-target="#myModalInformDetall" class="btn btn-primary btn-sm"  onclick="getInform('{{inform.id}}')">
+                        <i class="fa fa-info-circle"></i>
+                        </button>
+                      </a>
+                      <a href="#" data-toggle="tooltip"   title="Eliminar Informe">
+                        <button onclick="deleteInform('{{inform.id}}','{{inform.nameI}}')" class="btn btn-primary btn-sm"  >
+                        <i class="fa fa-trash"></i>
+                        </button>
+                      </a>
+                      <a href="#" data-toggle="tooltip" id="updateInform"  title="Actualizar informe">
+                        <button onclick="changeTypeUpdateInforme('{{inform.id}}','{{inform.nameI}}','{{inform.category}}','{{inform.digitI}}')"data-toggle="modal" data-target="#myModalInformUpdate" class="btn btn-primary btn-sm">
+                        <i class="fa fa-pencil"></i>
+                        </button>
+                      </a> 
+                                </td>
+                              </tr>
+                            {% endfor %}
+                            {% else %}
+                            <h1 class="black-color">No hay informes registrados de esta empresa</h1>
+                            {% endif %}  
+                    </tbody>
+                </table>
+        </div>
+</div>
+<div class="modal fade" id="myModalInformDetall" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Registrar Detalles del informe</h4>
+            </div>
+                <div class="modal-body">
+                    <div  class="container-fluid">
+                        <form id="addInformDetall" action="">
+                            {% csrf_token %}
+                            {% bootstrap_form InformFormDetall %}
+                            <div id="divCreateButtonsOrigin"  class="form-group">
+                                <button id="btnCreateDetaillInform" type="submit" class="genric-btn success circle" >Registrar detalle</button>
+                                <button type="button" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                            </div>   
+                    
+                        </form>  
+                    </div>
+                </div>
+            </div>         
+        </div>  
+</div>
+
+<div class="modal fade" id="myModalInform" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Añadir nuevo informe</h4>
+            </div>
+                <div class="modal-body">
+                    <div  class="container-fluid">
+                        <form id="addInform" action="">
+                            {% csrf_token %}
+                            {% bootstrap_form InformForm %}
+
+                            <div id="divCreateInform"  class="form-group">
+                                <button id="btnCreatenform" type="submit" class="genric-btn success circle" >Registrar Informe</button>
+                                <button type="submit" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                            </div>   
+                    
+                        </form>  
+                    </div>
+                </div>
+            </div>         
+        </div>  
+</div>
+<div class="modal fade" id="myModalInformUpdate" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Actualizar informe</h4>
+            </div>
+                <div class="modal-body">
+                    <div  class="container-fluid">
+                        <form id="formAPUpdateInform" action="">
+                            {% csrf_token %}
+                            {% bootstrap_form ByInformUpdate %}
+                            <div id="divCreateButtons"  class="form-group">
+                                <button id="btnCreate" type="submit" class="genric-btn success circle" >Actualizar informe</button>
+                                <button type="button" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                            </div> 
+                            
+                        </form>  
+                    </div>
+                </div>
+            </div>         
+        </div>  
+</div>
+<script>
+
+$(document).ready(function() {
+		$('#dataTableInform').DataTable( {
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',
+			buttons: [
+				'copy', 'csv', 'excel', 'pdf', 'print'
+			]
+			
+		  } );
+		 
+	
+} );
+
+var informId;
+var informCurrentName
+
+function getInform(id){
+    informId =  id; 
+ 
+}
+function changeTypeUpdateInforme(id, nameI, category, digitI){
+    informId =  id;
+    informCurrentName = nameI;
+    
+    var nameIUpdate = document.getElementById("id_nameIUpdate");
+    nameIUpdate.value = nameI;
+    var categoryUpdate = document.getElementById("id_categoryUpdate");
+    categoryUpdate.value = category;
+    var digitIUpdate = document.getElementById("id_digitIUpdate");
+    digitIUpdate.value = digitI;
+}
+$("form#addInformDetall").submit(function() {
+
+    var codeInfD = $('input[name="codeInfD"]').val();
+    var descriptionInfD = $('textarea[name="descriptionInfD"]').val();
+    var activity = $('input[name="activity"]').val();
+    
+    if (codeInfD,descriptionInfD,activity) {
+        // Create Ajax Call
+        $.ajax({
+            url: '{% url "settingsInfDetall" %}',
+            data: {
+                'informId': informId,
+                'codeInfD': codeInfD,
+                'descriptionInfD': descriptionInfD,
+                'activity': activity,
+
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                if(data.CREATE == "TRUE"){
+                    swal("Creado exitoso del detalle de informe!", "Continua con tu proceso!", "success");
+                    $('#myModalInformDetall').modal('toggle');
+                }else{
+                    swal("No se puede crear el detalle del informe", "Ya existe un detalle con este código", "error");
+                    $('#myModalInformDetall').modal('toggle');
+                }
+                
+            }
+        });
+    } else {
+        alert("Por favor llene todos los campos");
+    }
+    $('form#addInformDetall').trigger("reset");
+    return false;
+});
+
+$("form#addInform").submit(function() {
+
+    var nameI = $('input[name="nameI"]').val();
+    var category = $('input[name="category"]').val();
+    var digitI = $('input[name="digitI"]').val();
+
+    if (nameI,category,digitI) {
+        // Create Ajax Call
+        $.ajax({
+            url: '{% url "createInform" %}',
+            data: {
+                'bussines': localStorage.getItem('idBussines'),
+                'nameI': nameI,
+                'category': category,
+                'digitI': digitI,
+
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                $("#dataTableInform").load(" #dataTableInform");
+                if(data.CREATE == "TRUE"){
+                    swal("Creado exitoso del nuevo informe!", "Continua con tu proceso!", "success");
+                    $('#myModalInform').modal('toggle');
+                }else{
+                    swal("No se puede crear el informe", "Ya existe un informe con este nombre", "error");
+                    $('#myModalInform').modal('toggle');
+                }
+                
+            }
+        });
+    } else {
+        alert("Por favor llene todos los campos");
+    }
+    $('form#addInform').trigger("reset");
+    return false;
+});
+
+$("form#formAPUpdateInform").submit(function() {
+     
+    var nameIUpdate = $('input[name="nameIUpdate"]').val();
+    var categoryUpdate = $('input[name="categoryUpdate"]').val();
+    var digitIUpdate = $('input[name="digitIUpdate"]').val();
+    if (nameIUpdate, categoryUpdate, digitIUpdate) {
+
+        // Create Ajax Call
+        if(informCurrentName==nameIUpdate){
+            $.ajax({
+
+                url: '{% url "updateInform" %}',
+                data: {
+                    'bussinesId': localStorage.getItem('idBussines'),
+                    'equalName': 'TRUE',
+                    'id': informId,
+                    'nameI': nameIUpdate,
+                    'category': categoryUpdate,
+                    'digitI': digitIUpdate,
+                    
+                },
+                dataType: 'json',
+                success: function (data) {                   
+                    if(data.CREATE == "TRUE"){
+                        $("#dataTableInform").load(" #dataTableInform");
+                        swal("Actualización exitosa!", "Continua con tu proceso!", "success");
+                        $('#myModalInformUpdate').modal('toggle');
+                    }else{
+                        swal("No se puede actualizar el informe", "Ya existe un informe con este nombre", "error");
+                        $('#myModalInformUpdate').modal('toggle');
+                    } 
+                }
+                });
+        }else{
+            $.ajax({
+
+            url: '{% url "updateInform" %}',
+            data: {
+                'bussinesId': localStorage.getItem('idBussines'),
+                'equalName': 'FALSE',
+                'id': informId,
+                'nameI': nameIUpdate,
+                'category': categoryUpdate,
+                'digitI': digitIUpdate,
+                
+            },
+            dataType: 'json',
+            success: function (data) {               
+                if(data.CREATE == "TRUE"){
+                    $("#dataTableInform").load(" #dataTableInform");
+                    swal("Actualización exitosa!", "Continua con tu proceso!", "success");
+                    $('#myModalInformUpdate').modal('toggle');
+                }else{
+                    swal("No se puede actualizar el informe", "Ya existe un informe con este nombre", "error");
+                    $('#myModalInformUpdate').modal('toggle');
+                } 
+            }
+            });
+        }
+       
+    } else {
+        alert("All fields must have a valid value.");
+    }
+   
+    return false;
+ });
+ 
+function deleteInform(id, name){
+
+    swal({
+    title: "Desea eliminar el informe " + name + "?",
+    text: "Al confirmar esta acción, el informe " + name + " sera eliminado.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+    })
+    .then((willDelete) => {
+    if (willDelete) {
+
+        $.ajax({
+            url: '{% url "deleteAll" %}',
+            data: {
+                'id': id,
+                'option': '2'
+            },
+            dataType: 'json',
+            success: function (data) {   
+                $("#dataTableInform").load(" #dataTableInform");
+                swal("El informe " + name + "  se ha eliminado con éxito.", {
+                icon: "success",
+                });
+            }
+        });
+    }
+    });
+}
+
+</script>
+{% endblock %}

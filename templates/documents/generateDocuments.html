@@ -1,0 +1,816 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+{% block main %}
+
+<body onload="loadTest()">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+        
+{% load bootstrap4 %}
+<div class="col-lg-8 posts-list" >
+	<form id="addVoucher">
+		<h2>Seleccionar comprobante</h2>
+		<br>
+		<div id="separator">
+			
+		</div>
+		<br>
+		<h2>Seleccione el origen</h2>
+		<br>	
+			<div id="separatorOP">
+				
+			</div>
+			<br>		
+	</form>
+	<div id="separatorButton" style="display:none">
+		<button  onclick="generateDisponibilty()" id="generator" class="genric-btn primary small">GENERAR DISPONIBILIDAD DE PRESUPUESTO DE</button>
+	</div>
+</div>
+<br>
+
+<div id=divCreate class="container-fluid" style="display:none" >
+	<div class="card mb-4">
+		<div class="card-header"><i class="fas fa-table mr-1"></i>Agregar disponibilidad</div>
+		<div class="card-body">
+			<form id="createDisponibility">
+				<div class="form-row">
+					<div class="col-6">
+						<label>Numero de disponibilidad</label>
+						<input type="number" name="disponibilityIn" id="disponibilityIn" class="form-control" placeholder="Numero de disponibilidad" required>
+					</div>
+					<div class="col-6">
+						<label>Fecha disponibilidad</label>				  
+						<input name="date" id="date" type="date" class="form-control" >
+					</div>
+				</div>
+				<br>
+				<div class="form-row">
+					<div class="col-6">
+						<label for="exampleFormControlTextarea1">Observación</label>
+						<textarea placeholder="Observación" name="observation" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+					</div>					
+				</div>	
+				<br>
+				<div class="form-row">
+					<div id="divInitialBudget" >
+						<button type="button" onclick="createDisponibility(1)"   class="btn btn-primary">Guardar disponibilidad</button>
+						<button type="submit" onclick="createDisponibility(2)" class="btn btn-primary">Guardar y generar registro</button>
+						<button type="button" class="btn btn-secondary">Cancelar</button>
+					</div>					
+				</div>  
+			</form>
+		</div>	
+	</div>
+	<div  class="container-fluid col-12" style="float:left">
+			<div class="card mb-12" >
+			<div class="card-header " id="textTable"><i class="fas fa-table mr-1" ></i>Lista de rubros por presupuesto de</div>
+			<div class="card-body" >
+				<div class="table-responsive">
+					<button  onclick="getRubrosByOrigin()" data-toggle="modal" data-target="#myModalRubroOrigin" class="genric-btn primary small">Agregar Rubros</button>               
+					<table class="table table-bordered dataTable col-12" id="dataTableRubroTem" cellspacing="0" 
+						role="grid" aria-describedby="dataTable_info">
+						
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Rubro</th>
+								<th>Descripción</th>
+								<th>Disponibilidad</th>
+								<th>Presupuesto disponible</th>
+								<th>Valor P</th>
+								<th>Saldo</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>ID</th>
+								<th>Rubro</th>
+								<th>Descripción</th>
+								<th>Disponibilidad</th>
+								<th>Presupuesto disponible</th>
+								<th>Valor P</th>
+								<th>Saldo</th>
+								<th>Acciones</th>
+							</tr>
+						</tfoot>
+						</table>
+				</div>
+				<div class="form-row col-12 mb-2">
+						
+					<div class="col-8" >
+						<h6  id="totalDisponibility" for="totalDisponibility" align="center">DISPONIBILIDAD: 0</h6>					
+					</div>
+					<div class="col-4" >
+						<h6  id="totalBalance" for="totalBalance">SALDO: 0</h6>										
+					</div>
+				</div>
+			</div>
+			</div>
+	</div>  
+	<div  class="container-fluid col-12" style="float:left">
+		<div class="card mb-12" >
+		<div class="card-header " id="divTabDispoText"><i class="fas fa-table mr-1" ></i>Lista de movimientos Disponibilidad del presupuesto de</div>
+			<div class="card-body" >
+				<div class="table-responsive">
+					<table class="table table-bordered dataTable col-12" id="dataTableDispo" cellspacing="0" 
+						role="grid" aria-describedby="dataTable_info">
+						
+						<thead>
+							<tr>
+								<th>Numero</th>	
+								<th>Descripción</th>
+								<th>Valor</th>
+								<th>Saldo</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>Numero</th>	
+								<th>Descripción</th>
+								<th>Valor</th>
+								<th>Saldo</th>
+								<th>Acciones</th>
+							</tr>
+						</tfoot>
+						</table>
+				</div>
+			</div>
+		</div>
+	</div>  
+
+</div>
+<div id="divRegister" class="container-fluid" style="display:none">
+	<div class="card mb-4">
+		<div class="card-header"><i class="fas fa-table mr-1"></i>Agregar registro</div>
+		<div class="card-body">
+			<form id="createRegister">
+				<div class="form-row">
+					<div class="col-6">
+						<label>Numero de registro:</label>
+						<input type="number" name="register" id="register" class="form-control" placeholder="Numero de disponibilidad" >
+					</div>
+					<div class="col-6">
+						<label>Fecha de registro:</label>				  
+						<input name="date" id="dateRe" type="dateRe" class="form-control" >
+					</div>
+				</div>
+				<br>
+				<div class="form-row">
+					<div class="col-6" >
+						<label>Disponibilidad:</label>
+						<select class="form-control" id="disponibilitySelectRegister" >
+						</select>
+					</div>	
+					<div class="col-6" >
+						<label>Terceros:</label>
+						<select class="form-control" id="terceroSelectRegister" >
+						</select>
+					</div>					
+				</div>
+				<div class="form-row">
+					<div class="col-6" >
+						<label>Tipó de contrato o pago:</label>
+						<select class="form-control" id="typeContract" >
+						</select>
+					</div>					
+				</div>
+				<br>
+				<div class="form-row">
+					<div class="col-6">
+						<label for="exampleFormControlTextarea1">Observación:</label>
+						<textarea placeholder="Observación" name="observationRe" class="form-control" id="observationRe" rows="3"></textarea>
+					</div>					
+				</div>	
+				<br>
+				<div class="form-row">
+					<div >
+						<button type="submit" class="btn btn-primary">Guardar registro</button>
+						<button type="submit" class="btn btn-primary">Guardar y generar obligacion</button>
+						<button type="button" class="btn btn-secondary">Cancelar</button>
+					</div>					
+				</div>  
+			</form>
+		</div>	
+	</div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="myModalRubroOrigin" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de rubros para seleccionar</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid col-12" >
+						<div class="card mb-12" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Rubros</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+					
+								<table class="table table-bordered dataTable col-12" id="dataTableSelectRubro" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>ID</th>	
+											<th>Rubro</th>
+											<th>Descripción</th>
+											<th>Presupuesto inicial</th>
+											<th>Fecha de creación</th>
+											<th>Presupuesto real</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>ID</th>	
+											<th>Rubro</th>
+											<th>Descripción</th>
+											<th>Presupuesto inicial</th>
+											<th>Fecha de creación</th>
+											<th>Presupuesto real</th>
+											<th>Seleccionar</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+									
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="myModalDetall" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Detalles de la disponibilidad</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid col-12" >
+						<div class="card mb-12" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Rubros implicados</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+					
+								<table class="table table-bordered dataTable col-12" id="datatableDetalles" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>Rubro</th>	
+											<th>Descripción</th>
+											<th>Disponibilidad</th>
+											<th>Presupuesto disponible</th>
+											<th>Saldo</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Rubro</th>	
+											<th>Descripción</th>
+											<th>Disponibilidad</th>
+											<th>Presupuesto disponible</th>
+											<th>Saldo</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+									
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+
+<script>
+
+var originID=0;
+var rubrosToOperation=[];
+var addDisponibility=[];
+var indexTable;
+var totalOperate=0;
+var totalOperateArray=[];
+var totalDisponibility=0;
+
+$(document).ready(function() {
+		$('#dataTableRubroTem').DataTable( {
+			"columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            }
+        ],
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+
+$(document).ready(function() {
+		$('#dataTableDispo').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#datatableDetalles').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableSelectRubro').DataTable( {
+			"columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            }
+        ],
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );	
+function loadTest() {	
+	$.ajax({
+		url: '{% url "getVoucher" %}',
+		data: {
+			'option': '1',
+			'idBussines': localStorage.getItem('idBussines'),
+		},
+		dataType: 'json',
+		success: function (data) {
+		$('#separator')
+				.append(`
+				<div class="custom-control custom-radio custom-control-inline">
+					<input  onclick="getRadioButon()" value="DISPONIBILIDAD" type="radio" class="custom-control-input" id="DISPONIBILIDAD" name="typeComprobante">
+					<label class="custom-control-label" for="DISPONIBILIDAD">DISPONIBILIDAD</label>
+				</div>
+				<div class="custom-control custom-radio custom-control-inline">
+					<input  onclick="getRadioButon()" value="REGISTRO" type="radio" class="custom-control-input" id="REGISTRO" name="typeComprobante">
+					<label class="custom-control-label" for="REGISTRO">REGISTRO</label>
+				</div>
+				<div class="custom-control custom-radio custom-control-inline">
+					<input onclick="getRadioButon()" value="OBLIGACION" type="radio" class="custom-control-input" id="OBLIGACION" name="typeComprobante">
+					<label class="custom-control-label" for="OBLIGACION">OBLIGACION</label>
+				</div>
+				<div class="custom-control custom-radio custom-control-inline">
+					<input  onclick="getRadioButon()" value="COMPROBANTEPAGO" type="radio" class="custom-control-input" id="COMPROBANTEPAGO" name="typeComprobante">
+					<label class="custom-control-label" for="COMPROBANTEPAGO">COMPROBANTE DE PAGO</label>
+				</div>`)
+		for (var i=0; i<data.VH.length; i++){
+			$('#separator')
+			.append(`<div class="custom-control custom-radio custom-control-inline">
+			<input onclick="getRadioButon()" type="radio" class="custom-control-input" value="`+data.VH[i].name+`" id="`+data.VH[i].name+`"name="typeComprobante">
+			<label class="custom-control-label" for="`+data.VH[i].name+`">`+data.VH[i].name+`</label>
+			</div>`)
+			}
+		}			
+	});		
+}
+function getRadioButon(){
+
+	if($('input[name=typeComprobante]:checked', '#addVoucher').val()=="DISPONIBILIDAD"){
+		getVoucher();
+	}
+	if($('input[name=typeComprobante]:checked', '#addVoucher').val()=="REGISTRO"){
+		getVoucher();
+
+	}
+	else{
+		
+	}
+}
+
+function generateButton(){
+	var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
+	var nameVoucher = $('input[name=typeComprobante]:checked', '#addVoucher').val();
+
+	if(nameVoucher=="DISPONIBILIDAD"){
+		$("#divCreate").css("display", "none");
+		$("#generator").text("GENERAR DISPONIBILIDAD DE PRESUPUESTO DE "+ nameOrigin)															
+		$("#separatorButton").css("display", "block");
+		$.ajax({
+			url: '{% url "getVoucher" %}',
+			data: {
+				'option': '3',
+				'nameAC': localStorage.getItem('nameAC'),
+				'idBussines': localStorage.getItem('idBussines'),
+				'origin': nameOrigin
+			},
+			dataType: 'json',
+			success: function (data) {
+				originID = data.ID;
+			}
+		});
+	}
+	if(nameVoucher=="REGISTRO"){
+		$("#divCreate").css("display", "none");
+		$("#generator").text("GENERAR REGISTRO DE PRESUPUESTO DE "+ nameOrigin);
+		$("#separatorButton").css("display", "block");
+		$.ajax({
+			url: '{% url "getVoucher" %}',
+			data: {
+				'option': '3',
+				'nameAC': localStorage.getItem('nameAC'),
+				'idBussines': localStorage.getItem('idBussines'),
+				'origin': nameOrigin
+			},
+			dataType: 'json',
+			success: function (data) {
+				originID = data.ID;
+			}
+		});																	
+	}
+	else{
+		
+	}	
+}
+
+function getVoucher(){
+	$.ajax({
+		url: '{% url "getVoucher" %}',
+		data: {
+			'option': '2',
+			'nameAC': localStorage.getItem('nameAC'),
+			'idBussines': localStorage.getItem('idBussines'),
+
+		},
+		dataType: 'json',
+		success: function (data) {
+			$("#separatorOP").empty()
+			for (var i=0; i<data.OR.length; i++){
+				$('#separatorOP')
+				.append(`<div class="custom-control custom-radio custom-control-inline">
+				<input type="radio" onclick="generateButton()" class="custom-control-input" value="`+data.OR[i].nameOrigin+`" id="`+data.OR[i].nameOrigin+`"name="origins">
+				<label class="custom-control-label" for="`+data.OR[i].nameOrigin+`">`+data.OR[i].nameOrigin+`</label>
+				</div>`)
+				}   
+			}			
+		});	
+}
+
+function generateDisponibilty(){
+	var nameVoucher = $('input[name=typeComprobante]:checked', '#addVoucher').val();
+	if(nameVoucher=="DISPONIBILIDAD"){
+		$("#divCreate").css("display", "block");
+		var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
+		var fecha = new Date(); //Fecha actual
+		var mes = fecha.getMonth()+1; //obteniendo mes
+		var dia = fecha.getDate(); //obteniendo dia
+		var ano = fecha.getFullYear(); //obteniendo año
+		if(dia<10)
+			dia='0'+dia; //agrega cero si el menor de 10
+		if(mes<10)
+			mes='0'+mes //agrega cero si el menor de 10
+		document.getElementById('date').value=ano+"-"+mes+"-"+dia;
+		$.ajax({
+				url: '{% url "getDisponibility" %}',
+				data: {
+					'bussines':localStorage.getItem('idBussines'),
+					'origin': originID
+				},
+				dataType: 'json',
+				success: function (data) {
+					$("#divCreate").css("display", "block");
+					$("#textTable").text("Lista de rubros por presupuesto de "+nameOrigin);
+					$("#divTabDispoText").text("Lista de movimientos Disponibilidad del presupuesto de "+nameOrigin);
+					$("#disponibilityIn").val(data.DI); 
+
+					var table = $('#dataTableDispo').DataTable(); 
+					var rows = table.rows().remove().draw();
+					for (var i=0; i<data.MV.length; i++){
+
+						table.row.add( [
+						data.MV[i].disponibility,
+						data.MV[i].observation,
+						data.MV[i].value,
+						data.MV[i].balance,
+						"<a data-toggle='tooltip' title='Actualizar disponibilidad'><button  class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+						"<a data-toggle='tooltip' title='Ver detalles'><button onclick='getDetall("+data.MV[i].id+")' data-toggle='modal' data-target='#myModalDetall' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"			
+			
+						])
+					}
+					table.draw( false );		
+				}
+		});	
+	}
+	if(nameVoucher=="REGISTRO"){
+		$("#divCreate").css("display", "none");
+		getDataToRegister();
+	}
+														
+}
+
+function getRubrosByOrigin(){
+	$.ajax({
+			url: '{% url "getRubrosOrigin" %}',
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				var table = $('#dataTableSelectRubro').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].id,
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].description,
+				data.RUBRO[i].initialBudget,
+				data.RUBRO[i].dateCreation,
+				data.RUBRO[i].realBudget,
+				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].realBudget)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			}
+		});
+}
+
+function getRubroByDisponibilty(id,rubro,description,realBudget){
+	if(rubrosToOperation.includes("#balance"+id)){
+		swal("Este rubro ya fue añadido", "No se puede añadir el mismo rubro", "error");
+	}else{
+		rubrosToOperation.push("#balance"+id);
+		$('#myModalRubroOrigin').modal('toggle');
+		var table = $('#dataTableRubroTem').DataTable(); 
+		table.row.add([
+		id,
+		rubro,
+		description,
+		"<input type='number' id="+id+" class='form-control' name='inputOperations'>",
+		realBudget,
+		"<label type='number' id=valueP"+id+">0</label>", 
+		"<label type='number' id=balance"+id+"></label>",
+		"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description)+")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+		"<a data-toggle='tooltip' title='Eliminar rubro'><button  onclick='deleteRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"								
+		]).node().id = rubro+"IDtr";
+		table.draw(false);
+	}
+
+}
+
+function operateBalance(id,rubro,realBudget,description){
+	var createId =  "#"+id;
+	var result= "#balance"+id
+	var operate=0;
+	var intBudget = parseInt(realBudget);
+	operate = realBudget - parseInt($(createId).val());
+	if(operate<0){
+			swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor del presupuesto actual de "+ intBudget, " No se puede realizar la disponibilidad", "error");
+	}else{
+		$(result).text(operate);
+		addDisponibility.push({
+			"id": id,
+			"rubro": rubro,
+			"description": description,
+			"concept": "DISPONIBILIDAD",
+			"value":parseInt($(createId).val()),
+			"balance":operate,
+			"realBudget": realBudget
+		})
+		totalOperateArray.push({
+			"id": id,
+			"subtotal": operate,
+			"disponibility":  parseInt($(createId).val())
+		})
+		totalOperate = totalOperate + operate;	
+		totalDisponibility = totalDisponibility + parseInt($(createId).val());
+		$("#totalBalance").text("SALDO: "+ totalOperate);														
+		$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);														
+
+	}
+}
+
+function deleteRubroSelected(id){
+
+	var positionDelete;
+	for (var i = 0; i < totalOperateArray.length; i++) {	
+		if(totalOperateArray[i].id==id){
+			positionDelete = i;
+		}
+	}
+	oTable = $('#dataTableRubroTem').DataTable();
+	oTable.row(':eq('+indexTable +')').remove().draw();
+	rubrosToOperation.splice(rubrosToOperation.indexOf(id), 1);
+	addDisponibility.splice(addDisponibility.indexOf(id), 1);
+	totalOperate = totalOperate - totalOperateArray[positionDelete].subtotal;
+	totalDisponibility = totalDisponibility - totalOperateArray[positionDelete].disponibility;
+	$("#totalBalance").text("SALDO: "+ totalOperate);	
+	$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);														
+	totalOperateArray.splice(totalOperateArray.indexOf(id), 1);
+}
+
+$('#dataTableRubroTem tbody').on('click', 'tr', function () {	
+	indexTable=$(this).index();
+});
+
+$("form#createDisponibility").submit(function(e) {
+	e.preventDefault()
+
+	
+});
+
+function createDisponibility(option){
+	if(option==1){
+		if(totalDisponibility==0){
+		swal("No puede guardar una disponibilidad sin valores", "Por favor ingrese disponibilidades", "error");
+	}else{
+		swal({
+        title: "Desea terminar la disponibilidad ?",
+        text: "Al confirmar esta acción, la disponibilidad sera guardada",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        }).then((willDelete) => {
+        if (willDelete) {
+
+			var disponibilityCode = $('input[name="disponibilityIn"]').val();
+			var observation = $('textarea[name="observation"]').val();
+			var date = $('input[name="date"]').val();
+			if (disponibilityCode,observation,date) {
+				// Create Ajax Call
+				$.ajax({
+					url: '{% url "createDisponibility" %}',
+					data: {
+						'bussines':localStorage.getItem('idBussines'), 
+						'disponibilityCode': disponibilityCode,
+						'origin': originID,
+						'date': date,
+						'observation': observation,
+						'value':totalDisponibility,
+						'balance': totalOperate,
+						'disponibilitys': JSON.stringify(addDisponibility)
+					},
+					dataType: 'json',
+					success: function (data) {
+						$("#divCreate").css("display", "none");
+						swal("Creado exitoso de la disponibilidad!", "Continua con tu proceso!", "success");
+						$('textarea[name="observation"]').val("");
+						addDisponibility.length=0;
+						totalOperate=0;
+						totalOperateArray.length=[];
+						totalDisponibility=0;
+					}
+				});
+			} else {
+				alert("Por favor llene todos los campos");
+			}
+			return false;
+        }
+        });
+
+	}}else{
+		if(totalDisponibility==0){
+		swal("No puede guardar una disponibilidad sin valores", "Por favor ingrese disponibilidades", "error");
+		}else{
+			swal({
+			title: "Desea terminar la disponibilidad ?",
+			text: "Al confirmar esta acción, la disponibilidad sera guardada",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			}).then((willDelete) => {
+			if (willDelete) {
+
+				var disponibilityCode = $('input[name="disponibilityIn"]').val();
+				var observation = $('textarea[name="observation"]').val();
+				var date = $('input[name="date"]').val();
+				if (disponibilityCode,observation,date) {
+					// Create Ajax Call
+					$.ajax({
+						url: '{% url "createDisponibility" %}',
+						data: {
+							'bussines':localStorage.getItem('idBussines'), 
+							'disponibilityCode': disponibilityCode,
+							'origin': originID,
+							'date': date,
+							'observation': observation,
+							'value':totalDisponibility,
+							'balance': totalOperate,
+							'disponibilitys': JSON.stringify(addDisponibility)
+						},
+						dataType: 'json',
+						success: function (data) {
+							$("#divCreate").css("display", "none");
+							swal("Creado exitoso de la disponibilidad!", "Continua con tu proceso!", "success");
+							$('textarea[name="observation"]').val("");
+							addDisponibility.length=0;
+							totalOperate=0;
+							totalOperateArray.length=[];
+							totalDisponibility=0;
+							getDataToRegister();
+
+						}
+					});
+				} else {
+					alert("Por favor llene todos los campos");
+				}
+				return false;
+			}
+			});
+
+		}
+	}
+}
+function getDetall(id){
+	$.ajax({
+			url: '{% url "getDetallsDisponibility" %}',
+			data: {
+				'disponibility':id,
+			},
+			dataType: 'json',
+			success: function (data) {
+				
+				var table = $('#datatableDetalles').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].description,
+				data.RUBRO[i].realBudget,
+				data.RUBRO[i].value,
+				data.RUBRO[i].balance
+				])
+			}
+			table.draw( false );
+			}
+	});
+}
+
+function getDataToRegister(){
+	$.ajax({
+			url: '{% url "getDataToRegister" %}',
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+
+				const $select = document.querySelector("#typeContract");
+				const $selectTH = document.querySelector("#terceroSelectRegister");
+				const $selectTC = document.querySelector("#disponibilitySelectRegister");
+
+				for (let i = $select.options.length; i >= 0; i--) {
+						$select.remove(i);
+				}
+				for (let i = $selectTC.options.length; i >= 0; i--) {
+						$selectTC.remove(i);
+				}
+				for (let i = $selectTH.options.length; i >= 0; i--) {
+						$selectTH.remove(i);
+				}  
+
+				$('#disponibilitySelectRegister').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+				$('#terceroSelectRegister').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+				$('#typeContract').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+
+				for (var i=0; i<data.MV.length; i++){
+					$('#disponibilitySelectRegister').append(`<option value="`+data.MV[i].nameI+`">`+data.MV[i].disponibility+`</option>`)
+				}
+				for (var i=0; i<data.TH.length; i++){
+					$('#terceroSelectRegister').append(`<option value="`+data.TH[i].name+`">`+data.TH[i].name+`</option>`)
+				}
+				for (var i=0; i<data.TC.length; i++){
+					$('#typeContract').append(`<option value="`+data.TC[i].nameTC+`">`+data.TC[i].nameTC+`</option>`)
+				}
+				$("#divRegister").css("display", "block");
+
+			}
+		});
+}
+</script>
+
+{% endblock %}
+</body>
