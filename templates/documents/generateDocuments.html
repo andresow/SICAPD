@@ -64,15 +64,15 @@
 			</form>
 		</div>	
 	</div>
-	<div  class="container-fluid col-12" style="float:left">
-			<div class="card mb-12" >
+	<div  class="container-fluid " style="float:left">
+			<div class="card" >
 			<div class="card-header " id="textTable"><i class="fas fa-table mr-1" ></i>Lista de rubros por presupuesto de</div>
 			<div class="card-body" >
 				<div class="table-responsive">
 					<button  onclick="getRubrosByOrigin()" data-toggle="modal" data-target="#myModalRubroOrigin" class="genric-btn primary small">Agregar Rubros</button>               
-					<table class="table table-bordered dataTable col-12" id="dataTableRubroTem" cellspacing="0" 
-						role="grid" aria-describedby="dataTable_info">
-						
+					
+						<table class="table table-bordered dataTable" id="dataTableTest" cellspacing="0" 
+						role="grid" aria-describedby="dataTable_info">	
 						<thead>
 							<tr>
 								<th>ID</th>
@@ -97,7 +97,11 @@
 								<th>Acciones</th>
 							</tr>
 						</tfoot>
+							<tbody>
+								<h1></h1>
+							</tbody>
 						</table>
+						
 				</div>
 				<div class="form-row col-12 mb-2">
 						
@@ -111,12 +115,12 @@
 			</div>
 			</div>
 	</div>  
-	<div  class="container-fluid col-12" style="float:left">
-		<div class="card mb-12" >
+	<div  class="container-fluid " style="float:left">
+		<div class="card" >
 		<div class="card-header " id="divTabDispoText"><i class="fas fa-table mr-1" ></i>Lista de movimientos Disponibilidad del presupuesto de</div>
 			<div class="card-body" >
 				<div class="table-responsive">
-					<table class="table table-bordered dataTable col-12" id="dataTableDispo" cellspacing="0" 
+					<table class="table table-bordered dataTable" id="dataTableDispo" cellspacing="0" 
 						role="grid" aria-describedby="dataTable_info">
 						
 						<thead>
@@ -219,7 +223,6 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto inicial</th>
-											<th>Fecha de creación</th>
 											<th>Presupuesto real</th>
 											<th>Seleccionar</th>
 										</tr>
@@ -230,7 +233,6 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto inicial</th>
-											<th>Fecha de creación</th>
 											<th>Presupuesto real</th>
 											<th>Seleccionar</th>
 										</tr>
@@ -305,15 +307,17 @@ var indexTable;
 var totalOperate=0;
 var totalOperateArray=[];
 var totalDisponibility=0;
+var oTable;
 
 $(document).ready(function() {
-		$('#dataTableRubroTem').DataTable( {
+		$('#dataTableTest').DataTable( {
 			"columnDefs": [
             {
                 "targets": [ 0 ],
                 "visible": false
             }
-        ],
+        ]
+		,
 		  "destroy":true,
 		  "language": idioma_español,
 		  
@@ -321,6 +325,8 @@ $(document).ready(function() {
 		  }
 		  );		 	
 } );
+
+
 
 $(document).ready(function() {
 		$('#dataTableDispo').DataTable( {
@@ -356,7 +362,10 @@ $(document).ready(function() {
 			dom: 'Bfrtip',			
 		  }
 		  );		 	
-} );	
+} );
+
+
+
 function loadTest() {	
 	$.ajax({
 		url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -394,6 +403,12 @@ function loadTest() {
 		}			
 	});		
 }
+$('#dataTableTest tbody').on('click', 'tr', function () {	
+	indexTable=$(this).index();
+} );
+$('#dataTableSelectRubro tbody').on('click', 'tr', function () {	
+	indexTable=$(this).index();
+} );
 function getRadioButon(){
 
 	if($('input[name=typeComprobante]:checked', '#addVoucher').val()=="DISPONIBILIDAD"){
@@ -546,9 +561,8 @@ function getRubrosByOrigin(){
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,
 				data.RUBRO[i].initialBudget,
-				data.RUBRO[i].dateCreation,
 				data.RUBRO[i].realBudget,
-				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].realBudget)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].realBudget)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
 			}
 			table.draw( false );
@@ -556,25 +570,36 @@ function getRubrosByOrigin(){
 		});
 }
 
-function getRubroByDisponibilty(id,rubro,description,realBudget){
+function validaNumericos(event) {
+    if(event.charCode >= 48 && event.charCode <= 57){
+      return true;
+     }
+     return false;        
+}
+
+function getRubroByDisponibilty(id,rubro,description,realBudget,typeRubro){
 	if(rubrosToOperation.includes("#balance"+id)){
 		swal("Este rubro ya fue añadido", "No se puede añadir el mismo rubro", "error");
 	}else{
+		if(typeRubro=='A'){
 		rubrosToOperation.push("#balance"+id);
 		$('#myModalRubroOrigin').modal('toggle');
-		var table = $('#dataTableRubroTem').DataTable(); 
+		var table = $('#dataTableTest').DataTable(); 
 		table.row.add([
 		id,
 		rubro,
 		description,
-		"<input type='number' id="+id+" class='form-control' name='inputOperations'>",
+		"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id="+id+" class='form-control' name='inputOperations'>",
 		realBudget,
 		"<label type='number' id=valueP"+id+">0</label>", 
 		"<label type='number' id=balance"+id+"></label>",
 		"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description)+")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
-		"<a data-toggle='tooltip' title='Eliminar rubro'><button  onclick='deleteRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"								
+		"<a data-toggle='tooltip' title='Eliminar rubro'><button onclick='deleteRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"								
 		]).node().id = rubro+"IDtr";
 		table.draw(false);
+	}else{
+			swal("Este rubro es mayor", "No se puede añadir", "error");
+		}
 	}
 
 }
@@ -585,59 +610,93 @@ function operateBalance(id,rubro,realBudget,description){
 	var operate=0;
 	var intBudget = parseInt(realBudget);
 	operate = realBudget - parseInt($(createId).val());
+	const found = addDisponibility.findIndex(element => element['id'] == id);
+	if(found<0){
+
 	if(operate<0){
 			swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor del presupuesto actual de "+ intBudget, " No se puede realizar la disponibilidad", "error");
-	}else{
-		$(result).text(operate);
-		addDisponibility.push({
-			"id": id,
-			"rubro": rubro,
-			"description": description,
-			"concept": "DISPONIBILIDAD",
-			"value":parseInt($(createId).val()),
-			"balance":operate,
-			"realBudget": realBudget
-		})
-		totalOperateArray.push({
-			"id": id,
-			"subtotal": operate,
-			"disponibility":  parseInt($(createId).val())
-		})
-		totalOperate = totalOperate + operate;	
-		totalDisponibility = totalDisponibility + parseInt($(createId).val());
-		$("#totalBalance").text("SALDO: "+ totalOperate);														
-		$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);														
+		}else{
+			$(result).text(operate);
+			addDisponibility.push({
+				"id": id,
+				"rubro": rubro,
+				"description": description,
+				"concept": "DISPONIBILIDAD",
+				"value":parseInt($(createId).val()),
+				"balance":operate,
+				"realBudget": realBudget
+			})
+			totalOperateArray.push({
+				"id": id,
+				"subtotal": operate,
+				"disponibility":  parseInt($(createId).val())
+			})
+			totalOperate = totalOperate + operate;	
+			totalDisponibility = totalDisponibility + parseInt($(createId).val());
+			$("#totalBalance").text("SALDO: "+ totalOperate);														
+			$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);														
 
+		}
+		console.log(totalOperateArray)
+		console.log(addDisponibility)
+	}else{
+
+		if(operate<0){
+			swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor del presupuesto actual de "+ intBudget, " No se puede realizar la disponibilidad", "error");
+		}else{
+			$(result).text(operate);
+			addDisponibility[found] ={
+				"id": id,
+				"rubro": rubro,
+				"description": description,
+				"concept": "DISPONIBILIDAD",
+				"value":parseInt($(createId).val()),
+				"balance":operate,
+				"realBudget": realBudget
+			}
+			totalOperate = totalOperate - totalOperateArray[found]['subtotal'];	
+			totalDisponibility = totalDisponibility - totalOperateArray[found]['disponibility'];
+			totalOperateArray[found] = {
+				"id": id,
+				"subtotal": operate,
+				"disponibility":  parseInt($(createId).val())
+			}
+			totalOperate = totalOperate + totalOperateArray[found]['subtotal'];	
+			totalDisponibility = totalDisponibility + totalOperateArray[found]['disponibility'];
+			$("#totalBalance").text("PRESUPUESTO POR EJECUTAR: "+ totalOperate);														
+			$("#totalDisponibility").text("VALOR: "+ totalDisponibility);														
+
+		}
+		console.log(totalOperateArray)
+		console.log(addDisponibility)
 	}
+
+
 }
 
-function deleteRubroSelected(id){
 
+
+function deleteRubroSelected(id){
 	var positionDelete;
 	for (var i = 0; i < totalOperateArray.length; i++) {	
 		if(totalOperateArray[i].id==id){
 			positionDelete = i;
 		}
 	}
-	oTable = $('#dataTableRubroTem').DataTable();
+
+	oTable = $('#dataTableTest').DataTable();
 	oTable.row(':eq('+indexTable +')').remove().draw();
 	rubrosToOperation.splice(rubrosToOperation.indexOf(id), 1);
 	addDisponibility.splice(addDisponibility.indexOf(id), 1);
 	totalOperate = totalOperate - totalOperateArray[positionDelete].subtotal;
 	totalDisponibility = totalDisponibility - totalOperateArray[positionDelete].disponibility;
 	$("#totalBalance").text("SALDO: "+ totalOperate);	
-	$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);														
+	$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);													
 	totalOperateArray.splice(totalOperateArray.indexOf(id), 1);
 }
 
-$('#dataTableRubroTem tbody').on('click', 'tr', function () {	
-	indexTable=$(this).index();
-});
-
 $("form#createDisponibility").submit(function(e) {
 	e.preventDefault()
-
-	
 });
 
 function createDisponibility(option){
@@ -678,8 +737,13 @@ function createDisponibility(option){
 						$('textarea[name="observation"]').val("");
 						addDisponibility.length=0;
 						totalOperate=0;
-						totalOperateArray.length=[];
+						totalOperateArray.length=0;
 						totalDisponibility=0;
+						rubrosToOperation.length=0;
+						var table = $('#dataTableTest').DataTable(); 
+ 						var rows = table.rows().remove().draw();
+						$("#totalBalance").text("SALDO: "+ totalOperate);	
+						$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);	
 					}
 				});
 			} else {
@@ -726,8 +790,13 @@ function createDisponibility(option){
 							$('textarea[name="observation"]').val("");
 							addDisponibility.length=0;
 							totalOperate=0;
-							totalOperateArray.length=[];
+							totalOperateArray.length=0;
 							totalDisponibility=0;
+							rubrosToOperation.length=0;
+							var table = $('#dataTableTest').DataTable(); 
+							var rows = table.rows().remove().draw();
+							$("#totalBalance").text("SALDO: "+ totalOperate);	
+							$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);		
 							getDataToRegister();
 
 						}
