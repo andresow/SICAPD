@@ -130,7 +130,7 @@ var operationCurrentName;
 function getOrigins(id){
   operationId = id;
   $.ajax({
-      url: '{% url "settingsOP" %}',
+      url: '{% url "settingsOP"  0 %}'.replace('0', localStorage.getItem('userID')),
       data: {
            'accountPeriod': localStorage.getItem('idAC'),
            'bussines': localStorage.getItem('idBussines')
@@ -171,7 +171,7 @@ function changeTypeUpdateOperation(id, codeOp, nameOp, descriptionOp, operation,
 $(document).on('change', '#id_origen', function(event) {
 			nameOrigin = $("#id_origen option:selected").text();
 			$.ajax({
-					url: '{% url "getOperationsContra" %}',
+					url: '{% url "getOperationsContra" 0 %}'.replace('0', localStorage.getItem('userID')),
 					data: {
             'accountID': localStorage.getItem('idAC'),
 						'nameOrigin': nameOrigin,
@@ -207,7 +207,7 @@ $("form#formAPUpdateOperation").submit(function() {
             
             $.ajax({
  
-                url: '{% url "updateOperation" %}',
+                url: '{% url "updateOperation"  0 %}'.replace('0', localStorage.getItem('userID')),
                 data: {
                     'bussinesId': localStorage.getItem('idBussines'),
                     'equalName': 'TRUE',
@@ -237,7 +237,7 @@ $("form#formAPUpdateOperation").submit(function() {
         }else{
             $.ajax({
  
-            url: '{% url "updateOperation" %}',
+            url: '{% url "updateOperation"  0 %}'.replace('0', localStorage.getItem('userID')),
             ata: {
                 'bussinesId': localStorage.getItem('idBussines'),
                 'equalName': 'FALSE',
@@ -276,7 +276,7 @@ $("form#addContraOperation").submit(function() {
   if (nameOrigin,nameOp) {
       // Create Ajax Call
       $.ajax({
-          url: '{% url "updateContraOperation" %}',
+          url: '{% url "updateContraOperation" 0 %}'.replace('0', localStorage.getItem('userID')),
           data: {
             'operation' : operationId,
             'accountID': localStorage.getItem('idAC'),
@@ -309,7 +309,7 @@ dangerMode: true,
 if (willDelete) {
 
     $.ajax({
-        url: '{% url "deleteAll" %}',
+        url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
         data: {
             'id': id,
             'option': '7'

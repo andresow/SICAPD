@@ -159,7 +159,7 @@ $("form#addTypeAgreement").submit(function() {
     if (codeTA,nameTA,descriptionTA,ordenTA) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createTypeAgreement" %}',
+            url: '{% url "createTypeAgreement"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussines': localStorage.getItem('idBussines'),
                 'codeTA': codeTA,
@@ -201,7 +201,7 @@ $("form#formAPUpdateTypeAgreement").submit(function() {
         // Create Ajax Call
         if(codeTypeAgreement==codeTAUpdate){
                 $.ajax({
-                url: '{% url "updateTypeAgreement" %}',
+                url: '{% url "updateTypeAgreement"  0 %}'.replace('0', localStorage.getItem('userID')),
                 data: {
                     'equalCode': 'TRUE',
                     'bussinesId': localStorage.getItem('idBussines'),
@@ -228,7 +228,7 @@ $("form#formAPUpdateTypeAgreement").submit(function() {
             });
         }else{
             $.ajax({
-            url: '{% url "updateTypeAgreement" %}',
+            url: '{% url "updateTypeAgreement" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'equalCode': 'FALSE',
                 'bussinesId': localStorage.getItem('idBussines'),
@@ -262,7 +262,7 @@ $("form#formAPUpdateTypeAgreement").submit(function() {
   });
 
 function deleteTypeAgreement(id, nameTA){
-//comentario deploy
+
     swal({
     title: "Desea eliminar el tipo de acuerdo " + nameTA + "?",
     text: "Al confirmar esta acción, el tipo de acuerdo " + nameTA + " sera eliminado.",
@@ -274,7 +274,7 @@ function deleteTypeAgreement(id, nameTA){
     if (willDelete) {
 
         $.ajax({
-            url: '{% url "deleteAll" %}',
+            url: '{% url "deleteAll" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'id': id,
                 'option': '3'

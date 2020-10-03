@@ -266,11 +266,10 @@ $("form#addOrigin").submit(function() {
     var orderOrigin = $('input[name="orderOrigin"]').val();
     var finalDateOrigin =  $('input[name="finalDateOrigin"]').val();
 
-
     if (codeOrigin,nameOrigin,descriptionOrigin,orderOrigin,finalDateOrigin) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "settingsOG" %}',
+            url: '{% url "settingsOG" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'accountPeriod': accountPeriodId,
                 'codeOrigin': codeOrigin,
@@ -299,10 +298,9 @@ $("form#addOrigin").submit(function() {
 ////////////////////////////// JS relacionadas con operaciones ///////////////////////////////
 function getOriginOperation(id){
     accountPeriodId =  id; 
-
     $.ajax({
 
-        url: '{% url "getOriginOperation" %}',
+        url: '{% url "getOriginOperation" 0 %}'.replace('0', localStorage.getItem('userID')),
         data: {
             
             'accountPeriod': accountPeriodId,
@@ -326,7 +324,7 @@ function getOriginOperation(id){
 function getOrigin(id){
     accountPeriodId =  id; 
     $.ajax({
-        url: '{% url "settingsOP" %}',
+        url: '{% url "settingsOP" 0 %}'.replace('0', localStorage.getItem('userID')),
         data: {
             'accountPeriod': accountPeriodId,
         },
@@ -356,7 +354,7 @@ $("form#addOperacion").submit(function() {
     if (codeOp,nameOp,descriptionOp,operation,orderOp) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "settingsCreateOP" %}',
+            url: '{% url "settingsCreateOP" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'accountPeriod': accountPeriodId,
                 'codeOp': codeOp,
@@ -393,7 +391,7 @@ $("form#addAP").submit(function() {
     if (nameInput) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createAccountPeriod" %}',
+            url: '{% url "createAccountPeriod" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussines': localStorage.getItem('idBussines'),
                 'name': nameInput,
@@ -430,7 +428,7 @@ $("form#formAPUpdate").submit(function() {
         // Create Ajax Call
         if(nameAccountPeriod==nameUpdate){
             $.ajax({
-            url: '{% url "updateAccountPeriod" %}',
+            url: '{% url "updateAccountPeriod" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'equalName': 'TRUE',
                 'bussinesId': localStorage.getItem('idBussines'),
@@ -455,7 +453,7 @@ $("form#formAPUpdate").submit(function() {
         });
         }else{
             $.ajax({
-            url: '{% url "updateAccountPeriod" %}',
+            url: '{% url "updateAccountPeriod" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'equalName': 'FALSE',
                 'bussinesId': localStorage.getItem('idBussines'),
@@ -501,7 +499,7 @@ function deleteAccount(id, name){
         if (willDelete) {
 
             $.ajax({
-                url: '{% url "deleteAll" %}',
+                url: '{% url "deleteAll" 0 %}'.replace('0', localStorage.getItem('userID')),
                 data: {
                     'option': '1',
                     'id': id,
@@ -524,17 +522,17 @@ function deleteAccount(id, name){
 function sendAClocalstore(id){
     localStorage.setItem('idAC', id);
 }
-//prueba ttttttt
+
 $("form#addSeleOriginToOperation").submit(function() {
     $.ajax({
-            url: '{% url "changeWindowsOperation" %}',
+            url: '{% url "changeWindowsOperation" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'accountPeriod': accountPeriodId,
                 'origin': $("#id_originSelectO option:selected").text()
             },
             dataType: 'json',
             success: function (data) {
-				window.location.href = "https://sicapdeploys.herokuapp.com/settings/listOperations/"+data.OR;	
+				window.location.href = "https://sicapdeploys.herokuapp.com/"+data.OR+"/"+localStorage.getItem('userID');	
 
             }
         });

@@ -112,7 +112,8 @@ class GetOriginSettings(LoginRequiredMixin,  View):
     redirect_field_name = '/login/'
 
     def  get(self, request, *args, **kwargs):
-
+        print("entre eeee")
+        print(self.kwargs['pkUser'])
         origins = Origin.objects.filter(accountPeriod_id=request.GET.get('accountPeriod')).values('nameOrigin')
         return JsonResponse({"OR": list(origins)})
 

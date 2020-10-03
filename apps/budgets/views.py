@@ -99,7 +99,7 @@ class CreateOrigin(LoginRequiredMixin,View):
         else:
             return JsonResponse({'CREATE':"FALSE"})
         
-def mainBudget(request):
+def mainBudget(request,pkUser):
 
     informForm = ByInformForms()
     updateForm = ByRubroUpdate()

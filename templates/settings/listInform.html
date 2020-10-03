@@ -184,7 +184,7 @@ $("form#addInformDetall").submit(function() {
     if (codeInfD,descriptionInfD,activity) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "settingsInfDetall" %}',
+            url: '{% url "settingsInfDetall"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'informId': informId,
                 'codeInfD': codeInfD,
@@ -221,7 +221,7 @@ $("form#addInform").submit(function() {
     if (nameI,category,digitI) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createInform" %}',
+            url: '{% url "createInform"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussines': localStorage.getItem('idBussines'),
                 'nameI': nameI,
@@ -261,7 +261,7 @@ $("form#formAPUpdateInform").submit(function() {
         if(informCurrentName==nameIUpdate){
             $.ajax({
 
-                url: '{% url "updateInform" %}',
+                url: '{% url "updateInform"  0 %}'.replace('0', localStorage.getItem('userID')),
                 data: {
                     'bussinesId': localStorage.getItem('idBussines'),
                     'equalName': 'TRUE',
@@ -286,7 +286,7 @@ $("form#formAPUpdateInform").submit(function() {
         }else{
             $.ajax({
 
-            url: '{% url "updateInform" %}',
+            url: '{% url "updateInform"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussinesId': localStorage.getItem('idBussines'),
                 'equalName': 'FALSE',
@@ -330,7 +330,7 @@ function deleteInform(id, name){
     if (willDelete) {
 
         $.ajax({
-            url: '{% url "deleteAll" %}',
+            url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'id': id,
                 'option': '2'

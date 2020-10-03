@@ -181,7 +181,7 @@ $("form#addThird").submit(function() {
     if (typeIdentification, identification, name, surnames, reason, phone, city) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createThird" %}',
+            url: '{% url "createThird"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussines': localStorage.getItem('idBussines'),
                 'typeIdentification': typeIdentification,
@@ -229,7 +229,7 @@ $("form#formAPUpdateThird").submit(function() {
          // Create Ajax Call
          if(codeThird == nameUpdate){
             $.ajax({
-             url: '{% url "updateThird" %}',
+             url: '{% url "updateThird"  0 %}'.replace('0', localStorage.getItem('userID')),
              data: {
                 'bussinesId': localStorage.getItem('idBussines'),
                 'equalName': 'TRUE',
@@ -257,7 +257,7 @@ $("form#formAPUpdateThird").submit(function() {
          });
          }else{
             $.ajax({
-             url: '{% url "updateThird" %}',
+             url: '{% url "updateThird"  0 %}'.replace('0', localStorage.getItem('userID')),
              data: {
                 'bussinesId': localStorage.getItem('idBussines'),
                 'equalName': 'FALSE',
@@ -305,7 +305,7 @@ function deleteThird(id, name){
     if (willDelete) {
 
         $.ajax({
-            url: '{% url "deleteAll" %}',
+            url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'id': id,
                 'option': '5'

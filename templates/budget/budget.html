@@ -901,7 +901,7 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 	rubroRubUpdate.value = rubro;
 
 	$.ajax({
-			url: '{% url "getDetailRubro" %}',
+			url: '{% url "getDetailRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'id':id,
 				'bussines':localStorage.getItem('idBussines'),
@@ -938,7 +938,7 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 		$("#id_valueInitialUpdate").css("display", "block");
 
 		$.ajax({
-				url: '{% url "getOriginBudget" %}',
+				url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
 				data: {
 					'option': '2',
 					'idBussines': localStorage.getItem('idBussines'),
@@ -960,7 +960,7 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 		}) 
 		
 		$.ajax({
-				url: '{% url "getInformtUpdateRubro" %}',
+				url: '{% url "getInformtUpdateRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
 				data: {
 					'id':id,
 				},
@@ -988,7 +988,7 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 }
 $(document).on('change', '#chargeInforUpdatem', function(event) {
 		$.ajax({
-			url: '{% url "getOriginBudget" %}',
+			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'option': '3',
 				'inform': $("#chargeInforUpdatem option:selected").text(),
@@ -1030,7 +1030,7 @@ function getRadioButonType(){
 
 function loadTest() {	
 	$.ajax({
-		url: '{% url "getOriginBudget" %}',
+		url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
 		data: {
 			'option': '1',
 			'nameAC': localStorage.getItem('nameAC'),
@@ -1059,7 +1059,7 @@ function getRadioButon(){
 	$("#visualityTables").css('display', 'block ');		 
 
 	$.ajax({
-		url: '{% url "getOperationBudget" %}',
+		url: '{% url "getOperationBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
 		data: {
 			'nameOrigin': $('input[name=origins]:checked', '#addOptions').val(),
 			'nameAC': localStorage.getItem('nameAC'),
@@ -1123,7 +1123,7 @@ $("form#updateRubro").submit(function() {
       if (rubroUpdate, descriptionUpdate,valueInitialUpdate) {
           // Create Ajax Call
           $.ajax({
-              url: '{% url "updateRubro" %}',
+              url: '{% url "updateRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
               data: {
 				
 				'origin': originID,
@@ -1186,7 +1186,7 @@ $("form#updateRubro").submit(function() {
 
 function getDetallAgreement(id){
 	$.ajax({
-			url: '{% url "getDetallAgreement" %}',
+			url: '{% url "getDetallAgreement"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'agreement':id,
 			},
@@ -1208,7 +1208,7 @@ function getDetallAgreement(id){
 }
 function getDetailRubroOperation(rubroId){
 	$.ajax({
-			url: '{% url "getRubroOperationDetail" %}',
+			url: '{% url "getRubroOperationDetail"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'id': rubroId
 				
@@ -1231,7 +1231,7 @@ function getDetailRubroOperation(rubroId){
 }
 function getDetalleInformRubro(id){
 	$.ajax({
-			url: '{% url "getDetailRubro" %}',
+			url: '{% url "getDetailRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'id':id,
 				'bussines':localStorage.getItem('idBussines'),
@@ -1273,7 +1273,7 @@ function deleteRubro(id, rubro){
     if (willDelete) {
 
         $.ajax({
-            url: '{% url "deleteRubro" %}',
+            url: '{% url "deleteRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
 				'origin': originID,
 				'idBussines': localStorage.getItem('idBussines'),
@@ -1340,7 +1340,7 @@ function generateRubro(){
 		$("#divCreate").css('display', 'block');				
 
 		$.ajax({
-			url: '{% url "getOriginBudget" %}',
+			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'option': '2',
 				'idBussines': localStorage.getItem('idBussines'),
@@ -1365,7 +1365,7 @@ function generateRubro(){
 		$("#divRubro").css("display", "none");
 		$("#divAgreement").css("display", "block");
 		$.ajax({
-			url: '{% url "getOriginBudget" %}',
+			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'option': '4',
 		},
@@ -1401,7 +1401,7 @@ function generateRubro(){
 
 $(document).on('change', '#chargeInform', function(event) {
 		$.ajax({
-			url: '{% url "getOriginBudget" %}',
+			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'option': '3',
 				'inform': $("#chargeInform option:selected").text(),
@@ -1452,7 +1452,7 @@ $("form#createRubro").submit(function() {
 
 	if (rubro,rubroFather,nivel,description,initialBudget, typeRubro) {
 		$.ajax({
-			url: '{% url "createRubro" %}',
+			url: '{% url "createRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'bussines':  localStorage.getItem('idBussines'),
 				'origin': originID,
@@ -1475,7 +1475,7 @@ $("form#createRubro").submit(function() {
 					var rows = table.rows().remove().draw();
 					$("#tablesInformDiv").css("display", "none");
 					$.ajax({
-						url: '{% url "getRubroCreate" %}',
+						url: '{% url "getRubroCreate"  0 %}'.replace('0', localStorage.getItem('userID')),
 						data: {
 							'origin':originID,
 							'idBussines': localStorage.getItem('idBussines'),
@@ -1603,7 +1603,7 @@ function deleteContraRubroSelected(id){
 }
 function getRubrosByOrigin(){
 	$.ajax({
-			url: '{% url "getRubrosOrigin" %}',
+			url: '{% url "getRubrosOrigin"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'bussines':localStorage.getItem('idBussines'),
 				'origin': originID
@@ -1661,7 +1661,7 @@ function operateBalance(id,rubro,realBudget,description){
 	const found = addOperation.findIndex(element => element['id'] == id);
 	if(found<0){
 		$.ajax({
-			url: '{% url "getOperationByOperate" %}',
+			url: '{% url "getOperationByOperate"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'origin': originID,
 				'operation': $('input[name=operations]:checked', '#addOptions').val(),
@@ -1719,7 +1719,7 @@ function operateBalance(id,rubro,realBudget,description){
 	});
 	}else{
 		$.ajax({
-			url: '{% url "getOperationByOperate" %}',
+			url: '{% url "getOperationByOperate"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'origin': originID,
 				'operation': $('input[name=operations]:checked', '#addOptions').val(),
@@ -1792,7 +1792,7 @@ function finishOperation(){
     .then((willDelete) => {
     if (willDelete) {
 		$.ajax({
-			url: '{% url "getOperationByOperate" %}',
+			url: '{% url "getOperationByOperate"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'origin': originID,
 				'operation': $('input[name=operations]:checked', '#addOptions').val(),
@@ -1826,7 +1826,7 @@ function validaNumericos(event) {
 
 function getContraOperation(){
 	$.ajax({
-			url: '{% url "getRubrosContraOperation" %}',
+			url: '{% url "getRubrosContraOperation"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'origin': originID,
 				'bussines':localStorage.getItem('idBussines'),
@@ -2021,7 +2021,7 @@ function finishProcessOperation(){
 		var token = '{{csrf_token}}';
 		$.ajax({
 			headers: { "X-CSRFToken": token },
-			url: '{% url "createOperations" %}',
+			url: '{% url "createOperations"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'typeAgreement': typeAgreement,
 				'concept': conceptAgre,
@@ -2092,7 +2092,7 @@ $("#id_rubro").keyup(function(event){
 				'rubro': rubro,
 				'origin': originID
 			},
-			url: '{% url "searchRubroTw" %}',
+			url: '{% url "searchRubroTw" 0 %}'.replace('0', localStorage.getItem('userID')),
 			dataType: 'json',
 			success: function (data) {
 				if(data.RUBROFATHER=="PRIMER RUBRO"){
@@ -2128,7 +2128,7 @@ function searchImport(rubro){
 }
 }
 function importRubros(){
-	window.location.href = "http://localhost:8000/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
+	window.location.href = "https://sicapdeploys.herokuapp.com/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
 }
 function cancels(option){
 	if(option==1){
@@ -2300,7 +2300,7 @@ function sendDataToBD(){
 		var token = '{{csrf_token}}';
 		$.ajax({
 				headers: { "X-CSRFToken": token },
-				url: '{% url "importRubrosBD" %}',
+				url: '{% url "importRubrosBD"  0 %}'.replace('0', localStorage.getItem('userID')),
 				data: {
 					'idBussines':localStorage.getItem('idBussines'),
 					'rubros': JSON.stringify(jsonImport),

@@ -92,7 +92,7 @@ class UpdateVoucher(LoginRequiredMixin, View):
             else:
                 return JsonResponse({'CREATE':"FALSE"}) 
         
-def generateDocuments(request):
+def generateDocuments(request,pkUser):
 
     return render(request, 'documents/generateDocuments.html')
 

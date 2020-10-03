@@ -199,7 +199,9 @@ $('form#formLogin').trigger("reset");
 						localStorage.setItem('idAC', data.idAC);
 						localStorage.setItem('idBussines', id);
 						localStorage.setItem('patron', data.patron);
-						window.location.href = "https://sicapdeploys.herokuapp.com/settings/"+id;
+						localStorage.setItem('userID', data.userID);
+
+						window.location.href = "https://sicapdeploys.herokuapp.com/settings/"+id+"/"+ data.userID;
 		
 					}
 				});

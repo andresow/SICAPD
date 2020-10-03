@@ -83,6 +83,7 @@ class StartApp(View):
             'idAC': account.id,
             'nameBussines': request.GET.get('nameBussines'),
             'nameAC': nameAC,
-            'patron': bussines.rubroPattern
+            'patron': bussines.rubroPattern,
+            'userID': request.user.id
         }
         return JsonResponse(data)

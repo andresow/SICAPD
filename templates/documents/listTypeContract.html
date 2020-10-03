@@ -191,7 +191,7 @@ $("form#addDetailTypeContract").submit(function() {
     if (codeTypeC,descriptionTypeC,activity) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createDetailTypeContract" %}',
+            url: '{% url "createDetailTypeContract"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'typeContractId': typeContractId,
                 'codeTypeC': codeTypeC,
@@ -229,7 +229,7 @@ $("form#addTypeContract").submit(function() {
     if (nameTC,description,categoryTC,digitsTC) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createTypeContract" %}',
+            url: '{% url "createTypeContract"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussines': localStorage.getItem('idBussines'),
                 'nameTC': nameTC,
@@ -271,7 +271,7 @@ $("form#formAPUpdateTypeContract").submit(function() {
         if(typeContractCurrentName==nameTCUpdate){
             $.ajax({
 
-                url: '{% url "updateTypeContract" %}',
+                url: '{% url "updateTypeContract"  0 %}'.replace('0', localStorage.getItem('userID')),
                 data: {
                     'bussinesId': localStorage.getItem('idBussines'),
                     'equalName': 'TRUE',
@@ -297,7 +297,7 @@ $("form#formAPUpdateTypeContract").submit(function() {
         }else{
             $.ajax({
 
-            url: '{% url "updateTypeContract" %}',
+            url: '{% url "updateTypeContract"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussinesId': localStorage.getItem('idBussines'),
                 'equalName': 'FALSE',
@@ -341,7 +341,7 @@ function deleteTypeContract(id, name){
     if (willDelete) {
 
         $.ajax({
-            url: '{% url "deleteAll" %}',
+            url: '{% url "deleteAll" 0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'id': id,
                 'option': '6'

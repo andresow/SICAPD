@@ -359,7 +359,7 @@ $(document).ready(function() {
 } );	
 function loadTest() {	
 	$.ajax({
-		url: '{% url "getVoucher" %}',
+		url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
 		data: {
 			'option': '1',
 			'idBussines': localStorage.getItem('idBussines'),
@@ -417,7 +417,7 @@ function generateButton(){
 		$("#generator").text("GENERAR DISPONIBILIDAD DE PRESUPUESTO DE "+ nameOrigin)															
 		$("#separatorButton").css("display", "block");
 		$.ajax({
-			url: '{% url "getVoucher" %}',
+			url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'option': '3',
 				'nameAC': localStorage.getItem('nameAC'),
@@ -435,7 +435,7 @@ function generateButton(){
 		$("#generator").text("GENERAR REGISTRO DE PRESUPUESTO DE "+ nameOrigin);
 		$("#separatorButton").css("display", "block");
 		$.ajax({
-			url: '{% url "getVoucher" %}',
+			url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'option': '3',
 				'nameAC': localStorage.getItem('nameAC'),
@@ -455,7 +455,7 @@ function generateButton(){
 
 function getVoucher(){
 	$.ajax({
-		url: '{% url "getVoucher" %}',
+		url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
 		data: {
 			'option': '2',
 			'nameAC': localStorage.getItem('nameAC'),
@@ -491,7 +491,7 @@ function generateDisponibilty(){
 			mes='0'+mes //agrega cero si el menor de 10
 		document.getElementById('date').value=ano+"-"+mes+"-"+dia;
 		$.ajax({
-				url: '{% url "getDisponibility" %}',
+				url: '{% url "getDisponibility" 0 %}'.replace('0', localStorage.getItem('userID')),
 				data: {
 					'bussines':localStorage.getItem('idBussines'),
 					'origin': originID
@@ -530,7 +530,7 @@ function generateDisponibilty(){
 
 function getRubrosByOrigin(){
 	$.ajax({
-			url: '{% url "getRubrosOrigin" %}',
+			url: '{% url "getRubrosOrigin" 0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'bussines':localStorage.getItem('idBussines'),
 				'origin': originID
@@ -660,7 +660,7 @@ function createDisponibility(option){
 			if (disponibilityCode,observation,date) {
 				// Create Ajax Call
 				$.ajax({
-					url: '{% url "createDisponibility" %}',
+					url: '{% url "createDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
 					data: {
 						'bussines':localStorage.getItem('idBussines'), 
 						'disponibilityCode': disponibilityCode,
@@ -708,7 +708,7 @@ function createDisponibility(option){
 				if (disponibilityCode,observation,date) {
 					// Create Ajax Call
 					$.ajax({
-						url: '{% url "createDisponibility" %}',
+						url: '{% url "createDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
 						data: {
 							'bussines':localStorage.getItem('idBussines'), 
 							'disponibilityCode': disponibilityCode,
@@ -744,7 +744,7 @@ function createDisponibility(option){
 }
 function getDetall(id){
 	$.ajax({
-			url: '{% url "getDetallsDisponibility" %}',
+			url: '{% url "getDetallsDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'disponibility':id,
 			},
@@ -770,7 +770,7 @@ function getDetall(id){
 
 function getDataToRegister(){
 	$.ajax({
-			url: '{% url "getDataToRegister" %}',
+			url: '{% url "getDataToRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'bussines':localStorage.getItem('idBussines'),
 				'origin': originID

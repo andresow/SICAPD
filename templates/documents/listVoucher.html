@@ -180,7 +180,7 @@ $("form#addVoucher").submit(function() {
     if (code, name, description, order, number, category) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createVoucher" %}',
+            url: '{% url "createVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussines': localStorage.getItem('idBussines'),
                 'code': code,
@@ -226,7 +226,7 @@ $("form#formAPUpdateVoucher").submit(function() {
          // Create Ajax Call
          if(codeVoucher == codeUpdate){
             $.ajax({
-             url: '{% url "updateVoucher" %}',
+             url: '{% url "updateVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
              data: {
                 'bussinesId': localStorage.getItem('idBussines'),
                 'equalName': 'FALSE',
@@ -253,7 +253,7 @@ $("form#formAPUpdateVoucher").submit(function() {
          });
          }else{
             $.ajax({
-             url: '{% url "updateVoucher" %}',
+             url: '{% url "updateVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
              data: {
                 'bussinesId': localStorage.getItem('idBussines'),
                 'equalName': 'FALSE',
@@ -299,7 +299,7 @@ function deleteInform(id, name){
     if (willDelete) {
 
         $.ajax({
-            url: '{% url "deleteAll" %}',
+            url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'id': id,
                 'option': '4'
