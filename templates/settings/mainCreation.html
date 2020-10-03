@@ -532,7 +532,7 @@ $("form#addSeleOriginToOperation").submit(function() {
             },
             dataType: 'json',
             success: function (data) {
-				window.location.href = "https://sicapdeploys.herokuapp.com/"+data.OR+"/"+localStorage.getItem('userID');	
+				window.location.href = "https://sicapdeploys.herokuapp.com/settings/listOperations/"+data.OR+"/"+localStorage.getItem('userID');	
 
             }
         });
