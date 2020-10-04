@@ -295,7 +295,8 @@ class CreateRubro(LoginRequiredMixin,View):
                     rubroMov = RubroBalanceOperation.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')),
                         typeOperation = 'CREACION', value = request.GET.get('initialBudget'), balance = request.GET.get('initialBudget'), date = today, nameRubro = rubro.id,    
-                    ) 
+                    )              
+                    rubroFatherValue(request, rubroFather.id, int(request.GET.get('initialBudget')))
                 else:
                     rubroFather = Rubro.objects.get(rubro=request.GET.get('rubroFather'),bussines_id=request.GET.get('bussines'),origin_id=request.GET.get('origin'))
                     rubro = Rubro.objects.create(
@@ -578,6 +579,18 @@ class SearchRubroTw(LoginRequiredMixin,View):
             rubroExists = Rubro.objects.get(rubro=request.GET.get('rubro'),bussines_id=request.GET.get('idBussines'),origin_id=request.GET.get('origin'))
             last = Rubro.objects.all().last()
             return JsonResponse({"RUBROFATHER": "TRUE", "LEVEL":rubroExists.nivel+1, "LAST":last.rubro})
+
+def rubroFatherValue(request, rubroFather, value):
+
+    rubroFather = Rubro.objects.get(id=rubroFather)   
+    currentRealBudget = rubroFather.realBudget
+    newRealBudget = currentRealBudget + value
+    rubroFather.realBudget = newRealBudget
+    rubroFather.save()
+    if rubroFather.rubroFather == None:
+        return True
+    else:        
+        return rubroFatherValue(request, rubroFather.rubroFather, newRealBudget)
 
 
 def searchImport(request, rubro,origin,bussines,discount):

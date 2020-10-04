@@ -1451,7 +1451,8 @@ $("form#createRubro").submit(function() {
 	var detallTypeInfor = JSON.stringify(arrayCode);
 
 	if (rubro,rubroFather,nivel,description,initialBudget, typeRubro) {
-		$.ajax({
+		if($("#coreRubroPattern").text()=="Código rubro valido"){
+			$.ajax({
 			url: '{% url "createRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'bussines':  localStorage.getItem('idBussines'),
@@ -1507,6 +1508,10 @@ $("form#createRubro").submit(function() {
 				document.querySelectorAll('[name=origins]').forEach((x) => x.checked=false);
 			}
 		});
+		}else{
+			swal("Patron rubro invalido", "Por favor verifique el codigo", "error");
+		}
+		
 	} else {
 		alert("All fields must have a valid value.");
 	}
@@ -2128,7 +2133,7 @@ function searchImport(rubro){
 }
 }
 function importRubros(){
-	window.location.href = "https://sicapdeploys.herokuapp.com/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
+	window.location.href = "http://localhost:8000/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
 }
 function cancels(option){
 	if(option==1){
