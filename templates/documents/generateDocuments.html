@@ -258,13 +258,13 @@
           <h4 class="modal-title">Detalles de la disponibilidad</h4>
             </div>
                 <div class="modal-body">
-					<div  class="container-fluid col-12" >
-						<div class="card mb-12" >
+					<div  class="container-fluid " >
+						<div class="card mb" >
 						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Rubros implicados</div>
 						<div class="card-body" >
 							<div class="table-responsive">
 					
-								<table class="table table-bordered dataTable col-12" id="datatableDetalles" cellspacing="0" 
+								<table class="table table-bordered dataTable" id="datatableDetalles" cellspacing="0" 
 									role="grid" aria-describedby="dataTable_info">	
 									<thead>
 										<tr>
@@ -289,7 +289,16 @@
 										</tbody>
 									</table>
 									
-							</div>	
+							</div>
+							<div class="form-row col-12 mb-2">
+						
+								<div class="col-4" >
+									<h6  id="totalBalanceDetall" for="totalBalanceDetall">SALDO: 0</h6>														
+								</div>
+								<div class="col-8" >
+									<h6  id="totalDisponibilityDetall" for="totalDisponibilityDetall" align="center">DISPONIBILIDAD: 0</h6>
+								</div>
+							</div>		
 							</div>
 						</div>
 					</div> 
@@ -796,7 +805,7 @@ function createDisponibility(option){
 							var table = $('#dataTableTest').DataTable(); 
 							var rows = table.rows().remove().draw();
 							$("#totalBalance").text("SALDO: "+ totalOperate);	
-							$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);		
+							$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);	
 							getDataToRegister();
 
 						}
@@ -812,6 +821,8 @@ function createDisponibility(option){
 	}
 }
 function getDetall(id){
+	var totalDetall=0;
+	var totalDetallDisponibility=0;
 	$.ajax({
 			url: '{% url "getDetallsDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
@@ -827,13 +838,19 @@ function getDetall(id){
 				table.row.add( [
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,
-				data.RUBRO[i].realBudget,
 				data.RUBRO[i].value,
+				data.RUBRO[i].realBudget,
 				data.RUBRO[i].balance
 				])
+				totalDetall = totalDetall + data.RUBRO[i].balance;
+				totalDetallDisponibility = totalDetallDisponibility + data.RUBRO[i].value;				
 			}
 			table.draw( false );
-			}
+
+			$("#totalDisponibilityDetall").text("SALDO: "+ totalDetall);	
+			$("#totalBalanceDetall").text("DISPONIBILIDAD: "+ totalDetallDisponibility);
+
+		}
 	});
 }
 
