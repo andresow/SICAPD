@@ -52,7 +52,8 @@ class Operation(models.Model):
     descriptionOp = models.TextField()
     operation = models.CharField(max_length=10,choices=CHOICES)
     orderOp = models.IntegerField()
-    contraOperar = models.BigIntegerField(null=True, blank=True) 
+    contraOperar = models.BigIntegerField(null=True, blank=True)
+    contraOperarName = models.CharField(max_length=100,null=True, blank=True)
     contraOrigin = models.BigIntegerField(null=True, blank=True) 
 
     # Opcional poner  el periodo por facilidad
@@ -74,7 +75,7 @@ class TypeAgreement(models.Model):
 class Agreement(models.Model):
 
     origin = models.ForeignKey(Origin, null=True, blank=True, on_delete=models.CASCADE)
-    numberAg = models.BigIntegerField() 
+    numberAg = models.CharField(max_length=100)
     descriptionAg = models.TextField() 
     dateAg  = models.DateField()
     typeAgreement = models.ForeignKey(TypeAgreement, null=False, blank=True, on_delete=models.CASCADE)

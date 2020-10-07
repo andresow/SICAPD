@@ -44,7 +44,7 @@
 					</div>
 				<div class="col-2">
 					<label>#</label>				  
-					<input name="numberAgreement" id="numberAgreement" type="number" class="form-control" >
+					<input name="numberAgreement" id="numberAgreement" type="text" class="form-control" >
 				</div>
 				<div class="col-2">
 					<label>Fecha</label>				  
@@ -481,11 +481,11 @@
 	
 							<div class="form-row">
 								<div class="custom-control custom-radio custom-control-inline">
-									<input  value="A" type="radio" class="custom-control-input" id="AUXILIARUP" name="typeAccountUP">
+									<input onclick="getRadioButonTypeUpdate('A')" value="A" type="radio" class="custom-control-input" id="AUXILIARUP" name="typeAccountUP">
 									<label class="custom-control-label" for="AUXILIARUP">Auxiliar</label>
 								</div>
 								<div class="custom-control custom-radio custom-control-inline">
-									<input  value="MP" type="radio" class="custom-control-input" id="MAYORUP" name="typeAccountUP">
+									<input  onclick="getRadioButonType('M')" value="M" type="radio" class="custom-control-input" id="MAYORUP" name="typeAccountUP">
 									<label class="custom-control-label" for="MAYORUP">Mayor</label>
 								</div>
 	
@@ -783,6 +783,7 @@ var searchRubro;
 var clik=0;
 var typeRubroGlobalUpdate;
 var nextImport=false;
+var newTypeRubroUp;
 
 $(document).ready(function() {
 		$('#dataTableInformRubro').DataTable( {
@@ -895,7 +896,7 @@ $(document).ready(function() {
 /////////////funcion para gcargar los datos de la actualizacion de rubro_________tatan
 var rubroId;
 function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inform, detallTypeInfor){
-	
+	console.log(indexTable)
 	rubroId = id;
 	var rubroRubUpdate = document.getElementById("id_rubroUpdate");
 	rubroRubUpdate.value = rubro;
@@ -923,6 +924,7 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 			}
 	}) 
 	if(typeRubro=='M'){
+		newTypeRubroUp='M'
 		typeRubroGlobalUpdate = 'M'
 		$("#id_valueInitialUpdate").css("display", "none");
 		$('#id_valueInitialUpdate').val(0);
@@ -931,6 +933,7 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 		$("#tablesInformDivUpdate").css('display', 'none ');
 
 	}else{
+		newTypeRubroUp = 'A'
 		typeRubroGlobalUpdate = 'A'
 		$("#divUpdateChangeDetallInform").css('display', 'block ');
 		$("#divUpdateChangeInform").css('display', 'block ');
@@ -1050,7 +1053,9 @@ function loadTest() {
 		}			
 	});		
 }
-
+function getRadioButonTypeUpdate(type){
+	newTypeRubroUp=type;
+}
 ////////// modifique función agregue un button para detalles informe rubro
 function getRadioButon(){
 	$('#saveAgreement').attr("disabled", false);
@@ -1113,14 +1118,17 @@ function getRadioButon(){
 		}
 	});
 }
+
 ///////////////// inicio de funciones botones_________tatan
 $("form#updateRubro").submit(function() {
-     var rubroUpdate = $('input[name="rubroUpdate"]').val();
-     var descriptionUpdate = $('input[name="descriptionUpdate"]').val();
-	 var valueInitialUpdate =  $('input[name="valueInitialUpdate"]').val();
-	 var inform = JSON.stringify(arrayInformsUpdate);
-	 var detallTypeInfor = JSON.stringify(arrayCodeUpdate);
-      if (rubroUpdate, descriptionUpdate,valueInitialUpdate) {
+
+    var rubroUpdate = $('input[name="rubroUpdate"]').val();
+    var descriptionUpdate = $('input[name="descriptionUpdate"]').val();
+	var valueInitialUpdate =  $('input[name="valueInitialUpdate"]').val();
+	var inform = JSON.stringify(arrayInformsUpdate);
+	var detallTypeInfor = JSON.stringify(arrayCodeUpdate);
+
+    if (rubroUpdate, descriptionUpdate,valueInitialUpdate) {
           // Create Ajax Call
           $.ajax({
               url: '{% url "updateRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -1130,7 +1138,7 @@ $("form#updateRubro").submit(function() {
                 'idBussines': localStorage.getItem('idBussines'),				 
 				'id': rubroId,
 				'rubro':rubroUpdate,
-				'typeRubro': typeRubroGlobalUpdate,
+				'typeRubro': newTypeRubroUp,
                 'description': descriptionUpdate,
 				'initialBudget':valueInitialUpdate,
 				'inform': inform,
@@ -1139,17 +1147,39 @@ $("form#updateRubro").submit(function() {
               },
               dataType: 'json',
               success: function (data) {
-	  
 				if (data.SOY_FATHER=="TRUE"){
 						swal("No se puede modificar este rubro, posee RUBROS AUXILIARES", "Por favor verifica", "error");
 						$('#myModalRubroUpdate').modal('toggle');
-					}	
-				
-				else if(data.MOVIMIENTO=="TRUE"){
-							swal("No se puede actualizar este rubro tiene MOVIMIENTOS", "Por favor verifica", "error");
-							$('#myModalRubroUpdate').modal('toggle');
-							}
+				}	
+				if (data.SOY_FATHER=="FALSE"){
+					var tableUpdateRubro = $('#dataTableRubroTem').DataTable(); 
+					var rows = tableUpdateRubro.rows().remove().draw();
 
+					for (var i=0; i<data.RUBRO.length; i++){
+						tableUpdateRubro.row.add( [
+						data.RUBRO[i].id,
+						data.RUBRO[i].rubro,
+						data.RUBRO[i].typeRubro,
+						data.RUBRO[i].description,
+						data.RUBRO[i].initialBudget,
+						"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
+						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
+						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
+						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+						])
+					}
+					tableUpdateRubro.draw( false );
+					swal("Actualización exitosa!", "Continua con tu proceso!", "success");
+					$('#myModalRubroUpdate').modal('toggle');
+				}	
+				else if(data.MOVIMIENTO=="TRUE"){
+						swal("No se puede actualizar este rubro tiene MOVIMIENTOS", "Por favor verifica", "error");
+						$('#myModalRubroUpdate').modal('toggle');
+				}
+				else if(data.DESCRIPTION=="TRUE"){
+						swal("Solo se puede actualizar la descripcion"," ", "warning");
+						$('#myModalRubroUpdate').modal('toggle');
+				}
 				else{
 					
 					if(data.MOVIMIENTO=="FALSE"){
@@ -1167,8 +1197,10 @@ $("form#updateRubro").submit(function() {
 						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
-						]).draw( false );
+						]);
 					}
+					tableUpdateRubro.draw( false );
+
 					swal("Actualización exitosa!", "Continua con tu proceso!", "success");
 					$('#myModalRubroUpdate').modal('toggle');
 				}
@@ -1513,9 +1545,8 @@ $("form#createRubro").submit(function() {
 		}
 		
 	} else {
-		alert("All fields must have a valid value.");
+		swal("Todos los campos deben ser llenados", "Por favor verifique", "warning");
 	}
-	$('form#createRubro').trigger("reset");
 	return false;
 });
 
@@ -1551,6 +1582,9 @@ $('#dataTableContraRubros tbody').on('click', 'tr', function () {
 	indexTable=$(this).index();
 } );
 $('#dataTableInformUpdateT tbody').on('click', 'tr', function () {
+	indexTable=$(this).index();
+} );
+$('#dataTableRubroTem tbody').on('click', 'tr', function () {
 	indexTable=$(this).index();
 } );
 function deleteInformTem(){
@@ -2180,6 +2214,8 @@ function cancels(option){
 		$('#myModalRubroUpdate').modal('toggle');
 	}
 	if(option==4){
+		
+		$("#upload").val('');
 		$('#MyModalImport').modal('toggle');
 		var table = $('#dataTableImports').DataTable(); 
  		var rows = table.rows().remove().draw();
@@ -2262,7 +2298,7 @@ function validateDataImport(){
 		}else{
 				if(value.length==arrayImport[i]){
 			
-					$("#import"+value).text("Patro OK");	
+					$("#import"+value).text("OK");	
 						countOk += 1;														
 						return false;
 				}else{

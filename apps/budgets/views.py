@@ -47,7 +47,7 @@ class CreateAccountPeriod(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = '/login/'
 
-    def  get(self, request):
+    def  get(self, request, *args, **kwargs): 
 
         bussinesId= request.GET.get('bussines')
         name = request.GET.get('name')
@@ -346,68 +346,114 @@ class UpdateRubro(LoginRequiredMixin,View):
     login_url = '/login/'
     redirect_field_name = '/login/'
 
-    def  get(self, request):      
+    def  get(self, request, *args, **kwargs):      
         updateRubro = Rubro.objects.get(id=request.GET.get('id'))
-        if updateRubro.typeRubro == 'A':
+        print(updateRubro.typeRubro)
+        print(request.GET.get('typeRubro'))
+
+        if updateRubro.typeRubro == 'A' and request.GET.get('typeRubro')=='M':
             rubroExists = Rubro.objects.filter(rubroFather=request.GET.get('id'),bussines_id=request.GET.get('idBussines'),origin_id=request.GET.get('origin')).exists()
-            if rubroExists == False:
-                movementExists = Movement.objects.filter(nameRubro=request.GET.get('id')).exclude(concept='CREACION').exists()
-                if movementExists == False:
+            movementExists = Movement.objects.filter(nameRubro=request.GET.get('id')).exclude(concept='CREACION').exists()
+            if movementExists == False:
                     
-                    updateRubro.typeRubro = request.GET.get('typeRubro')
-                    updateRubro.description = request.GET.get('description')
-                    updateRubro.initialBudget = request.GET.get('initialBudget')
-                    inform = json.loads(request.GET.get('inform'))
-                    informDetall = json.loads(request.GET.get('detallInform'))
-                    rbList = list(Rubro.objects.filter(id=request.GET.get('id')).values('inform__nameI','informdetall__codeInfD'))
-                    if rbList[0]['inform__nameI'] != None:
-                        for x in range(0,len(rbList)):
-                            objInformG = Inform.objects.get(nameI=rbList[x]['inform__nameI'], bussines_id=request.GET.get('idBussines'))
-                            objDetallG = InformDetall.objects.get(codeInfD=rbList[x]['informdetall__codeInfD'],inform_id=objInformG.id)
+                updateRubro.typeRubro = request.GET.get('typeRubro')
+                updateRubro.description = request.GET.get('description')
+                updateRubro.initialBudget = request.GET.get('initialBudget')
+                inform = json.loads(request.GET.get('inform'))
+                informDetall = json.loads(request.GET.get('detallInform'))
+                rbList = list(Rubro.objects.filter(id=request.GET.get('id')).values('inform__nameI','informdetall__codeInfD'))
+                if rbList[0]['inform__nameI'] != None:
+                    for x in range(0,len(rbList)):
+                        objInformG = Inform.objects.get(nameI=rbList[x]['inform__nameI'], bussines_id=request.GET.get('idBussines'))
+                        objDetallG = InformDetall.objects.get(codeInfD=rbList[x]['informdetall__codeInfD'],inform_id=objInformG.id)
 
-                            updateRubro.inform.remove(objInformG.id)
-                            updateRubro.informdetall.remove(objDetallG.id)
+                        updateRubro.inform.remove(objInformG.id)
+                        updateRubro.informdetall.remove(objDetallG.id)
 
-                        for x in range(0,len(inform)):
-                            objInform = Inform.objects.filter(nameI=inform[x], bussines_id=request.GET.get('idBussines'))
-                            objDetall = InformDetall.objects.filter(codeInfD=informDetall[x])
-                            updateRubro.inform.add(*objInform)
-                            updateRubro.informdetall.add(*objDetall)
+                    for x in range(0,len(inform)):
+                        objInform = Inform.objects.filter(nameI=inform[x], bussines_id=request.GET.get('idBussines'))
+                        objDetall = InformDetall.objects.filter(codeInfD=informDetall[x])
+                        updateRubro.inform.add(*objInform)
+                        updateRubro.informdetall.add(*objDetall)
                         updateRubro.save()
-                    else:
-                        for x in range(0,len(inform)):
-                            objInform = Inform.objects.filter(nameI=inform[x], bussines_id=request.GET.get('idBussines'))
-                            objDetall = InformDetall.objects.filter(codeInfD=informDetall[x])
-                            updateRubro.inform.add(*objInform)
-                            updateRubro.informdetall.add(*objDetall)
+                else:
+                    updateRubro.description = request.GET.get('description')
+                    for x in range(0,len(inform)):
+                        objInform = Inform.objects.filter(nameI=inform[x], bussines_id=request.GET.get('idBussines'))
+                        objDetall = InformDetall.objects.filter(codeInfD=informDetall[x])
+                        updateRubro.inform.add(*objInform)
+                        updateRubro.informdetall.add(*objDetall)
                         updateRubro.save()
 
                     originId = request.GET.get('origin')
                     origin = Origin.objects.get(id=originId)
-                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')
-                        
+                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                       
+                    
                     return JsonResponse({"RUBRO": list(rubro), "MOVIMIENTO": 'FALSE'})        
-                else:
-                     return JsonResponse({"SOY_FATHER": 'TRUE'})
-        
             else:
-                return JsonResponse({"SOY_FATHER": 'TRUE'})            
-        else:
-            rubroExists = Rubro.objects.filter(rubroFather=request.GET.get('id'),bussines_id=request.GET.get('idBussines'),origin_id=request.GET.get('origin')).exists()
-            if rubroExists == False:
-                
+                return JsonResponse({"MOVIMIENTO": 'TRUE'})    
+
+        elif updateRubro.typeRubro == 'A' and request.GET.get('typeRubro')=='A':
+            movementExists = Movement.objects.filter(nameRubro=request.GET.get('id')).exclude(concept='CREACION').exists()
+            if movementExists == False:               
                 updateRubro.description = request.GET.get('description')
-                updateRubro.save()
-                
-                                
+                updateRubro.initialBudget = request.GET.get('initialBudget')
+                inform = json.loads(request.GET.get('inform'))
+                informDetall = json.loads(request.GET.get('detallInform'))
+                rbList = list(Rubro.objects.filter(id=request.GET.get('id')).values('inform__nameI','informdetall__codeInfD'))
+                if rbList[0]['inform__nameI'] != None:
+                    for x in range(0,len(rbList)):
+                        objInformG = Inform.objects.get(nameI=rbList[x]['inform__nameI'], bussines_id=request.GET.get('idBussines'))
+                        objDetallG = InformDetall.objects.get(codeInfD=rbList[x]['informdetall__codeInfD'],inform_id=objInformG.id)
+
+                        updateRubro.inform.remove(objInformG.id)
+                        updateRubro.informdetall.remove(objDetallG.id)
+
+                    for x in range(0,len(inform)):
+                        objInform = Inform.objects.filter(nameI=inform[x], bussines_id=request.GET.get('idBussines'))
+                        objDetall = InformDetall.objects.filter(codeInfD=informDetall[x])
+                        updateRubro.inform.add(*objInform)
+                        updateRubro.informdetall.add(*objDetall)
+                        updateRubro.save()
+                else:
+                    updateRubro.description = request.GET.get('description')
+                    for x in range(0,len(inform)):
+                        objInform = Inform.objects.filter(nameI=inform[x], bussines_id=request.GET.get('idBussines'))
+                        objDetall = InformDetall.objects.filter(codeInfD=informDetall[x])
+                        updateRubro.inform.add(*objInform)
+                        updateRubro.informdetall.add(*objDetall)
+                        updateRubro.save()
+
+                    originId = request.GET.get('origin')
+                    origin = Origin.objects.get(id=originId)
+                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                       
+                    
+                    return JsonResponse({"RUBRO": list(rubro), "MOVIMIENTO": 'FALSE'})        
+            else:
+                return JsonResponse({"MOVIMIENTO": 'TRUE'})
+
+        elif updateRubro.typeRubro == 'M' and request.GET.get('typeRubro')=='A':
+            rubroExists = Rubro.objects.filter(rubroFather=request.GET.get('id'),bussines_id=request.GET.get('idBussines'),origin_id=request.GET.get('origin')).exists()
+            if updateRubro.description == request.GET.get('description'):
+                    return JsonResponse({"DESCRIPTION": 'TRUE'})
+            if rubroExists == False:           
+                updateRubro.description = request.GET.get('description')
+                updateRubro.typeRubro = request.GET.get('typeRubro')
+                updateRubro.save()                             
                 originId = request.GET.get('origin')
                 origin = Origin.objects.get(id=originId)
-                rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')
-                                
-                return JsonResponse({"RUBRO": list(rubro), "MOVIMIENTO": 'FALSE'})
-   
+                rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                               
+                return JsonResponse({"RUBRO": list(rubro), "SOY_FATHER": 'FALSE'})
             else:
-                return JsonResponse({"MOVIMIENTO": 'TRUE'})             
+                return JsonResponse({"SOY_FATHER": 'TRUE'})  
+        else:
+            updateRubro.description = request.GET.get('description')
+            updateRubro.save()  
+            originId = request.GET.get('origin')
+            origin = Origin.objects.get(id=originId)
+            rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                               
+            return JsonResponse({"RUBRO": list(rubro), "SOY_FATHER": 'FALSE'})
+                   
         
 
 class DeleteRubro(LoginRequiredMixin, View):

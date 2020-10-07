@@ -63,7 +63,7 @@ class UpdateVoucher(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = '/login/'
-    def  get(self, request):
+    def  get(self, request, *args, **kwargs): 
         
         updateVoucher = Voucher.objects.get(id=request.GET.get('id'))
         code = request.GET.get('code').upper()
@@ -267,7 +267,7 @@ class UpdateTypeContract(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = '/login/'
-    def  get(self, request):
+    def  get(self, request, *args, **kwargs): 
         print('entre función actualizar')
         print(request.GET.get('bussinesId'))
         print(request.GET.get('typeContractId'))

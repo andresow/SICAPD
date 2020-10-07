@@ -53,7 +53,7 @@ class UpdateAccountPeriod(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = '/login/'
-    def  get(self, request):
+    def  get(self, request, *args, **kwargs): 
 
         updateAC = AccountPeriod.objects.get(id=request.GET.get('id'))
 
@@ -147,22 +147,15 @@ class UpdateOperation(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = '/login/'
-    def  get(self, request):
-        print('hola actualice operación')
-        print(request.GET.get('codeOp'))
-        print(request.GET.get('nameOp'))
-        print(request.GET.get('descriptionOp'))
-        print(request.GET.get('operation'))
-        print(request.GET.get('orderOp'))
+    def  get(self, request, *args, **kwargs): 
+ 
 
         
         updateOperation = Operation.objects.get(id=request.GET.get('id'))
-        print(request.GET.get('id'))
 
         if request.GET.get('equalName') == 'TRUE':
     
             updateOperation.codeOp = request.GET.get('codeOp').upper()
-            updateOperation.descriptionOp = request.GET.get('descriptionOp').upper()
             updateOperation.operation = request.GET.get('operation').upper()
             updateOperation.orderOp = request.GET.get('orderOp')
             updateOperation.save() 
@@ -174,7 +167,6 @@ class UpdateOperation(LoginRequiredMixin, View):
 
                 updateOperation.codeOp = request.GET.get('codeOp').upper()
                 updateOperation.nameOp = request.GET.get('nameOp').upper()
-                updateOperation.descriptionOp = request.GET.get('descriptionOp').upper()
                 updateOperation.operation = request.GET.get('operation')
                 updateOperation.orderOp = request.GET.get('orderOp')
                 updateOperation.save()
@@ -254,7 +246,7 @@ class UpdateInform(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = '/login/'
-    def  get(self, request):
+    def  get(self, request, *args, **kwargs): 
         
         updateInforme = Inform.objects.get(id=request.GET.get('id'))
         nameI=request.GET.get('nameI').upper()
@@ -323,7 +315,7 @@ class UpdateTipeAgreement(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = '/login/'
-    def  get(self, request):
+    def  get(self, request, *args, **kwargs): 
 
         updateTypeAgreement = TypeAgreement.objects.get(id=request.GET.get('id'))
         codeTA=request.GET.get('codeTA').upper()
@@ -408,6 +400,7 @@ class UpdateContraOperation(LoginRequiredMixin, View):
         idContrOperation = Operation.objects.get(origin=origin.id,nameOp=request.GET.get('nameOp'))
         currentOperation.contraOperar = idContrOperation.id
         currentOperation.contraOrigin = origin.id
+        currentOperation.contraOperarName = idContrOperation.nameOp
         currentOperation.save()
         return JsonResponse({'TRUE': 'OK'})
 

@@ -170,7 +170,6 @@ class OperationUpdateForm(forms.Form):
         CHOICES = [('+','+'),('-', '-'),('*', '*'),('/', '/')]
         codeOpUpdate = forms.CharField()
         nameOpUpdate = forms.CharField()
-        descriptionOpUpdate = forms.CharField(widget=forms.Textarea)
         operationOpUpdate = forms.ChoiceField(choices=CHOICES)
         orderOpUpdate = forms.CharField()
     
@@ -179,7 +178,6 @@ class OperationUpdateForm(forms.Form):
         
                 self.fields['codeOpUpdate'].label = 'Código'
                 self.fields['nameOpUpdate'].label = 'Nombre'
-                self.fields['descriptionOpUpdate'].label = 'Descripción'
                 self.fields['operationOpUpdate'].label = 'Operación'
                 self.fields['orderOpUpdate'].label = 'Orden'
                 

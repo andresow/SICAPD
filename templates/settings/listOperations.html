@@ -23,7 +23,7 @@
                         <tr>
                             <th>Codigo</th>
                             <th>Nombre</th>
-                            <th>Descripción</th>
+                            <th>Contraoperacion</th>
                             <th>Operación</th>
                             <th>Acciones</th>
                         </tr>
@@ -32,7 +32,7 @@
                         <tr>
                             <th>Codigo</th>
                             <th>Nombre</th>
-                            <th>Descripción</th>
+                            <th>Contraoperacion</th>
                             <th>Operación</th>
                             <th>Acciones</th>
                         </tr>
@@ -43,7 +43,11 @@
                               <tr>                          
                                 <td>{{operation.codeOp}}</td>
                                 <td>{{operation.nameOp}}</td>
-                                <td>{{operation.descriptionOp}}</td>
+                                {% if operation.contraOperarName == None %}
+                                <td>No hay contraoperacion</td>
+                                {% else %}
+                                <td>{{operation.contraOperarName}}</td>
+                                {% endif %}  
                                 <td>{{operation.operation}}</td>
                                 <td>
 
@@ -61,7 +65,7 @@
                         </button>
                       </a> 
                       <a href="#" data-toggle="tooltip" id="updateOperation"  title="Actualizar Operación">
-                        <button onclick="changeTypeUpdateOperation('{{operation.id}}','{{operation.codeOp}}','{{operation.nameOp}}','{{operation.descriptionOp}}','{{operation.operation}}','{{operation.orderOp}}','{{operation.origin}}')"data-toggle="modal" data-target="#myModalOperationUpdate" class="btn btn-primary btn-sm">
+                        <button onclick="changeTypeUpdateOperation('{{operation.id}}','{{operation.codeOp}}','{{operation.nameOp}}','{{operation.operation}}','{{operation.orderOp}}','{{operation.origin}}')"data-toggle="modal" data-target="#myModalOperationUpdate" class="btn btn-primary btn-sm">
                         <i class="fa fa-pencil"></i>
                         </button>
                       </a>
@@ -150,7 +154,7 @@ function getOrigins(id){
   });
 }
 
-function changeTypeUpdateOperation(id, codeOp, nameOp, descriptionOp, operation, orderOp, origin){
+function changeTypeUpdateOperation(id, codeOp, nameOp, operation, orderOp, origin){
 
   operationId =  id;
   operationCurrentName = nameOp;
@@ -159,8 +163,6 @@ function changeTypeUpdateOperation(id, codeOp, nameOp, descriptionOp, operation,
   codeOpUpdate.value = codeOp;
   var nameOpUpdate = document.getElementById("id_nameOpUpdate");
   nameOpUpdate.value = nameOp;
-  var descriptionOpUpdate = document.getElementById("id_descriptionOpUpdate");
-  descriptionOpUpdate.value = descriptionOp;
   var operationOpUpdate = document.getElementById("id_operationOpUpdate");
   operationOpUpdate.value = operation;
   var orderOpUpdate = document.getElementById("id_orderOpUpdate");
@@ -195,12 +197,11 @@ $("form#formAPUpdateOperation").submit(function() {
    
     var codeOpUpdate = $('input[name="codeOpUpdate"]').val();
     var nameOpUpdate = $('input[name="nameOpUpdate"]').val();
-    var descriptionOpUpdate = $('textarea[name="descriptionOpUpdate"]').val();
     var operationOpUpdate = $("#id_operationOpUpdate option:selected").text();
     var orderOpUpdate = $('input[name="orderOpUpdate"]').val();
     
     
-    if (codeOpUpdate, nameOpUpdate, descriptionOpUpdate, operationOpUpdate, orderOpUpdate) {
+    if (codeOpUpdate, nameOpUpdate, operationOpUpdate, orderOpUpdate) {
  
         // Create Ajax Call
         if(operationCurrentName==nameOpUpdate){
@@ -214,11 +215,8 @@ $("form#formAPUpdateOperation").submit(function() {
                     'id': operationId,
                     'codeOp': codeOpUpdate,
                     'nameOp': nameOpUpdate,
-                    'descriptionOp': descriptionOpUpdate,
                     'operation': operationOpUpdate,
-                    'orderOp': orderOpUpdate,
-                    
-                                     
+                    'orderOp': orderOpUpdate,                                    
                 },
                 dataType: 'json',
                 success: function (data) { 
@@ -286,6 +284,7 @@ $("form#addContraOperation").submit(function() {
           dataType: 'json',
           success: function (data) {
               swal("Agregado exitoso de la contraoperación","Continua con tu proceso", "success");
+              $("#dataTableOperation").load(" #dataTableOperation");
               $('#myModalContraOperation').modal('toggle');
           }
       });
