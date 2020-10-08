@@ -268,13 +268,7 @@ class UpdateTypeContract(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = '/login/'
     def  get(self, request, *args, **kwargs): 
-        print('entre función actualizar')
-        print(request.GET.get('bussinesId'))
-        print(request.GET.get('typeContractId'))
-        print(request.GET.get('nameTC'))
-        print(request.GET.get('description'))
-        print(request.GET.get('categoryTC'))
-        print(request.GET.get('digitsTC'))
+
  
         updateTypeContract = TypeContract.objects.get(id=request.GET.get('id'))
         nameTC = request.GET.get('nameTC').upper()
@@ -337,8 +331,11 @@ class CreateDisponibility(LoginRequiredMixin,View):
                 date=request.GET.get('date'),disponibility=request.GET.get('disponibilityCode'),origin=Origin.objects.get(id=request.GET.get('origin')),observation=request.GET.get('observation')
             )
             for x in range(0,len(disponibilitys)):
+                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id']) 
                 rubroMov = RubroMovement.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id'],movement=disponibility) 
-
+                rubro = Rubro.objects.get(id=disponibilitys[x]['id'])
+                rubro.budgetEject = disponibilitys[x]['balance']
+                rubro.save()
             return JsonResponse({"CREATE": "TRUE"})
         else:        
             lastDisponibility = Movement.objects.filter(concept="DISPONIBILIDAD", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()
@@ -347,8 +344,12 @@ class CreateDisponibility(LoginRequiredMixin,View):
                 date=request.GET.get('date'),disponibility=lastDisponibility.disponibility+1,origin=Origin.objects.get(id=request.GET.get('origin')),observation=request.GET.get('observation')
             )
             for x in range(0,len(disponibilitys)):
-                rubroMov = RubroMovement.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id'],movement=disponibility) 
-
+                
+                rubroMov = RubroMovement.objects.create(bussines=bussines,value=disponibilitys[x]['value'],typeOperation='DISPONIBILIDAD',balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id'],movement=disponibility) 
+                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id']) 
+                rubro = Rubro.objects.get(id=disponibilitys[x]['id'])
+                rubro.budgetEject = disponibilitys[x]['balance']
+                rubro.save()
             return JsonResponse({"CREATE": "TRUE"})
 
 
@@ -359,12 +360,12 @@ class GetDetallsDisponibility(LoginRequiredMixin,View):
 
     def get(self, request, *args, **kwargs):
 
-        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('disponibility')).values('nameRubro','value','balance')
+        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('disponibility')).values('nameRubro','value','balance','valueP')
         rubroList = []
 
         for x in range(0,len(list(rubroMov))):
             rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
-            rubroList.append({"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance']})
+            rubroList.append({"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
         return JsonResponse({"RUBRO": list(rubroList)})
 
 class GetDataToRegister(LoginRequiredMixin,View):
@@ -379,3 +380,15 @@ class GetDataToRegister(LoginRequiredMixin,View):
         movement = Movement.objects.filter(bussines_id=request.GET.get('bussines'),origin_id=request.GET.get('origin'), concept="DISPONIBILIDAD").values('disponibility')
         return JsonResponse({"TH": list(third), "TC":list(typeContract),"MV":list(movement)})
    
+class GetDataRubroDisponibility(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        print(request.GET.get('initialDate'))
+        print(request.GET.get('finalDate'))
+        print(request.GET.get('id'))
+        rubroMovement = RubroMovement.objects.filter(nameRubro=request.GET.get('id'),movement__concept='DISPONIBILIDAD', date__gte=request.GET.get('initialDate'),date__lte=request.GET.get('finalDate')).values('movement__disponibility','value','balance','nameRubro','date')
+        print(rubroMovement)  
+        return JsonResponse({"DPRUBRO": list(rubroMovement)})

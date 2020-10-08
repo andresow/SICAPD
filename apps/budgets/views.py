@@ -223,7 +223,7 @@ class CreateRubro(LoginRequiredMixin,View):
                     rubro = Rubro.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')), 
                         origin = Origin.objects.get(id=request.GET.get('origin')), 
-                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = request.GET.get('initialBudget'), typeRubro = "A", realBudget=request.GET.get('initialBudget'),  
+                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today,budgetEject=request.GET.get('initialBudget'), initialBudget = request.GET.get('initialBudget'), typeRubro = "A", realBudget=request.GET.get('initialBudget'),  
                     )
                     inform = json.loads(request.GET.get('inform'))
                     informDetall = json.loads(request.GET.get('detallInform'))
@@ -250,7 +250,7 @@ class CreateRubro(LoginRequiredMixin,View):
                     rubro = Rubro.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')), 
                         origin = Origin.objects.get(id=request.GET.get('origin')), 
-                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M",realBudget=0, 
+                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M",realBudget=0, budgetEject=request.GET.get('initialBudget'),
                     )
                     movement = Movement.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')),
@@ -274,7 +274,7 @@ class CreateRubro(LoginRequiredMixin,View):
                         origin = Origin.objects.get(id=request.GET.get('origin')),
                         rubro = request.GET.get('rubro'),
                         rubroFather = rubroFather.id, 
-                        nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = request.GET.get('initialBudget'), typeRubro = "A", realBudget=request.GET.get('initialBudget'), 
+                        nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = request.GET.get('initialBudget'), typeRubro = "A", realBudget=request.GET.get('initialBudget'), budgetEject=request.GET.get('initialBudget'),
                     )
                     inform = json.loads(request.GET.get('inform'))
                     informDetall = json.loads(request.GET.get('detallInform'))
@@ -303,7 +303,7 @@ class CreateRubro(LoginRequiredMixin,View):
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')), 
                         origin = Origin.objects.get(id=request.GET.get('origin')), 
                         rubroFather = rubroFather.id, 
-                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M", realBudget=0  
+                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M", realBudget=0,budgetEject=request.GET.get('initialBudget')
                     )
                     movement = Movement.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')),
@@ -500,7 +500,7 @@ class GetRubrosOrigin(LoginRequiredMixin,View):
 
     def get(self, request, *args, **kwargs):
 
-        rubros = Rubro.objects.filter(origin_id=request.GET.get('origin'), bussines_id=request.GET.get('bussines')).values('id','rubro','typeRubro','description','initialBudget','realBudget')
+        rubros = Rubro.objects.filter(origin_id=request.GET.get('origin'), bussines_id=request.GET.get('bussines')).values('id','rubro','typeRubro','description','initialBudget','realBudget','budgetEject')
         return JsonResponse({"RUBRO": list(rubros)}) 
 
 class GetOperationByOperate(LoginRequiredMixin,View):
@@ -624,7 +624,8 @@ class SearchRubroTw(LoginRequiredMixin,View):
         else:  
             rubroExists = Rubro.objects.get(rubro=request.GET.get('rubro'),bussines_id=request.GET.get('idBussines'),origin_id=request.GET.get('origin'))
             last = Rubro.objects.all().last()
-            return JsonResponse({"RUBROFATHER": "TRUE", "LEVEL":rubroExists.nivel+1, "LAST":last.rubro})
+            return JsonResponse({"RUBROFATHER": "TRUE", "LEVEL":rubroExists.nivel+1, "LAST":last.rubro, "TYPERUBRO": rubroExists.typeRubro})
+
 
 def rubroFatherValue(request, rubroFather, value):
 
@@ -632,6 +633,7 @@ def rubroFatherValue(request, rubroFather, value):
     currentRealBudget = rubroFather.realBudget
     newRealBudget = currentRealBudget + value
     rubroFather.realBudget = newRealBudget
+    rubroFather.budgetEject = newRealBudget
     rubroFather.save()
     if rubroFather.rubroFather == None:
         return True
@@ -694,24 +696,24 @@ class ImportRubrosBD(LoginRequiredMixin,View):
                     if  rubros[x]['TC'] == "A":
                         Rubro.objects.create(
                             bussines_id = bussines,origin_id = origin, rubroFather= getRubro.id, 
-                            rubro = rubros[x]['RB'], nivel =getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'], imported="TRUE", 
+                            rubro = rubros[x]['RB'], nivel =getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
                     else:
                         Rubro.objects.create(
                             bussines_id = bussines, 
                             origin_id = origin, rubroFather= getRubro.id,
-                            rubro = rubros[x]['RB'], nivel =  getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'], imported="TRUE",
+                            rubro = rubros[x]['RB'], nivel =  getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
                 else: 
                     if  rubros[x]['TC'] == "A":
                         Rubro.objects.create(
                                 bussines_id = bussines,origin_id = origin, 
-                                rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'], imported="TRUE", 
+                                rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
                     else:
                         Rubro.objects.create(
                                 bussines_id = bussines, origin_id = origin, 
-                                rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'], imported="TRUE",
+                                rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'], budgetEject=rubros[x]['PI'],imported="TRUE"
                         )                    
             else:
                 return JsonResponse({"IMPORT": "FALSE"})

@@ -108,6 +108,7 @@ class Rubro(models.Model):
     inform = models.ManyToManyField(Inform)
     informdetall = models.ManyToManyField(InformDetall)
     realBudget = models.BigIntegerField()
+    budgetEject = models.BigIntegerField()
     imported =  models.CharField(max_length=100, null=True)
 
 class Movement(models.Model):

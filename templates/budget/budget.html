@@ -648,7 +648,7 @@
                 <div class="modal-body">
 					<div  class="container-fluid col-12" >
 						<div class="card mb-12" >
-						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Movimientos Presupuestales</div>
+						<div class="card-header" id="movementByRubro"><i class="fas fa-table mr-1" ></i>Movimientos Presupuestales</div>
 						<div class="card-body" >
 							<div class="table-responsive">
 								<font size="2" face="Arial" >
@@ -737,6 +737,67 @@
             </div>         
         </div>  
 </div>
+
+
+<div class="modal fade bd-example-modal-lg" id="myModalDatesDispoinibility" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Ver disponibilidaes</h4>
+            </div>
+                <div class="modal-body">
+					<div class="form-row">
+						<div class="col-6">
+							<label>Fecha inicial</label>				  
+							<input  name="initialDate" id="initialDate" type="date" class="form-control" >
+						</div>
+						<div class="col-6">
+							<label>Fecha final</label>				  
+							<input  name="finalDate" id="finalDate" type="date" class="form-control" >
+						</div>
+						<br>
+						<br>
+					</div>
+						<br>
+						<br>
+						<div  class="container-fluid col-12" >
+							<div class="card mb-12" >
+							<div class="card-header " id="idTextDisponibilityByRubro" ><i class="fas fa-table mr-1" ></i>Disponibilidades del rubro </div>
+							<div class="card-body" >
+								<div class="table-responsive">
+									 
+									<font size="2" face="Arial" >
+									<table class="table table-bordered dataTable" id="dataTableDisponiblityRubros" cellspacing="0" 
+										role="grid" aria-describedby="dataTable_informDetailRubro">	
+										<thead>
+											<tr>
+												<th>Numero</th>
+												<th>Fecha</th>
+												<th>Valor</th>																				
+												<th>Saldo</th>
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>									
+												<th>Numero</th>
+												<th>Fecha</th>
+												<th>Valor</th>																				
+												<th>Saldo</th>
+											</tr>
+										</tfoot>
+											<tbody>
+												<h1></h1>
+											</tbody>
+										</table>
+									</font>
+								</div>	
+								</div>
+							</div>
+						</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
 <!-- fil del html-->
 
 <div style="display:none" id="finalButton" class="container">
@@ -784,6 +845,10 @@ var clik=0;
 var typeRubroGlobalUpdate;
 var nextImport=false;
 var newTypeRubroUp;
+var typeRubroCreate;
+var idRubroDisponibilityDate;
+var initialDate;
+var finalDate;
 
 $(document).ready(function() {
 		$('#dataTableInformRubro').DataTable( {
@@ -1101,7 +1166,8 @@ function getRadioButon(){
 				"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 				"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 				"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-				"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+				"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
+				"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 				])
 			}
 			for (var i=0; i<data.AG.length; i++){
@@ -1165,7 +1231,7 @@ $("form#updateRubro").submit(function() {
 						"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 						])
 					}
 					tableUpdateRubro.draw( false );
@@ -1196,7 +1262,7 @@ $("form#updateRubro").submit(function() {
 						"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 						]);
 					}
 					tableUpdateRubro.draw( false );
@@ -1238,7 +1304,8 @@ function getDetallAgreement(id){
 			}
 		});
 }
-function getDetailRubroOperation(rubroId){
+function getDetailRubroOperation(rubroId, description){
+	$("#movementByRubro").text("Movimientos Presupuestales de "+description)															
 	$.ajax({
 			url: '{% url "getRubroOperationDetail"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
@@ -1260,7 +1327,71 @@ function getDetailRubroOperation(rubroId){
 			}
 			}
 		});
+
 }
+
+function getDispoinibilityByRubro(rubroId){
+	idRubroDisponibilityDate = rubroId;
+}
+
+document.getElementById('initialDate').addEventListener('change', function() {
+      // se ejecuta cuando el datepicker cambie de valor
+      initialDate = this.value;
+	  $.ajax({
+		url: '{% url "getDataRubroDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
+		data: {
+			'id': idRubroDisponibilityDate,
+			'initialDate': initialDate,
+			'finalDate': finalDate
+		},
+		dataType: 'json',
+		success: function (data) {
+			console.log(data)
+			var table = $('#dataTableDisponiblityRubros').DataTable(); 
+ 			var rows = table.rows().remove().draw();
+			for (var i=0; i<data.DPRUBRO.length; i++){
+
+				table.row.add( [
+				data.DPRUBRO[i].movement__disponibility,
+				data.DPRUBRO[i].date,
+				data.DPRUBRO[i].value,
+				data.DPRUBRO[i].balance,							
+				])
+		}
+		table.draw( false );
+		}
+		}
+	);
+});
+document.getElementById('finalDate').addEventListener('change', function() {
+      // se ejecuta cuando el datepicker cambie de valor
+      finalDate = this.value;
+	  $.ajax({
+		url: '{% url "getDataRubroDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
+		data: {
+			'id': idRubroDisponibilityDate,
+			'initialDate': initialDate,
+			'finalDate': finalDate
+		},
+		dataType: 'json',
+		success: function (data) {
+			console.log(data)
+			var table = $('#dataTableDisponiblityRubros').DataTable(); 
+ 			var rows = table.rows().remove().draw();
+			for (var i=0; i<data.DPRUBRO.length; i++){
+
+				table.row.add( [
+				data.DPRUBRO[i].movement__disponibility,
+				data.DPRUBRO[i].date,
+				data.DPRUBRO[i].value,
+				data.DPRUBRO[i].balance,						
+				])
+		}
+		table.draw( false );
+		}
+		}
+	);
+});
 function getDetalleInformRubro(id){
 	$.ajax({
 			url: '{% url "getDetailRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -1334,7 +1465,7 @@ function deleteRubro(id, rubro){
 							"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
 							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 							"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"		
+							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"		
 							]).draw( false );
 						}	
 						swal("El rubro " + rubro + "  se ha eliminado con éxito.", {
@@ -1484,7 +1615,10 @@ $("form#createRubro").submit(function() {
 
 	if (rubro,rubroFather,nivel,description,initialBudget, typeRubro) {
 		if($("#coreRubroPattern").text()=="Código rubro valido"){
-			$.ajax({
+			if(typeRubroCreate=='A'){
+				swal("Rubro padre es auxiliar", "El rubro padre debe ser una cuenta mayor", "error");		
+			}else{
+				$.ajax({
 			url: '{% url "createRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'bussines':  localStorage.getItem('idBussines'),
@@ -1528,7 +1662,7 @@ $("form#createRubro").submit(function() {
 								"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 								"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+','+JSON.stringify(dataTwo.RUBRO[i].typeRubro)+','+JSON.stringify(dataTwo.RUBRO[i].description)+','+JSON.stringify(dataTwo.RUBRO[i].initialBudget)+','+JSON.stringify(dataTwo.RUBRO[i].inform)+','+JSON.stringify(dataTwo.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 								"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-								"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(dataTwo.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+								"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 								])
 							}
 							tableRubro.draw(false);
@@ -1540,6 +1674,7 @@ $("form#createRubro").submit(function() {
 				document.querySelectorAll('[name=origins]').forEach((x) => x.checked=false);
 			}
 		});
+			}		
 		}else{
 			swal("Patron rubro invalido", "Por favor verifique el codigo", "error");
 		}
@@ -1692,11 +1827,15 @@ function getRubroByOperation(id,rubro,description,realBudget,typeRubro){
 }
 
 function operateBalance(id,rubro,realBudget,description){
+
 	var validator;
 	var createId =  "#"+id;
 	var result= "#balance"+id
 	var operate=0;
 	var intBudget = parseInt(realBudget);
+	if(parseInt($(createId).val())==0){
+		swal("No se puede generar una operacion de valor 0", " " , "error");
+	}else{
 	const found = addOperation.findIndex(element => element['id'] == id);
 	if(found<0){
 		$.ajax({
@@ -1817,6 +1956,8 @@ function operateBalance(id,rubro,realBudget,description){
 			}
 	});
 	}
+	}
+	
 }
 
 
@@ -1921,7 +2062,10 @@ function operateContraBalance(id,rubro,realBudget,description){
 	var result= "#balancecontra"+id
 	var contraOperate=0;
 	const found = addContraperation.findIndex(element => element['id'] == id);
-	if(found<0){
+	if(parseInt($(createId).val())==0){
+		swal("No se puede generar una operacion de valor 0", " " , "error");
+	}else{
+		if(found<0){
 			console.log("normal")
 
 		if(simbolContraoperation == '+'){
@@ -2024,6 +2168,8 @@ function operateContraBalance(id,rubro,realBudget,description){
 			$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);
 		}
 	}		
+	}
+	
 }
  
 function finishContraoperation(){
@@ -2141,6 +2287,7 @@ $("#id_rubro").keyup(function(event){
 					$('#lastRubro').val($('input[name="rubro"]').val());
 				}
 				else if (data.RUBROFATHER=="TRUE"){
+					typeRubroCreate = data.TYPERUBRO;
 					$('#rubroFather').val(searchRubro);
 					$('#nivel').val(data.LEVEL);
 					$('#lastRubro').val(data.LAST);
@@ -2167,7 +2314,7 @@ function searchImport(rubro){
 }
 }
 function importRubros(){
-	window.location.href = "https://sicapdeploys.herokuapp.com/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
+	window.location.href = "http://localhost:8000/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
 }
 function cancels(option){
 	if(option==1){
@@ -2363,7 +2510,7 @@ function sendDataToBD(){
 							"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
 							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 							"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"		
+							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"		
 							])
 						}
 						table.draw(false);

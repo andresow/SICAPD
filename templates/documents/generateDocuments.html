@@ -58,7 +58,7 @@
 					<div id="divInitialBudget" >
 						<button type="button" onclick="createDisponibility(1)"   class="btn btn-primary">Guardar disponibilidad</button>
 						<button type="submit" onclick="createDisponibility(2)" class="btn btn-primary">Guardar y generar registro</button>
-						<button type="button" class="btn btn-secondary">Cancelar</button>
+						<button type="button" onclick="cancels(2)"  class="btn btn-secondary">Cancelar</button>
 					</div>					
 				</div>  
 			</form>
@@ -79,7 +79,7 @@
 								<th>Rubro</th>
 								<th>Descripción</th>
 								<th>Disponibilidad</th>
-								<th>Presupuesto disponible</th>
+								<th>Valor Registro</th>
 								<th>Valor P</th>
 								<th>Saldo</th>
 								<th>Acciones</th>
@@ -91,7 +91,7 @@
 								<th>Rubro</th>
 								<th>Descripción</th>
 								<th>Disponibilidad</th>
-								<th>Presupuesto disponible</th>
+								<th>Valor Registro</th>
 								<th>Valor P</th>
 								<th>Saldo</th>
 								<th>Acciones</th>
@@ -223,7 +223,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto inicial</th>
-											<th>Presupuesto real</th>
+											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
 									</thead>
@@ -233,7 +233,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto inicial</th>
-											<th>Presupuesto real</th>
+											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
 									</tfoot>
@@ -570,8 +570,8 @@ function getRubrosByOrigin(){
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,
 				data.RUBRO[i].initialBudget,
-				data.RUBRO[i].realBudget,
-				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].realBudget)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				data.RUBRO[i].budgetEject,
+				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].budgetEject)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
 			}
 			table.draw( false );
@@ -586,7 +586,7 @@ function validaNumericos(event) {
      return false;        
 }
 
-function getRubroByDisponibilty(id,rubro,description,realBudget,typeRubro){
+function getRubroByDisponibilty(id,rubro,description,budgetEject,typeRubro){
 	if(rubrosToOperation.includes("#balance"+id)){
 		swal("Este rubro ya fue añadido", "No se puede añadir el mismo rubro", "error");
 	}else{
@@ -599,10 +599,10 @@ function getRubroByDisponibilty(id,rubro,description,realBudget,typeRubro){
 		rubro,
 		description,
 		"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id="+id+" class='form-control' name='inputOperations'>",
-		realBudget,
+		budgetEject,
 		"<label type='number' id=valueP"+id+">0</label>", 
 		"<label type='number' id=balance"+id+"></label>",
-		"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description)+")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+		"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateBalance("+id+','+rubro+','+budgetEject+','+ JSON.stringify(description)+")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
 		"<a data-toggle='tooltip' title='Eliminar rubro'><button onclick='deleteRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"								
 		]).node().id = rubro+"IDtr";
 		table.draw(false);
@@ -613,12 +613,12 @@ function getRubroByDisponibilty(id,rubro,description,realBudget,typeRubro){
 
 }
 
-function operateBalance(id,rubro,realBudget,description){
+function operateBalance(id,rubro,budgetEject,description){
 	var createId =  "#"+id;
 	var result= "#balance"+id
 	var operate=0;
-	var intBudget = parseInt(realBudget);
-	operate = realBudget - parseInt($(createId).val());
+	var intBudget = parseInt(budgetEject);
+	operate = budgetEject - parseInt($(createId).val());
 	const found = addDisponibility.findIndex(element => element['id'] == id);
 	if(found<0){
 
@@ -633,7 +633,7 @@ function operateBalance(id,rubro,realBudget,description){
 				"concept": "DISPONIBILIDAD",
 				"value":parseInt($(createId).val()),
 				"balance":operate,
-				"realBudget": realBudget
+				"realBudget": budgetEject
 			})
 			totalOperateArray.push({
 				"id": id,
@@ -661,7 +661,7 @@ function operateBalance(id,rubro,realBudget,description){
 				"concept": "DISPONIBILIDAD",
 				"value":parseInt($(createId).val()),
 				"balance":operate,
-				"realBudget": realBudget
+				"realBudget": budgetEject
 			}
 			totalOperate = totalOperate - totalOperateArray[found]['subtotal'];	
 			totalDisponibility = totalDisponibility - totalOperateArray[found]['disponibility'];
@@ -839,7 +839,7 @@ function getDetall(id){
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,
 				data.RUBRO[i].value,
-				data.RUBRO[i].realBudget,
+				data.RUBRO[i].budgetEject,
 				data.RUBRO[i].balance
 				])
 				totalDetall = totalDetall + data.RUBRO[i].balance;
@@ -895,6 +895,43 @@ function getDataToRegister(){
 
 			}
 		});
+}
+function cancels(option){
+	if(option==1){
+	}
+	if(option==2){
+		
+		swal({
+			title: "Desea cancelar por completo la disponibilidad?",
+			text: "No se guardar ningun valor agregado.",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			})
+			.then((willDelete) => {
+			if (willDelete) {
+				$("#divCreate").css("display", "none");
+				$("#divAgreement").css("display", "none");
+				var tableRubros = $('#dataTableTest').DataTable(); 
+				var rowsRubros = tableRubros.rows().remove().draw();
+				$("#rubroContraOperations").css('display', 'none');		
+				$('textarea[name="observation"]').val("");
+				rubrosToOperation.length = 0;
+				totalOperateArray.length =0;
+				addDisponibility.length =0;
+				totalDisponibility = 0;
+				totalOperate = 0;
+				$("#totalBalance").text("SALDO: "+ totalOperate);														
+				$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);	
+
+			}
+		});
+	}if(option==3){
+
+	}
+	if(option==4){
+
+	}
 }
 </script>
 

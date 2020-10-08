@@ -201,7 +201,7 @@ $('form#formLogin').trigger("reset");
 						localStorage.setItem('patron', data.patron);
 						localStorage.setItem('userID', data.userID);
 
-						window.location.href = "https://sicapdeploys.herokuapp.com/settings/"+id+"/"+ data.userID;
+						window.location.href = "http://localhost:8000/settings/"+id+"/"+ data.userID;
 		
 					}
 				});
