@@ -331,7 +331,7 @@ class CreateDisponibility(LoginRequiredMixin,View):
                 date=request.GET.get('date'),disponibility=request.GET.get('disponibilityCode'),origin=Origin.objects.get(id=request.GET.get('origin')),observation=request.GET.get('observation')
             )
             for x in range(0,len(disponibilitys)):
-                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id']) 
+                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation='DISPONIBILIDAD',value=disponibilitys[x]['value'],balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id']) 
                 rubroMov = RubroMovement.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id'],movement=disponibility) 
                 rubro = Rubro.objects.get(id=disponibilitys[x]['id'])
                 rubro.budgetEject = disponibilitys[x]['balance']
@@ -345,8 +345,8 @@ class CreateDisponibility(LoginRequiredMixin,View):
             )
             for x in range(0,len(disponibilitys)):
                 
-                rubroMov = RubroMovement.objects.create(bussines=bussines,value=disponibilitys[x]['value'],typeOperation='DISPONIBILIDAD',balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id'],movement=disponibility) 
-                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id']) 
+                rubroMov = RubroMovement.objects.create(bussines=bussines,value=disponibilitys[x]['value'],valueP=0,balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id'],movement=disponibility) 
+                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation='DISPONIBILIDAD',value=disponibilitys[x]['value'],balance=disponibilitys[x]['balance'],date=today,nameRubro=disponibilitys[x]['id']) 
                 rubro = Rubro.objects.get(id=disponibilitys[x]['id'])
                 rubro.budgetEject = disponibilitys[x]['balance']
                 rubro.save()
