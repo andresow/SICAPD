@@ -194,7 +194,7 @@ class GetOperationBudget(LoginRequiredMixin,View):
         accountPeriod = AccountPeriod.objects.get(name=request.GET.get('nameAC')[:-1])
         origin = Origin.objects.get(nameOrigin=nameOrigin, accountPeriod=accountPeriod.id)
         operations = Operation.objects.filter(origin=origin.id).values('nameOp')
-        rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')
+        rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')
         movementIni = Agreement.objects.filter(origin_id=origin.id).values('id','descriptionAg','numberAg','typeAgreement')
         return JsonResponse({"ID":origin.id ,"OP": list(operations),"RUBRO": list(rubro),"AG":list(movementIni)})
 
@@ -206,7 +206,7 @@ class GetRubroCreate(LoginRequiredMixin,View):
     def  get(self, request, *args, **kwargs):
 
         origin = Origin.objects.get(id=request.GET.get('origin'))
-        rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')
+        rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')
         return JsonResponse({"RUBRO": list(rubro)})
 
 class CreateRubro(LoginRequiredMixin,View):
@@ -348,9 +348,6 @@ class UpdateRubro(LoginRequiredMixin,View):
 
     def  get(self, request, *args, **kwargs):      
         updateRubro = Rubro.objects.get(id=request.GET.get('id'))
-        print(updateRubro.typeRubro)
-        print(request.GET.get('typeRubro'))
-
         if updateRubro.typeRubro == 'A' and request.GET.get('typeRubro')=='M':
             rubroExists = Rubro.objects.filter(rubroFather=request.GET.get('id'),bussines_id=request.GET.get('idBussines'),origin_id=request.GET.get('origin')).exists()
             movementExists = Movement.objects.filter(nameRubro=request.GET.get('id')).exclude(concept='CREACION').exists()
@@ -387,7 +384,7 @@ class UpdateRubro(LoginRequiredMixin,View):
 
                     originId = request.GET.get('origin')
                     origin = Origin.objects.get(id=originId)
-                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                       
+                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')                       
                     
                     return JsonResponse({"RUBRO": list(rubro), "MOVIMIENTO": 'FALSE'})        
             else:
@@ -426,7 +423,7 @@ class UpdateRubro(LoginRequiredMixin,View):
 
                     originId = request.GET.get('origin')
                     origin = Origin.objects.get(id=originId)
-                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                       
+                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')                      
                     
                     return JsonResponse({"RUBRO": list(rubro), "MOVIMIENTO": 'FALSE'})        
             else:
@@ -442,7 +439,7 @@ class UpdateRubro(LoginRequiredMixin,View):
                 updateRubro.save()                             
                 originId = request.GET.get('origin')
                 origin = Origin.objects.get(id=originId)
-                rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                               
+                rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')                               
                 return JsonResponse({"RUBRO": list(rubro), "SOY_FATHER": 'FALSE'})
             else:
                 return JsonResponse({"SOY_FATHER": 'TRUE'})  
@@ -451,7 +448,7 @@ class UpdateRubro(LoginRequiredMixin,View):
             updateRubro.save()  
             originId = request.GET.get('origin')
             origin = Origin.objects.get(id=originId)
-            rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')                               
+            rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')                               
             return JsonResponse({"RUBRO": list(rubro), "SOY_FATHER": 'FALSE'})
                    
         
@@ -472,7 +469,7 @@ class DeleteRubro(LoginRequiredMixin, View):
                     
                     originId = request.GET.get('origin')
                     origin = Origin.objects.get(id=originId)
-                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget')
+                    rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget').order_by('rubro')
                     
                     return JsonResponse({'ELIMINADO': 'TRUE', "RUBRO": list(rubro)})
                 else:
@@ -487,7 +484,7 @@ class DeleteRubro(LoginRequiredMixin, View):
                    
                 originId = request.GET.get('origin')
                 origin = Origin.objects.get(id=originId)
-                rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget')
+                rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')
                         
                 return JsonResponse({'ELIMINADO': 'TRUE', "RUBRO": list(rubro)})        
             else:
@@ -719,7 +716,7 @@ class ImportRubrosBD(LoginRequiredMixin,View):
                 return JsonResponse({"IMPORT": "FALSE"})
                 break
 
-        rubros = Rubro.objects.filter(bussines_id=bussines,origin_id=origin).values('id','rubro','description','initialBudget','typeRubro')
+        rubros = Rubro.objects.filter(bussines_id=bussines,origin_id=origin).values('id','rubro','description','initialBudget','typeRubro').order_by('rubro')
         return JsonResponse({"IMPORT": "TRUE","RUBRO": list(rubros)})
 
 class UpdateAgreementRubro(LoginRequiredMixin, View):

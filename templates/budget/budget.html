@@ -908,13 +908,14 @@ $(document).ready(function() {
 
 $(document).ready(function() {///______________se modifico la cumna posicion 0
 		$('#dataTableRubroTem').DataTable( {
+			"ordering": false,
+
 			"columnDefs": [
             {
                 "targets": [ 0 ],
                 "visible": false
             }
         ],
-		  "destroy":true,
 		  "language": idioma_español,
 		  
 			dom: 'Bfrtip',			
@@ -1010,7 +1011,6 @@ var rubroId;
 var agreementId;
 
 function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inform, detallTypeInfor){
-	console.log(indexTable)
 	rubroId = id;
 	var rubroRubUpdate = document.getElementById("id_rubroUpdate");
 	rubroRubUpdate.value = rubro;
@@ -1532,7 +1532,6 @@ document.getElementById('initialDate').addEventListener('change', function() {
 		},
 		dataType: 'json',
 		success: function (data) {
-			console.log(data)
 			var table = $('#dataTableDisponiblityRubros').DataTable(); 
  			var rows = table.rows().remove().draw();
 			for (var i=0; i<data.DPRUBRO.length; i++){
@@ -1561,7 +1560,6 @@ document.getElementById('finalDate').addEventListener('change', function() {
 		},
 		dataType: 'json',
 		success: function (data) {
-			console.log(data)
 			var table = $('#dataTableDisponiblityRubros').DataTable(); 
  			var rows = table.rows().remove().draw();
 			for (var i=0; i<data.DPRUBRO.length; i++){
@@ -1838,6 +1836,7 @@ $("form#createRubro").submit(function() {
 						},
 						dataType: 'json',
 						success: function (dataTwo) {
+							console.log(dataTwo)
 							var tableRubro = $('#dataTableRubroTem').DataTable(); 
 							var rowsRubro = tableRubro.rows().remove().draw();
 
@@ -1852,7 +1851,7 @@ $("form#createRubro").submit(function() {
 								"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+','+JSON.stringify(dataTwo.RUBRO[i].typeRubro)+','+JSON.stringify(dataTwo.RUBRO[i].description)+','+JSON.stringify(dataTwo.RUBRO[i].initialBudget)+','+JSON.stringify(dataTwo.RUBRO[i].inform)+','+JSON.stringify(dataTwo.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
 								"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 								"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
-								"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+								"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 								])
 							}
 							tableRubro.draw(false);
@@ -2510,7 +2509,7 @@ function searchImport(rubro){
 }
 }
 function importRubros(){
-	window.location.href = "https://sicapdeploys.herokuapp.com/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
+	window.location.href = "http://localhost:8000/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
 }
 function cancels(option){
 	if(option==1){
@@ -2686,7 +2685,7 @@ function validateDataImport(){
 				$("#import"+jsonImport[i].RB).text("El total de la cuenta mayor no coincide");	
 			}
 		}
-	}
+	} 
 
    	if(countOk==nRow) {
 		nextImport = true;
@@ -2746,7 +2745,7 @@ function sumIncludes(mayor){
 	var sum=0;
 	for (var i=jsonImport.length-1; i>=0; i--){
 		if(jsonImport[i].TC=='A'){
-			if(jsonImport[i].RB.includes(mayor)){
+			if(jsonImport[i].RB.substr(0,mayor.length).includes(mayor)){
 				sum = sum + parseInt(jsonImport[i].PI)
 			
 			}
