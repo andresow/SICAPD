@@ -1655,7 +1655,7 @@ function deleteRubro(id, rubro){
 							"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 							])
 						}
-						tableDeleteRubro..draw( false );	
+						tableDeleteRubro.draw( false );	
 						swal("El rubro " + rubro + "  se ha eliminado con éxito.", {
 							icon: "success",
 							});
