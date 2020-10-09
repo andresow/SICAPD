@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'ajax/importRubrosBD/(?P<pkUser>\d+)/', ImportRubrosBD.as_view(), name='importRubrosBD'),
     url(r'ajax/getRubroOperationDetail/(?P<pkUser>\d+)/', GetRubroOperationDetail.as_view(), name='getRubroOperationDetail'),
     url(r'ajax/getInformtUpdateRubro/(?P<pkUser>\d+)/', GetInformtUpdateRubro.as_view(), name='getInformtUpdateRubro'),
+    url(r'ajax/updateAgreementRubro/(?P<pkUser>\d+)/', UpdateAgreementRubro.as_view(), name='updateAgreementRubro'),
 
 
 ]

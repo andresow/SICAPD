@@ -743,7 +743,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Ver disponibilidaes</h4>
+          <h4 class="modal-title">Ver disponibilidades</h4>
             </div>
                 <div class="modal-body">
 					<div class="form-row">
@@ -798,6 +798,53 @@
             </div>         
         </div>  
 </div>
+<div class="modal fade bd-example-modal-lg" id="myModalAgreementUpdate" role="dialog">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content">
+		<div class="modal-header ">
+		  <h4 class="modal-title">Actualizar Tipo de Acuerdo</h4>
+			</div>
+				<div class="modal-body">
+					<div  class="container-fluid col-12 mb-8">
+
+						<div class="card col-12 mb-4">
+							<div class="card-body col-12">
+								<form id="updateAG">
+									<div class="form-row">
+										<div id="divUpdateChangeAgreement" class="col-5">
+											<label>Tipo de acuerdo</label>
+											<select class="form-control" id="typeAgreementUpdate" required>
+											</select>
+										</div>
+									<div class="col-3">
+										<label>#</label>				  
+										<input name="numberAgreementUpdate" id="numberAgreementUpdate" type="number" class="form-control" >
+									</div>
+									<div class="col-4">
+										<label>Fecha</label>				  
+										<input  name="dateAgreementUpdate" id="dateAgreementUpdate" type="date" class="form-control" >
+									</div>
+									</div>
+									<br>
+									<div class="form-row">
+										
+										<div class="col-10">
+											<label>Concepto</label>				  
+											<textarea name="conceptUpdate" id="conceptUpdate" type="text" class="form-control" ></textarea>
+										</div>
+									</div>
+									<br>
+									<button id="saveUpdateAgreement" type="submit" class="btn btn-primary">Actualizar Tipo de Acuerdo</button>
+									<button type="button" onclick="cancels(5)" class="btn btn-secondary">Cancelar</button>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>         
+		</div>  
+  </div>
 <!-- fil del html-->
 
 <div style="display:none" id="finalButton" class="container">
@@ -960,11 +1007,14 @@ $(document).ready(function() {
 
 /////////////funcion para gcargar los datos de la actualizacion de rubro_________tatan
 var rubroId;
+var agreementId;
+
 function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inform, detallTypeInfor){
 	console.log(indexTable)
 	rubroId = id;
 	var rubroRubUpdate = document.getElementById("id_rubroUpdate");
 	rubroRubUpdate.value = rubro;
+	
 
 	$.ajax({
 			url: '{% url "getDetailRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -1053,6 +1103,38 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 		}
 	
 	
+}
+function changeUpdateAgreement(id, typeAgreement, numberAg, dateAg, descriptionAg){
+
+agreementId = id;
+
+var numberAgUpdate = document.getElementById("numberAgreementUpdate");
+numberAgUpdate.value = numberAg;
+var descriptionAgUpdate = document.getElementById("conceptUpdate");
+descriptionAgUpdate.value = descriptionAg;
+
+$.ajax({
+			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'option': '4',
+				'idBussines': localStorage.getItem('idBussines'),
+
+		},
+		dataType: 'json',
+		success: function (data) {
+				const $select = document.querySelector("#typeAgreementUpdate");
+
+				for (let i = $select.options.length; i >= 0; i--) {
+						$select.remove(i);
+				}
+				$('#typeAgreementUpdate').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+				for (var i=0; i<data.TA.length; i++){
+					$('#typeAgreementUpdate').append(`<option value="`+data.TA[i].nameTA+`">`+data.TA[i].nameTA+`</option>`)
+				}
+												
+			}
+	})
+
 }
 $(document).on('change', '#chargeInforUpdatem', function(event) {
 		$.ajax({
@@ -1164,7 +1246,7 @@ function getRadioButon(){
 				data.RUBRO[i].description,
 				data.RUBRO[i].initialBudget,
 				"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
-				"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
+				"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
 				"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 				"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
 				"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
@@ -1175,7 +1257,9 @@ function getRadioButon(){
 				data.AG[i].descriptionAg,
 				data.AG[i].numberAg,
 				data.AG[i].typeAgreement,
-				"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalles del acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
+				"<a data-toggle='tooltip' href='#' id='deleteAgreement'title='Eliminar Tipo de Acuerdo'><button onclick=\'deleteAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].numberAg)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+				"<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
+				"<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
 				])
 			}
 			table.draw(false);
@@ -1229,9 +1313,10 @@ $("form#updateRubro").submit(function() {
 						data.RUBRO[i].description,
 						data.RUBRO[i].initialBudget,
 						"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
-						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
+						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
 						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
+						"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 						])
 					}
 					tableUpdateRubro.draw( false );
@@ -1260,9 +1345,10 @@ $("form#updateRubro").submit(function() {
 						data.RUBRO[i].description,
 						data.RUBRO[i].initialBudget,
 						"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
-						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
+						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
 						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
+						"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 						]);
 					}
 					tableUpdateRubro.draw( false );
@@ -1280,7 +1366,107 @@ $("form#updateRubro").submit(function() {
       }
       $('form#formAPUpdateRubro').trigger("reset");
       return false;
-  });
+});
+
+$("form#updateAG").submit(function() {
+     
+	 var agreementUpdate =  $("#AgreementUpdate option:selected").text();
+	 var numberUpdate = $('input[name="numberAgreementUpdate"]').val();
+	 var dateUpdate = $('input[name="dateAgreementUpdate"]').val();
+	 var descriptionUpdate = $('textarea[name="conceptUpdate"]').val();	  
+   
+	 if (agreementUpdate, numberUpdate, dateUpdate, descriptionUpdate) {
+		 // Create Ajax Call
+	  
+		 $.ajax({
+		 url: '{% url "updateAgreementRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
+		 data: {
+			 'origin': originID,
+			 'id': agreementId,
+			 'numberAg': numberUpdate,
+			 'dateAg': dateUpdate,
+			 'descriptionAg': descriptionUpdate,
+				   
+		 },
+		 dataType: 'json',
+		 success: function (data) {
+			 if(data.CREATE == "TRUE"){
+			 var tableUpdateAg = $('#dataTableMovTem').DataTable(); 
+			 var rows = tableUpdateAg.rows().remove().draw();
+			 for (var i=0; i<data.AG.length; i++){
+						   
+				 tableUpdateAg.row.add( [
+				 data.AG[i].descriptionAg,
+				 data.AG[i].numberAg,
+				 data.AG[i].typeAgreement,
+					  
+				 "<a data-toggle='tooltip' href='#' id='deleteAgreement'title='Eliminar Tipo de Acuerdo'><button onclick=\'deleteAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].numberAg)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+				 "<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
+				 "<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
+				 ])
+			 }
+			 tableUpdateAg.draw(false);
+			 swal("Actualización exitosa!", "Continua con tu proceso!", "success");
+			 $('#myModalAgreementUpdate').modal('toggle');
+			 }else{
+   
+				 swal("No se puede actualizar el tipo de acuerdo", "Ya existe un tipo de acuerdo con este nombre", "error");
+				 $('#myModalAgreementUpdate').modal('toggle');
+			 }
+				   
+		 }
+		 });
+	 }else {
+		 alert("All fields must have a valid value.");
+	 }
+	 return false;
+});
+function deleteAgreement(id, numberAg){
+  
+	 swal({
+	 title: "Desea eliminar el tipo de acuerdo con número " + numberAg + "?",
+	 text: "Al confirmar esta acción, el tipo de acuerdo con número " + numberAg + " sera eliminado.",
+	 icon: "warning",
+	 buttons: true,
+	 dangerMode: true,
+	 })
+	 .then((willDelete) => {
+	 if (willDelete) {
+	 
+		 $.ajax({
+			 url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
+			 data: {
+				 'origin': originID,
+				 'id': id,
+				 'option': '8'
+			 },
+			 dataType: 'json',
+			 success: function (data) {   
+				 var tableUpdateAg = $('#dataTableMovTem').DataTable(); 
+				 var rows = tableUpdateAg.rows().remove().draw();
+				 for (var i=0; i<data.AG.length; i++){
+							 
+					 tableUpdateAg.row.add( [
+					 data.AG[i].descriptionAg,
+					 data.AG[i].numberAg,
+					 data.AG[i].typeAgreement,
+							 
+					 "<a data-toggle='tooltip' href='#' id='deleteAgreement'title='Eliminar Tipo de Acuerdo'><button onclick=\'deleteAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].numberAg)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+					 "<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
+					 "<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
+					 ])
+				 }
+				 tableUpdateAg.draw(false);
+				 swal("El tipo de acuerdo con número " + numberAg + "  se ha eliminado con éxito.", {
+				 icon: "success",
+				 });
+				 
+			 }
+		 });
+	 }
+	 });
+}
+ 
 
 function getDetallAgreement(id){
 	$.ajax({
@@ -1463,11 +1649,13 @@ function deleteRubro(id, rubro){
 							data.RUBRO[i].description,
 							data.RUBRO[i].initialBudget,
 							"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
+							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
 							"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"		
-							]).draw( false );
-						}	
+							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+		
+							"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+							])
+						}
+						tableDeleteRubro..draw( false );	
 						swal("El rubro " + rubro + "  se ha eliminado con éxito.", {
 							icon: "success",
 							});
@@ -1614,7 +1802,8 @@ $("form#createRubro").submit(function() {
 	var detallTypeInfor = JSON.stringify(arrayCode);
 
 	if (rubro,rubroFather,nivel,description,initialBudget, typeRubro) {
-		if($("#coreRubroPattern").text()=="Código rubro valido"){
+		if($("#coreRubroPattern").text()=="Código rubro valido") {
+			$("#coreRubroPattern").css("color", "green");			
 			if(typeRubroCreate=='A'){
 				swal("Rubro padre es auxiliar", "El rubro padre debe ser una cuenta mayor", "error");		
 			}else{
@@ -1660,9 +1849,10 @@ $("form#createRubro").submit(function() {
 								dataTwo.RUBRO[i].description,
 								dataTwo.RUBRO[i].initialBudget,
 								"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
-								"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+','+JSON.stringify(dataTwo.RUBRO[i].typeRubro)+','+JSON.stringify(dataTwo.RUBRO[i].description)+','+JSON.stringify(dataTwo.RUBRO[i].initialBudget)+','+JSON.stringify(dataTwo.RUBRO[i].inform)+','+JSON.stringify(dataTwo.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
+								"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+','+JSON.stringify(dataTwo.RUBRO[i].typeRubro)+','+JSON.stringify(dataTwo.RUBRO[i].description)+','+JSON.stringify(dataTwo.RUBRO[i].initialBudget)+','+JSON.stringify(dataTwo.RUBRO[i].inform)+','+JSON.stringify(dataTwo.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
 								"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-								"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+								"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
+								"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 								])
 							}
 							tableRubro.draw(false);
@@ -2267,9 +2457,11 @@ $("#id_rubro").keyup(function(event){
 		$('#nivel').val("");
 		$('#lastRubro').val("");
 	}
+	var campoInputCodigoRubro = $('#id_rubro').val();
 	rubro = $('input[name="rubro"]').val()
 	if(searchImport(rubro)==true){
-		$("#coreRubroPattern").text("Código rubro valido");	
+		$("#coreRubroPattern").text("Código rubro valido");
+		$("#coreRubroPattern").css("color", "green");
 
 		$.ajax({
 			data: {
@@ -2299,11 +2491,15 @@ $("#id_rubro").keyup(function(event){
 			},error: function(data){
 				$('#rubroFather').val(searchRubro);
 			}
-	});
-	}else{
-		$("#coreRubroPattern").text("Código rubro invalido");	
+		});
 	}
-
+	else if(campoInputCodigoRubro === ''){
+			$("#coreRubroPattern").text("Código rubro");
+			$("#coreRubroPattern").css("color", "gray");
+	}else{
+		$("#coreRubroPattern").text("Código rubro invalido");
+		$("#coreRubroPattern").css("color", "red");
+	}
 }); 
 
 function searchImport(rubro){
@@ -2314,7 +2510,7 @@ function searchImport(rubro){
 }
 }
 function importRubros(){
-	window.location.href = "http://localhost:8000/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
+	window.location.href = "https://sicapdeploys.herokuapp.com/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
 }
 function cancels(option){
 	if(option==1){
@@ -2366,6 +2562,9 @@ function cancels(option){
 		$('#MyModalImport').modal('toggle');
 		var table = $('#dataTableImports').DataTable(); 
  		var rows = table.rows().remove().draw();
+	}
+	if(option==5){
+		$('#myModalAgreementUpdate').modal('toggle');
 	}
 }
 
@@ -2477,6 +2676,18 @@ function validateDataImport(){
 		}	
     });
 
+	var validator= jsonImport;
+	var reverse = validator.reverse();
+	for (var i=jsonImport.length - 1; i>=0; i--){
+		if(jsonImport[i].TC=='M'){
+			var sum = sumIncludes(jsonImport[i].RB)
+			if(sum!=jsonImport[i].PI){
+				countOk -= 1
+				$("#import"+jsonImport[i].RB).text("El total de la cuenta mayor no coincide");	
+			}
+		}
+	}
+
    	if(countOk==nRow) {
 		nextImport = true;
 	}
@@ -2510,7 +2721,8 @@ function sendDataToBD(){
 							"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
 							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
 							"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
-							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"		
+							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+	
+							"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 							])
 						}
 						table.draw(false);
@@ -2530,20 +2742,19 @@ function sendDataToBD(){
 	
 }
 
-function validateValues(){
-
+function sumIncludes(mayor){
 	var sum=0;
-	var validator= jsonImport;
-	var currentAux;
-	currentAux = validator[0].RB;
-	for (var i=0; i<validator.length; i++){
-		
-		if(validator[i].RB.includes(currentAux)){
-
+	for (var i=jsonImport.length-1; i>=0; i--){
+		if(jsonImport[i].TC=='A'){
+			if(jsonImport[i].RB.includes(mayor)){
+				sum = sum + parseInt(jsonImport[i].PI)
+			
+			}
 		}
-	}	
-}
 
+	}
+	return sum;
+}
 
 </script>
 

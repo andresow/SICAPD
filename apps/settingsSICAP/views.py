@@ -373,10 +373,16 @@ class DeleteAll(LoginRequiredMixin, View):
             typeContract = TypeContract.objects.get(id=request.GET.get('id'))
             typeContract.delete()
             return JsonResponse({'Eliminado': 'True'})
-        else:
+        elif option=='7':
             operation = Operation.objects.get(id=request.GET.get('id'))
             operation.delete()
             return JsonResponse({'Eliminado': 'True'})
+        else:
+            agreement = Agreement.objects.get(id=request.GET.get('id'))
+            agreement.delete()
+            listAgreement = Agreement.objects.filter(origin_id=request.GET.get('origin')).values('id', 'typeAgreement', 'numberAg', 'descriptionAg')
+            return JsonResponse({'Eliminado': 'True', 'AG':list(listAgreement)})
+
 
 class GetOperationsContra(LoginRequiredMixin, View):
 

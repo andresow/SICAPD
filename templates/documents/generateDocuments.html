@@ -47,14 +47,97 @@
 					</div>
 				</div>
 				<br>
-				<div class="form-row">
+				<div class="form-row mb-3">
 					<div class="col-6">
 						<label for="exampleFormControlTextarea1">Observación</label>
 						<textarea placeholder="Observación" name="observation" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 					</div>					
-				</div>	
+				</div>
+				<div  class="container-fluid mb-3" style="float:left">
+					<div class="card" >
+					<div class="card-header " id="textTable"><i class="fas fa-table mr-1" ></i>Lista de rubros por presupuesto de</div>
+					<div class="card-body" >
+						<div class="table-responsive">
+							<button  onclick="getRubrosByOrigin()" data-toggle="modal" data-target="#myModalRubroOrigin" class="genric-btn primary small">Agregar Rubros</button>               
+							
+								<table class="table table-bordered dataTable" id="dataTableTest" cellspacing="0" 
+								role="grid" aria-describedby="dataTable_info">	
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Rubro</th>
+										<th>Descripción</th>
+										<th>Disponibilidad</th>
+										<th>Valor Registro</th>
+										<th>Valor P</th>
+										<th>Saldo</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>ID</th>
+										<th>Rubro</th>
+										<th>Descripción</th>
+										<th>Disponibilidad</th>
+										<th>Valor Registro</th>
+										<th>Valor P</th>
+										<th>Saldo</th>
+										<th>Acciones</th>
+									</tr>
+								</tfoot>
+									<tbody>
+										<h1></h1>
+									</tbody>
+								</table>
+								
+						</div>
+						<div class="form-row col-12 mb-2">
+								
+							<div class="col-8" >
+								<h6  id="totalDisponibility" for="totalDisponibility" align="center">DISPONIBILIDAD: 0</h6>					
+							</div>
+							<div class="col-4" >
+								<h6  id="totalBalance" for="totalBalance">SALDO: 0</h6>										
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>  
+				<div  class="container-fluid mb-3" style="float:left">
+					<div class="card" >
+					<div class="card-header " id="divTabDispoText"><i class="fas fa-table mr-1" ></i>Lista de movimientos Disponibilidad del presupuesto de</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<table class="table table-bordered dataTable" id="dataTableDispo" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">
+									
+									<thead>
+										<tr>
+											<th>Numero</th>	
+											<th>Descripción</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Numero</th>	
+											<th>Descripción</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Acciones</th>
+										</tr>
+									</tfoot>
+									</table>
+							</div>
+						</div>
+					</div>
+				</div> 	
 				<br>
-				<div class="form-row">
+				<br>
+				<div class="form-row mb-2">
 					<div id="divInitialBudget" >
 						<button type="button" onclick="createDisponibility(1)"   class="btn btn-primary">Guardar disponibilidad</button>
 						<button type="submit" onclick="createDisponibility(2)" class="btn btn-primary">Guardar y generar registro</button>
@@ -64,88 +147,7 @@
 			</form>
 		</div>	
 	</div>
-	<div  class="container-fluid " style="float:left">
-			<div class="card" >
-			<div class="card-header " id="textTable"><i class="fas fa-table mr-1" ></i>Lista de rubros por presupuesto de</div>
-			<div class="card-body" >
-				<div class="table-responsive">
-					<button  onclick="getRubrosByOrigin()" data-toggle="modal" data-target="#myModalRubroOrigin" class="genric-btn primary small">Agregar Rubros</button>               
-					
-						<table class="table table-bordered dataTable" id="dataTableTest" cellspacing="0" 
-						role="grid" aria-describedby="dataTable_info">	
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Rubro</th>
-								<th>Descripción</th>
-								<th>Disponibilidad</th>
-								<th>Valor Registro</th>
-								<th>Valor P</th>
-								<th>Saldo</th>
-								<th>Acciones</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<th>ID</th>
-								<th>Rubro</th>
-								<th>Descripción</th>
-								<th>Disponibilidad</th>
-								<th>Valor Registro</th>
-								<th>Valor P</th>
-								<th>Saldo</th>
-								<th>Acciones</th>
-							</tr>
-						</tfoot>
-							<tbody>
-								<h1></h1>
-							</tbody>
-						</table>
-						
-				</div>
-				<div class="form-row col-12 mb-2">
-						
-					<div class="col-8" >
-						<h6  id="totalDisponibility" for="totalDisponibility" align="center">DISPONIBILIDAD: 0</h6>					
-					</div>
-					<div class="col-4" >
-						<h6  id="totalBalance" for="totalBalance">SALDO: 0</h6>										
-					</div>
-				</div>
-			</div>
-			</div>
-	</div>  
-	<div  class="container-fluid " style="float:left">
-		<div class="card" >
-		<div class="card-header " id="divTabDispoText"><i class="fas fa-table mr-1" ></i>Lista de movimientos Disponibilidad del presupuesto de</div>
-			<div class="card-body" >
-				<div class="table-responsive">
-					<table class="table table-bordered dataTable" id="dataTableDispo" cellspacing="0" 
-						role="grid" aria-describedby="dataTable_info">
-						
-						<thead>
-							<tr>
-								<th>Numero</th>	
-								<th>Descripción</th>
-								<th>Valor</th>
-								<th>Saldo</th>
-								<th>Acciones</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<th>Numero</th>	
-								<th>Descripción</th>
-								<th>Valor</th>
-								<th>Saldo</th>
-								<th>Acciones</th>
-							</tr>
-						</tfoot>
-						</table>
-				</div>
-			</div>
-		</div>
-	</div>  
+	 
 
 </div>
 <div id="divRegister" class="container-fluid" style="display:none">

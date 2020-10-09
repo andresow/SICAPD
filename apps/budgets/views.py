@@ -250,7 +250,7 @@ class CreateRubro(LoginRequiredMixin,View):
                     rubro = Rubro.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')), 
                         origin = Origin.objects.get(id=request.GET.get('origin')), 
-                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M",realBudget=0, budgetEject=request.GET.get('initialBudget'),
+                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M",realBudget=0, budgetEject= 0,
                     )
                     movement = Movement.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')),
@@ -303,7 +303,7 @@ class CreateRubro(LoginRequiredMixin,View):
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')), 
                         origin = Origin.objects.get(id=request.GET.get('origin')), 
                         rubroFather = rubroFather.id, 
-                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M", realBudget=0,budgetEject=request.GET.get('initialBudget')
+                        rubro = request.GET.get('rubro'), nivel = request.GET.get('nivel'), description = request.GET.get('description'), dateCreation = today, initialBudget = 0, typeRubro = "M", realBudget=0,budgetEject= 0
                     )
                     movement = Movement.objects.create(
                         bussines = Bussines.objects.get(id=request.GET.get('bussines')),
@@ -721,3 +721,24 @@ class ImportRubrosBD(LoginRequiredMixin,View):
 
         rubros = Rubro.objects.filter(bussines_id=bussines,origin_id=origin).values('id','rubro','description','initialBudget','typeRubro')
         return JsonResponse({"IMPORT": "TRUE","RUBRO": list(rubros)})
+
+class UpdateAgreementRubro(LoginRequiredMixin, View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+    def  get(self, request, *args, **kwargs):
+        print('entre actualizar acuerdo')
+        print(request.GET.get('numberAg'))
+        print(request.GET.get('descriptionAg'))
+        print(request.GET.get('dateAg'))
+        print(request.GET.get('origin'))
+
+        updateAgreement = Agreement.objects.get(id=request.GET.get('id'))
+        listAgreement = Agreement.objects.filter(origin_id=request.GET.get('origin')).values('id', 'typeAgreement', 'numberAg', 'descriptionAg')
+        
+        updateAgreement.numberAg = request.GET.get('numberAg')
+        updateAgreement.dateAg = request.GET.get('dateAg')
+        updateAgreement.descriptionAg = request.GET.get('descriptionAg').upper()
+        updateAgreement.save()
+
+        return JsonResponse({'CREATE':"TRUE", 'AG':list(listAgreement)})
