@@ -539,8 +539,8 @@ function generateDisponibilty(){
 						data.MV[i].value,
 						data.MV[i].balance,
 						"<a data-toggle='tooltip' title='Actualizar disponibilidad'><button  class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
-						"<a data-toggle='tooltip' title='Ver detalles'><button onclick='getDetall("+data.MV[i].id+")' data-toggle='modal' data-target='#myModalDetall' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"			
-			
+						"<a data-toggle='tooltip' title='Ver detalles'><button onclick='getDetall("+data.MV[i].id+")' data-toggle='modal' data-target='#myModalDetall' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
+						"<a data-toggle='tooltip'  id='deleteDisponibility' title='Eliminar disponibilidad'><button onclick=\'deleteDisponibility("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
 						])
 					}
 					table.draw( false );		
@@ -573,7 +573,7 @@ function getRubrosByOrigin(){
 				data.RUBRO[i].description,
 				data.RUBRO[i].initialBudget,
 				data.RUBRO[i].budgetEject,
-				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].budgetEject)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].budgetEject)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
 				])
 			}
 			table.draw( false );
@@ -581,6 +581,52 @@ function getRubrosByOrigin(){
 		});
 }
 
+function deleteDisponibility(id, numero){
+  
+  swal({
+  title: "Desea eliminar disponibilidad con número " + numero + "?",
+  text: "Al confirmar esta acción, la disponibilidad con número " + numero + " sera eliminado.",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+  })
+  .then((willDelete) => {
+  if (willDelete) {
+  
+	  $.ajax({
+		  url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
+		  data: {
+			  'origin': originID,
+			  'id': id,
+			  'option': '9'
+		  },
+		  dataType: 'json',
+		  success: function (data) { 
+
+			var table = $('#dataTableDispo').DataTable(); 
+			var rows = table.rows().remove().draw();
+			for (var i=0; i<data.MV.length; i++){
+
+				table.row.add( [
+				data.MV[i].disponibility,
+				data.MV[i].observation,
+				data.MV[i].value,
+				data.MV[i].balance,
+				"<a data-toggle='tooltip' title='Actualizar disponibilidad'><button  class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+				"<a data-toggle='tooltip' title='Ver detalles'><button onclick='getDetall("+data.MV[i].id+")' data-toggle='modal' data-target='#myModalDetall' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
+				"<a data-toggle='tooltip'  id='deleteDisponibility' title='Eliminar disponibilidad'><button onclick=\'deleteDisponibility("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
+				])
+			}
+			table.draw( false );
+			  swal("La disponibilidad con número " + numero + "  se ha eliminado con éxito.", {
+			  icon: "success",
+			  });
+			  
+		  }
+	  });
+  }
+  });
+}
 function validaNumericos(event) {
     if(event.charCode >= 48 && event.charCode <= 57){
       return true;

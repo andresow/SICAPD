@@ -377,11 +377,18 @@ class DeleteAll(LoginRequiredMixin, View):
             operation = Operation.objects.get(id=request.GET.get('id'))
             operation.delete()
             return JsonResponse({'Eliminado': 'True'})
-        else:
+        elif option=='8':
             agreement = Agreement.objects.get(id=request.GET.get('id'))
             agreement.delete()
             listAgreement = Agreement.objects.filter(origin_id=request.GET.get('origin')).values('id', 'typeAgreement', 'numberAg', 'descriptionAg')
             return JsonResponse({'Eliminado': 'True', 'AG':list(listAgreement)})
+        else:
+            movement = Movement.objects.get(id=request.GET.get('id'))
+            movement.delete()
+            listMovement = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="DISPONIBILIDAD").values('id','value','balance','disponibility','observation')
+            return JsonResponse({'Eliminado': 'True', 'MV':list(listMovement)})
+
+
 
 
 class GetOperationsContra(LoginRequiredMixin, View):

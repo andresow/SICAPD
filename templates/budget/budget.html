@@ -106,10 +106,10 @@
 					</font>
 					<div class="form-row col-12 mb-2">
 						
-						<div class="col-6" >
-							<h6  id="totalValorOp" for="totalValorOp" align="center">VALOR: 0</h6>					
-						</div>
 						<div class="col-5" >
+							<h6  id="totalValorOp" for="totalValorOp">VALOR: 0</h6>					
+						</div>
+						<div class="col-7" >
 							<h6  id="totalPresupuestoOp" for="totalPresupuestoOp">PRESUPUESTO POR EJECUTAR: 0</h6>										
 						</div>
 					</div>
@@ -157,11 +157,11 @@
 						</font>
 						<div class="form-row col-12 mb-2">
 						
-							<div class="col-6" >
-								<h6  id="totalValorContraOp" for="totalValorContraOp" align="center">VALOR: 0</h6>					
-							</div>
 							<div class="col-5" >
-								<h6  id="totalPresupuestoContraOp" for="totalPresupuestoContraOp">PRESUPUESTO POR EJECUTAR: 0</h6>										
+								<h6  id="totalValorContraOp" for="totalValorContraOp">VALOR: 0</h6>					
+							</div>
+							<div class="col-7" >
+								<h6  id="totalPresupuestoContraOp" for="totalPresupuestoContraOp">FALTA POR CONTRA OPERAR: 0</h6>										
 							</div>
 						</div>
 
@@ -1956,9 +1956,9 @@ function deleteContraRubroSelected(id){
 	oTable.row(':eq('+indexTable +')').remove().draw();
 	rubrosToContraOperation.splice(rubrosToContraOperation.indexOf(id), 1);
 	addContraperation.splice(addContraperation.indexOf(id), 1);
-	totalcontraOperate = totalcontraOperate - totalContraOpArray[positionDeleteContraOP].subtotalContraOp;
+	totalcontraOperate = totalcontraOperate + totalContraOpArray[positionDeleteContraOP].valorContraOp;
 	totalValorContraOp = totalValorContraOp - totalContraOpArray[positionDeleteContraOP].valorContraOp;
-	$("#totalPresupuestoContraOp").text("PRESUPUESTO POR EJECUTAR: "+ totalcontraOperate);	
+	$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);	
 	$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);														
 	totalContraOpArray.splice(totalContraOpArray.indexOf(id), 1);
 	rubrosToContraOperation.splice(addOperation.indexOf(id), 1);
@@ -2176,7 +2176,9 @@ function finishOperation(){
 						$('#fOperation').attr("disabled", true);
 
 				}
-				$("#textContraperations").text("Rubros de "+ data.CO);															
+				totalcontraOperate = totalValor;
+				$("#textContraperations").text("Rubros de "+ data.CO);
+				$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);																
 				var table = $('#dataTableSelectRubro').DataTable(); 
  				var rows = table.rows().remove().draw();
 			}
@@ -2250,6 +2252,7 @@ function operateContraBalance(id,rubro,realBudget,description){
 	var createId =  "#contra"+id;
 	var result= "#balancecontra"+id
 	var contraOperate=0;
+	
 	const found = addContraperation.findIndex(element => element['id'] == id);
 	if(parseInt($(createId).val())==0){
 		swal("No se puede generar una operacion de valor 0", " " , "error");
@@ -2300,9 +2303,9 @@ function operateContraBalance(id,rubro,realBudget,description){
 		"subtotalContraOp": contraOperate,
 		"valorContraOp":  parseInt($(createId).val())
 		})
-		totalcontraOperate = totalcontraOperate + contraOperate;	
+		totalcontraOperate = totalcontraOperate - parseInt($(createId).val());	
 		totalValorContraOp = totalValorContraOp + parseInt($(createId).val());
-		$("#totalPresupuestoContraOp").text("PRESUPUESTO POR EJECUTAR: "+ totalcontraOperate);														
+		$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);														
 		$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);
 	}
 	}else{
@@ -2346,14 +2349,16 @@ function operateContraBalance(id,rubro,realBudget,description){
 		if (validator=="True"){
 			totalcontraOperate = totalcontraOperate - totalContraOpArray[found]['subtotalContraOp'];	
 			totalValorContraOp = totalValorContraOp - totalContraOpArray[found]['valorContraOp'];
+			totalcontraOperate = totalcontraOperate + totalContraOpArray[found]['valorContraOp'];
 			totalContraOpArray[found] = {
 			"id": id,
 			"subtotalContraOp": contraOperate,
 			"valorContraOp":  parseInt($(createId).val())
-			}				
+			}
+			totalcontraOperate = totalcontraOperate - totalContraOpArray[found]['valorContraOp'];				
 			totalcontraOperate = totalcontraOperate + totalContraOpArray[found]['subtotalContraOp'];	
 			totalValorContraOp = totalValorContraOp + totalContraOpArray[found]['valorContraOp'];
-			$("#totalPresupuestoContraOp").text("PRESUPUESTO POR EJECUTAR: "+ totalcontraOperate);														
+			$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);														
 			$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);
 		}
 	}		
