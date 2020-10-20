@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'ajax/getDetallsDisponibility/(?P<pkUser>\d+)/', GetDetallsDisponibility.as_view(), name='getDetallsDisponibility'),
     url(r'ajax/getDataToRegister/(?P<pkUser>\d+)/', GetDataToRegister.as_view(), name='getDataToRegister'),
     url(r'ajax/getDataRubroDisponibility/(?P<pkUser>\d+)/', GetDataRubroDisponibility.as_view(), name='getDataRubroDisponibility'),
+    url(r'ajax/getOperationsByOrigin/(?P<pkUser>\d+)/', GetOperationsByOrigin.as_view(), name='getOperationsByOrigin'),
 
 ]

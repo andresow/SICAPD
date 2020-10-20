@@ -13,6 +13,9 @@ import simplejson as json
 from tablib import Dataset 
 from django.views.decorators.csrf import csrf_exempt
 from apps.budgets.resources import RubroResources
+import sys
+from django.db.models import Sum
+
 # Create your views here.
 
 
@@ -194,7 +197,7 @@ class GetOperationBudget(LoginRequiredMixin,View):
         accountPeriod = AccountPeriod.objects.get(name=request.GET.get('nameAC')[:-1])
         origin = Origin.objects.get(nameOrigin=nameOrigin, accountPeriod=accountPeriod.id)
         operations = Operation.objects.filter(origin=origin.id).values('nameOp')
-        rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget').order_by('rubro')
+        rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget','budgetEject').order_by('rubro')
         movementIni = Agreement.objects.filter(origin_id=origin.id).values('id','descriptionAg','numberAg','typeAgreement')
         return JsonResponse({"ID":origin.id ,"OP": list(operations),"RUBRO": list(rubro),"AG":list(movementIni)})
 
@@ -351,11 +354,13 @@ class UpdateRubro(LoginRequiredMixin,View):
         if updateRubro.typeRubro == 'A' and request.GET.get('typeRubro')=='M':
             rubroExists = Rubro.objects.filter(rubroFather=request.GET.get('id'),bussines_id=request.GET.get('idBussines'),origin_id=request.GET.get('origin')).exists()
             movementExists = Movement.objects.filter(nameRubro=request.GET.get('id')).exclude(concept='CREACION').exists()
-            if movementExists == False:
+            rubroMovement = RubroMovement.objects.filter(nameRubro=request.GET.get('id'), movement__concept='DISPONIBILIDAD').exists()
+            if movementExists == False and rubroMovement == False:
                     
-                updateRubro.typeRubro = request.GET.get('typeRubro')
+                updateRubro.typeRubro = 'M'
                 updateRubro.description = request.GET.get('description')
                 updateRubro.initialBudget = request.GET.get('initialBudget')
+                updateRubro.save()
                 inform = json.loads(request.GET.get('inform'))
                 informDetall = json.loads(request.GET.get('detallInform'))
                 rbList = list(Rubro.objects.filter(id=request.GET.get('id')).values('inform__nameI','informdetall__codeInfD'))
@@ -392,7 +397,9 @@ class UpdateRubro(LoginRequiredMixin,View):
 
         elif updateRubro.typeRubro == 'A' and request.GET.get('typeRubro')=='A':
             movementExists = Movement.objects.filter(nameRubro=request.GET.get('id')).exclude(concept='CREACION').exists()
-            if movementExists == False:               
+            rubroMovement = RubroMovement.objects.filter(nameRubro=request.GET.get('id'), movement__concept='DISPONIBILIDAD').exists()
+
+            if movementExists == False and rubroMovement == False:
                 updateRubro.description = request.GET.get('description')
                 updateRubro.initialBudget = request.GET.get('initialBudget')
                 inform = json.loads(request.GET.get('inform'))
@@ -435,7 +442,7 @@ class UpdateRubro(LoginRequiredMixin,View):
                     return JsonResponse({"DESCRIPTION": 'TRUE'})
             if rubroExists == False:           
                 updateRubro.description = request.GET.get('description')
-                updateRubro.typeRubro = request.GET.get('typeRubro')
+                updateRubro.typeRubro = 'A'
                 updateRubro.save()                             
                 originId = request.GET.get('origin')
                 origin = Origin.objects.get(id=originId)
@@ -445,6 +452,7 @@ class UpdateRubro(LoginRequiredMixin,View):
                 return JsonResponse({"SOY_FATHER": 'TRUE'})  
         else:
             updateRubro.description = request.GET.get('description')
+            updateRubro.typeRubro = 'A'
             updateRubro.save()  
             originId = request.GET.get('origin')
             origin = Origin.objects.get(id=originId)
@@ -478,7 +486,8 @@ class DeleteRubro(LoginRequiredMixin, View):
                 return JsonResponse({"SOY_FATHER": 'TRUE'})
         else:
             movementExists = Movement.objects.filter(nameRubro=request.GET.get('id')).exclude(concept='CREACION').exists()
-            if movementExists == False:
+            rubroMovement = RubroMovement.objects.filter(nameRubro=request.GET.get('id'), movement__concept='DISPONIBILIDAD').exists()
+            if movementExists == False and rubroMovement == False:
                 deleteRubro = Rubro.objects.get(id=request.GET.get('id'))
                 deleteRubro.delete()
                    
@@ -488,7 +497,7 @@ class DeleteRubro(LoginRequiredMixin, View):
                         
                 return JsonResponse({'ELIMINADO': 'TRUE', "RUBRO": list(rubro)})        
             else:
-                return JsonResponse({'ELIMINADO': 'FALSE'}) 
+                return JsonResponse({'MOVEMENTS': 'TRUE'}) 
 
 class GetRubrosOrigin(LoginRequiredMixin,View):
 
@@ -497,7 +506,7 @@ class GetRubrosOrigin(LoginRequiredMixin,View):
 
     def get(self, request, *args, **kwargs):
 
-        rubros = Rubro.objects.filter(origin_id=request.GET.get('origin'), bussines_id=request.GET.get('bussines')).values('id','rubro','typeRubro','description','initialBudget','realBudget','budgetEject')
+        rubros = Rubro.objects.filter(origin_id=request.GET.get('origin'), bussines_id=request.GET.get('bussines')).values('id','rubro','typeRubro','description','initialBudget','realBudget','budgetEject').order_by('rubro')
         return JsonResponse({"RUBRO": list(rubros)}) 
 
 class GetOperationByOperate(LoginRequiredMixin,View):
@@ -524,7 +533,7 @@ class GetRubrosContraOperation(LoginRequiredMixin,View):
         operation = Operation.objects.get(nameOp=request.GET.get('operation'), origin=Origin.objects.get(id=request.GET.get('origin')))
         idContraOperation = operation.contraOperar
         contraoperation = Operation.objects.get(id=idContraOperation)
-        rubros = Rubro.objects.filter(origin_id=operation.contraOrigin, bussines_id=request.GET.get('bussines')).values('id','rubro','typeRubro','description','initialBudget','realBudget')
+        rubros = Rubro.objects.filter(origin_id=operation.contraOrigin, bussines_id=request.GET.get('bussines')).values('id','rubro','typeRubro','description','initialBudget','realBudget').order_by('rubro')
         return JsonResponse({"RUBRO": list(rubros), "CONTRAOPERACION": str(contraoperation.operation),"NAME": contraoperation.nameOp}) 
 
 class CreateOperations(LoginRequiredMixin,View):
@@ -549,18 +558,20 @@ class CreateOperations(LoginRequiredMixin,View):
         for x in range(0,len(operation)):
             bussines = Bussines.objects.get(id=request.POST.get('bussines'))
             rubro = Rubro.objects.get(id=operation[x]['id'])
-            movement = Movement.objects.create(bussines=bussines,nameRubro=operation[x]['id'],concept=operation[x]['concept'], value=operation[x]['value'],balance=operation[x]['value'],date=today,agreement=agreement)
+            movement = Movement.objects.create(bussines=bussines,nameRubro=operation[x]['id'],concept=operation[x]['concept'], value=operation[x]['value'],balance=operation[x]['balance'],date=today,agreement=agreement,budgetEject=operation[x]['byEject'])
             rubroMov = RubroMovement.objects.create(bussines = bussines,value=operation[x]['value'],valueP=rubro.realBudget,balance=operation[x]['balance'],date=today,nameRubro=operation[x]['id'],movement=movement) 
             rubroBalanceMov = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation=operation[x]['concept'],value=operation[x]['value'],balance=operation[x]['balance'],date=today,nameRubro=operation[x]['id']) 
             rubro.realBudget = operation[x]['balance']
+            rubro.budgetEject = operation[x]['byEject']
             rubro.save()
 
         for x in range(0,len(contraoperation)):
             contraRubro = Rubro.objects.get(id=contraoperation[x]['id'])
-            contramovement = Movement.objects.create(bussines=bussines,nameRubro=contraoperation[x]['id'],concept=contraoperation[x]['concept'], value=contraoperation[x]['value'],balance=contraoperation[x]['balance'],date=today,agreement=agreement)
+            contramovement = Movement.objects.create(bussines=bussines,nameRubro=contraoperation[x]['id'],concept=contraoperation[x]['concept'], value=contraoperation[x]['value'],balance=contraoperation[x]['balance'],date=today,agreement=agreement,budgetEject=contraoperation[x]['byEject'])
             contraRubroMov = RubroMovement.objects.create(bussines = bussines,value=contraoperation[x]['value'],valueP=contraRubro.realBudget,balance=contraoperation[x]['balance'],date=today,nameRubro=contraoperation[x]['id'],movement=contramovement) 
             contraRubroBalanceMov = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation=contraoperation[x]['concept'],value=contraoperation[x]['value'],balance=contraoperation[x]['balance'],date=today,nameRubro=contraoperation[x]['id']) 
             contraRubro.realBudget = contraoperation[x]['balance']
+            contraRubro.budgetEject = contraoperation[x]['byEject']
             contraRubro.save()
 
         return JsonResponse({"OP":"TRUE"}) 
@@ -640,7 +651,6 @@ def rubroFatherValue(request, rubroFather, value):
 
 def searchImport(request, rubro,origin,bussines,discount):
     
-
     rubroExist = Rubro.objects.filter(rubro=rubro[:-discount],bussines_id=bussines,origin_id=origin).exists()
     
     if rubroExist==False:
@@ -678,6 +688,7 @@ class ImportRubrosBD(LoginRequiredMixin,View):
     redirect_field_name = '/login/'
 
     def  post(self, request, *args, **kwargs):
+   
         bussines = request.POST.get('idBussines')
         rubrost = request.POST.get('rubros')
         rubros = json.loads(rubrost)
@@ -691,27 +702,33 @@ class ImportRubrosBD(LoginRequiredMixin,View):
                     filaRubro=str(rubros[x]['RB'])
                     getRubro = Rubro.objects.get(rubro=filaRubro[:-request.session.get('num')],bussines_id=bussines,origin_id=origin)
                     if  rubros[x]['TC'] == "A":
-                        Rubro.objects.create(
+                        newRubro = Rubro.objects.create(
                             bussines_id = bussines,origin_id = origin, rubroFather= getRubro.id, 
                             rubro = rubros[x]['RB'], nivel =getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
+                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
                     else:
-                        Rubro.objects.create(
+                        newRubro =Rubro.objects.create(
                             bussines_id = bussines, 
                             origin_id = origin, rubroFather= getRubro.id,
                             rubro = rubros[x]['RB'], nivel =  getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
+                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
+
                 else: 
                     if  rubros[x]['TC'] == "A":
-                        Rubro.objects.create(
+                        newRubro = Rubro.objects.create(
                                 bussines_id = bussines,origin_id = origin, 
                                 rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
+                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today)                 
                     else:
-                        Rubro.objects.create(
+                        newRubro = Rubro.objects.create(
                                 bussines_id = bussines, origin_id = origin, 
                                 rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'], budgetEject=rubros[x]['PI'],imported="TRUE"
-                        )                    
+                        ) 
+                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
+                   
             else:
                 return JsonResponse({"IMPORT": "FALSE"})
                 break
@@ -724,11 +741,6 @@ class UpdateAgreementRubro(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = '/login/'
     def  get(self, request, *args, **kwargs):
-        print('entre actualizar acuerdo')
-        print(request.GET.get('numberAg'))
-        print(request.GET.get('descriptionAg'))
-        print(request.GET.get('dateAg'))
-        print(request.GET.get('origin'))
 
         updateAgreement = Agreement.objects.get(id=request.GET.get('id'))
         listAgreement = Agreement.objects.filter(origin_id=request.GET.get('origin')).values('id', 'typeAgreement', 'numberAg', 'descriptionAg')
@@ -739,3 +751,49 @@ class UpdateAgreementRubro(LoginRequiredMixin, View):
         updateAgreement.save()
 
         return JsonResponse({'CREATE':"TRUE", 'AG':list(listAgreement)})
+
+class DeleteRubrosImported(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def  post(self, request, *args, **kwargs):
+
+        rubrost = request.POST.get('rubros')
+        rubros = json.loads(rubrost)
+        for x in range(0,len(rubros)):
+            rubro = Rubro.objects.get(bussines_id=request.POST.get('idBussines'),origin_id = request.POST.get('origin'),rubro=rubros[x]['RB'],imported="TRUE")
+            if rubro != None:
+                rubro.delete()
+            else:
+                print("gg")
+
+        return JsonResponse({"DELETE": "TRUE"})
+
+class GetMovementsByOrigin(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def  get(self, request, *args, **kwargs):
+
+        movement = Movement.objects.filter(origin_id=request.GET.get('origin')).exclude(concept='CREACION').exists()
+        if movement == True:
+            return JsonResponse({"MOVEMENTS": "TRUE"})
+        else:
+            return JsonResponse({"MOVEMENTS": "FALSO"})
+
+class GetDisponibilityByRubros(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def  get(self, request, *args, **kwargs):
+
+        rubroMovement = RubroMovement.objects.filter(nameRubro=request.GET.get('id'),movement__concept='DISPONIBILIDAD').exists()
+        if rubroMovement == True:
+            rubroMovement = RubroMovement.objects.filter(nameRubro=request.GET.get('id'),movement__concept='DISPONIBILIDAD').aggregate(total_value=Sum('value'))
+            print(rubroMovement)
+            return JsonResponse({"DP": rubroMovement['total_value']})
+        else:
+            return JsonResponse({"DP": 0})

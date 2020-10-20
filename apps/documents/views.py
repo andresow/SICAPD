@@ -386,9 +386,18 @@ class GetDataRubroDisponibility(LoginRequiredMixin,View):
     redirect_field_name = '/login/'
 
     def get(self, request, *args, **kwargs):
-        print(request.GET.get('initialDate'))
-        print(request.GET.get('finalDate'))
-        print(request.GET.get('id'))
+
         rubroMovement = RubroMovement.objects.filter(nameRubro=request.GET.get('id'),movement__concept='DISPONIBILIDAD', date__gte=request.GET.get('initialDate'),date__lte=request.GET.get('finalDate')).values('movement__disponibility','value','balance','nameRubro','date')
-        print(rubroMovement)  
         return JsonResponse({"DPRUBRO": list(rubroMovement)})
+
+class GetOperationsByOrigin(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        print(request.GET.get('originID'))
+        origin = Origin.objects.get(nameOrigin=request.GET.get('originID'),accountPeriod_id=request.GET.get('accountPeriod'))
+        operations = Operation.objects.filter(origin=origin.id).values('nameOp')
+        return JsonResponse({"OP": list(operations)})

@@ -359,7 +359,7 @@
 		
 	</div>
 	<div id="visualityTables">
-		<div  class="container-fluid col-6" style="float:left">
+		<div  class="container-fluid col-7" style="float:left">
 			<div class="card mb" >
 			<div class="card-header " id="textTable"><i class="fas fa-table mr-1" ></i>Lista de rubros por presupuesto de</div>
 			<div class="card-body" >
@@ -376,6 +376,7 @@
 								<th>Tipo</th>
 								<th>Descripción</th>
 								<th>Presupuesto inicial</th>
+								<th>Presupuesto por ejecutar</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -386,6 +387,7 @@
 								<th>Tipo </th>
 								<th>Descripción</th>
 								<th>Presupuesto inicial</th>
+								<th>Presupuesto por ejecutar</th>
 								<th>Acciones</th>
 							</tr>
 						</tfoot>
@@ -398,7 +400,7 @@
 				</div>
 			</div>
 		</div> 
-		<div  class="container-fluid col-6" style="float:right">
+		<div  class="container-fluid col-5" style="float:right">
 			<div class="card " style="float:right">
 			<div class="card-header " style="float:right"><i class="fas fa-table mr-1" style="float:right"></i>Lista de Acuerdos</div>
 			<div class="card-body" style="float:right">
@@ -485,7 +487,7 @@
 									<label class="custom-control-label" for="AUXILIARUP">Auxiliar</label>
 								</div>
 								<div class="custom-control custom-radio custom-control-inline">
-									<input  onclick="getRadioButonType('M')" value="M" type="radio" class="custom-control-input" id="MAYORUP" name="typeAccountUP">
+									<input  onclick="getRadioButonTypeUpdate('M')" value="M" type="radio" class="custom-control-input" id="MAYORUP" name="typeAccountUP">
 									<label class="custom-control-label" for="MAYORUP">Mayor</label>
 								</div>
 	
@@ -904,9 +906,6 @@ $(document).ready(function() {
 		  
 			dom: 'Bfrtip',			
 		  } );		 	
-} );
-
-$(document).ready(function() {///______________se modifico la cumna posicion 0
 		$('#dataTableRubroTem').DataTable( {
 			"ordering": false,
 
@@ -921,8 +920,22 @@ $(document).ready(function() {///______________se modifico la cumna posicion 0
 			dom: 'Bfrtip',			
 		  }
 		  );		 	
-} );	
-$(document).ready(function() {
+		$('#dataTableSelectRubro').DataTable( {
+		  "destroy":true,
+		  "ordering": false,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );
+		$('#dataTableSelectContraRubro').DataTable( {
+		  "destroy":true,
+		  "ordering": false,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		);		 	
 		$('#dataTableImports').DataTable( {
 		  "destroy":true,
 		  "paging":   false,
@@ -930,25 +943,18 @@ $(document).ready(function() {
 		  
 			dom: 'Bfrtip',			
 		  } );		 	
-} );
-$(document).ready(function() {
 		$('#dataTableMovTem').DataTable( {
 		  "destroy":true,
 		  "language": idioma_español,
 		  
 			dom: 'Bfrtip',			
 		  } );		 	
-} );	
-$(document).ready(function() {
 		$('#dataTableContraRubros').DataTable( {
 		  "destroy":true,
 		  "language": idioma_español,
 		  
 			dom: 'Bfrtip',			
 		  } );		 	
-} );	
-
-$(document).ready(function() {
 		$('#dataTableRubroOthers').DataTable( {
 
 		  "destroy":true,
@@ -957,8 +963,6 @@ $(document).ready(function() {
 			dom: 'Bfrtip',			
 		  }
 		  );		 	
-} );	
-$(document).ready(function() {
 		$('#dataTableAgreeementOperation').DataTable( {
 
 		  "destroy":true,
@@ -967,35 +971,12 @@ $(document).ready(function() {
 			dom: 'Bfrtip',			
 		  }
 		  );		 	
-} );
-$(document).ready(function() {
-		$('#dataTableSelectRubro').DataTable( {
-		  "destroy":true,
-		  "language": idioma_español,
-		  
-			dom: 'Bfrtip',			
-		  }
-		  );		 	
-} );
-$(document).ready(function() {
-		$('#dataTableSelectContraRubro').DataTable( {
-		  "destroy":true,
-		  "language": idioma_español,
-		  
-			dom: 'Bfrtip',			
-		  }
-		  );		 	
-} );
-////////////////////____tatan se definio esta tabla detalle____///////////////////////////
-$(document).ready(function() {
 		$('#dataTableDetailInformRubro').DataTable( {
 		  "destroy":true,
 		  "language": idioma_español,
 		  
 			dom: 'Bfrtip',			
 		  } );		 	
-} );
-$(document).ready(function() {
 		$('#dataTableRubroOperation').DataTable( {
 
 		  "destroy":true,
@@ -1245,9 +1226,9 @@ function getRadioButon(){
 				data.RUBRO[i].typeRubro,
 				data.RUBRO[i].description,
 				data.RUBRO[i].initialBudget,
+				data.RUBRO[i].budgetEject,
 				"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 				"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-				"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 				"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
 				"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 				])
@@ -1277,7 +1258,7 @@ $("form#updateRubro").submit(function() {
 	var valueInitialUpdate =  $('input[name="valueInitialUpdate"]').val();
 	var inform = JSON.stringify(arrayInformsUpdate);
 	var detallTypeInfor = JSON.stringify(arrayCodeUpdate);
-
+	console.log(newTypeRubroUp)
     if (rubroUpdate, descriptionUpdate,valueInitialUpdate) {
           // Create Ajax Call
           $.ajax({
@@ -1312,9 +1293,9 @@ $("form#updateRubro").submit(function() {
 						data.RUBRO[i].typeRubro,
 						data.RUBRO[i].description,
 						data.RUBRO[i].initialBudget,
+						data.RUBRO[i].budgetEject,
 						"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
 						"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 						])
@@ -1344,9 +1325,9 @@ $("form#updateRubro").submit(function() {
 						data.RUBRO[i].typeRubro,
 						data.RUBRO[i].description,
 						data.RUBRO[i].initialBudget,
+						data.RUBRO[i].budgetEject,
 						"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 						"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-						"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 						"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
 						"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 						]);
@@ -1633,6 +1614,9 @@ function deleteRubro(id, rubro){
 						swal("No se puede eliminar soy rubro PADRE", "Por favor verifica", "error");
 						
 					}
+				if (data.MOVEMENTS=="TRUE"){
+					swal("El rubro tiene movimientos por ende no se puede eliminar", "Por favor verifica", "error");			
+				}
 				else{
 					if  (data.ELIMINADO=='TRUE'){
 
@@ -1646,9 +1630,9 @@ function deleteRubro(id, rubro){
 							data.RUBRO[i].typeRubro,
 							data.RUBRO[i].description,
 							data.RUBRO[i].initialBudget,
+							data.RUBRO[i].budgetEject,
 							"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
 							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-							"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+		
 							"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 							])
@@ -1822,6 +1806,7 @@ $("form#createRubro").submit(function() {
 			dataType: 'json',
 			success: function (data) {
 				if (data.CREATE == "TRUE"){
+					$("#createRubro")[0].reset();
 					swal("Creado exitoso del rubro!", "Continua con tu proceso!", "success");
 					arrayInforms.length=0;
 					arrayCode.length=0;
@@ -1847,9 +1832,9 @@ $("form#createRubro").submit(function() {
 								dataTwo.RUBRO[i].typeRubro,
 								dataTwo.RUBRO[i].description,
 								dataTwo.RUBRO[i].initialBudget,
+								dataTwo.RUBRO[i].budgetEject,
 								"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+ 
 								"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].rubro)+','+JSON.stringify(dataTwo.RUBRO[i].typeRubro)+','+JSON.stringify(dataTwo.RUBRO[i].description)+','+JSON.stringify(dataTwo.RUBRO[i].initialBudget)+','+JSON.stringify(dataTwo.RUBRO[i].inform)+','+JSON.stringify(dataTwo.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-								"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 								"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(dataTwo.RUBRO[i].id)+','+JSON.stringify(dataTwo.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+
 								"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(dataTwo.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 								])
@@ -1973,6 +1958,7 @@ function getRubrosByOrigin(){
 			},
 			dataType: 'json',
 			success: function (data) {
+
 				var table = $('#dataTableSelectRubro').DataTable(); 
  				var rows = table.rows().remove().draw();
 				for (var i=0; i<data.RUBRO.length; i++){
@@ -2002,7 +1988,7 @@ function getRubroByOperation(id,rubro,description,realBudget,typeRubro){
 			rubro,
 			description,
 			"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' min='1'  pattern='^[0-9]+'  oninput='validity.valid||(value='');'  style='font-family: Arial; font-size: 10pt;' id="+id+" class='form-control' name='inputOperations'>",
-			realBudget,
+			"<label type='number'   id=Realbalance"+id+"  >"+realBudget+"</label>",
 			"<label type='number'   id=balance"+id+"  ></label>",
 			"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description)+")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
 			"<a data-toggle='tooltip' title='Eliminar rubro'><button  onclick='deleteRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"						
@@ -2017,135 +2003,164 @@ function getRubroByOperation(id,rubro,description,realBudget,typeRubro){
 
 function operateBalance(id,rubro,realBudget,description){
 
-	var validator;
-	var createId =  "#"+id;
-	var result= "#balance"+id
-	var operate=0;
-	var intBudget = parseInt(realBudget);
-	if(parseInt($(createId).val())==0){
-		swal("No se puede generar una operacion de valor 0", " " , "error");
-	}else{
-	const found = addOperation.findIndex(element => element['id'] == id);
-	if(found<0){
-		$.ajax({
-			url: '{% url "getOperationByOperate"  0 %}'.replace('0', localStorage.getItem('userID')),
+ 	$.ajax({
+			url: '{% url "getDisponibilityByRubros"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
-				'origin': originID,
-				'operation': $('input[name=operations]:checked', '#addOptions').val(),
+				'id':id,
+				'bussines':localStorage.getItem('idBussines')
 			},
 			dataType: 'json',
-			success: function (data) {
-			
-			if(data.OP == '+'){
-				operate = realBudget +  parseInt($(createId).val());
-				$(result).text(operate);
-				addOperation.push({
-					"id": id,
-					"rubro": rubro,
-					"description": description,
-					"concept": $('input[name=operations]:checked', '#addOptions').val(),
-					"value":parseInt($(createId).val()),
-					"balance":operate,
-					"realBudget": realBudget
-			})
-			validator="True";
-			}else if(data.OP == '-'){
-			operate = realBudget - parseInt($(createId).val());
-			if(operate<0){
-				swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
-				validator="False"
-			}else{
-				$(result).text(operate);
-				addOperation.push({
-					"id": id,
-					"rubro": rubro,
-					"description": description,
-					"concept": $('input[name=operations]:checked', '#addOptions').val(),
-					"value":parseInt($(createId).val()),
-					"balance":operate,
-					"realBudget": realBudget
-				})
-				validator="True";				
-			}	
-			}else{
-				console.log(data)
-			}			
-			if (validator=="True"){
-					totalOperateArray.push({
-					"id": id,
-					"subtotalOp": operate,
-					"valorOp":  parseInt($(createId).val())
-					})
-					totalOperate = totalOperate + operate;	
-					totalValor = totalValor + parseInt($(createId).val());
-					$("#totalPresupuestoOp").text("PRESUPUESTO POR EJECUTAR: "+ totalOperate);														
-					$("#totalValorOp").text("VALOR: "+ totalValor);
-				}
+			success: function (response) {
+				var disponibilityByRubro = response.DP
+				var validator;
+				var createId =  "#"+id;
+				var result= "#balance"+id;
+				var resultReal= "#Realbalance"+id;
+				var operate=0;
+				var intBudget = parseInt(realBudget);
+				if(parseInt($(createId).val())==0){
+					swal("No se puede generar una operacion de valor 0", " " , "error");
+				}else{
+				const found = addOperation.findIndex(element => element['id'] == id);
+				if(found<0){
+					$.ajax({
+						url: '{% url "getOperationByOperate"  0 %}'.replace('0', localStorage.getItem('userID')),
+						data: {
+							'origin': originID,
+							'operation': $('input[name=operations]:checked', '#addOptions').val(),
+						},
+						dataType: 'json',
+						success: function (data) {
+						
+						if(data.OP == '+'){
+							operate = realBudget +  parseInt($(createId).val());
+							operateEject=  realBudget + parseInt($(createId).val())-parseInt(disponibilityByRubro);
 
+							$(result).text(operateEject);
+							$(resultReal).text(operate);
+							addOperation.push({
+								"id": id,
+								"rubro": rubro,
+								"description": description,
+								"concept": $('input[name=operations]:checked', '#addOptions').val(),
+								"value":parseInt($(createId).val()),
+								"balance":operate,
+								"byEject":operateEject,
+								"realBudget": realBudget
+						})
+						validator="True";
+						}else if(data.OP == '-'){
+						operate = realBudget - parseInt($(createId).val());
+						operateEject=  realBudget - parseInt($(createId).val())-parseInt(disponibilityByRubro);
+
+						if(operate<0){
+							swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
+							validator="False"
+						}else{
+							$(result).text(operateEject);
+							$(resultReal).text(operate);
+							addOperation.push({
+								"id": id,
+								"rubro": rubro,
+								"description": description,
+								"concept": $('input[name=operations]:checked', '#addOptions').val(),
+								"value":parseInt($(createId).val()),
+								"balance":operate,
+								"byEject":operateEject,
+								"realBudget": realBudget
+							})
+							validator="True";				
+						}	
+						}else{
+							console.log(data)
+						}			
+						if (validator=="True"){
+								totalOperateArray.push({
+								"id": id,
+								"subtotalOp": operateEject,
+								"valorOp":  parseInt($(createId).val())
+								})
+								totalOperate = totalOperate + operateEject;	
+								totalValor = totalValor + parseInt($(createId).val());
+								$("#totalPresupuestoOp").text("PRESUPUESTO POR EJECUTAR: "+ totalOperate);														
+								$("#totalValorOp").text("VALOR: "+ totalValor);
+							}
+
+						}
+				});
+				}else{
+					$.ajax({
+						url: '{% url "getOperationByOperate"  0 %}'.replace('0', localStorage.getItem('userID')),
+						data: {
+							'origin': originID,
+							'operation': $('input[name=operations]:checked', '#addOptions').val(),
+						},
+						dataType: 'json',
+						success: function (data) {
+						
+						if(data.OP == '+'){
+							operate = realBudget +  parseInt($(createId).val());
+							operateEject=  realBudget + parseInt($(createId).val())-parseInt(disponibilityByRubro);
+
+							$(result).text(operateEject);
+							$(resultReal).text(operate);
+							addOperation[found] = {
+								"id": id,
+								"rubro": rubro,
+								"description": description,
+								"concept": $('input[name=operations]:checked', '#addOptions').val(),
+								"value":parseInt($(createId).val()),
+								"balance":operate,
+								"byEject":operateEject,
+								"realBudget": realBudget
+						}
+						validator="True";
+						}else if(data.OP == '-'){
+						operate = realBudget - parseInt($(createId).val());
+						operateEject=  realBudget - parseInt($(createId).val())-parseInt(disponibilityByRubro);
+						if(operate<0){
+							swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
+							validator="False"
+						}else{
+							$(result).text(operateEject);
+							$(resultReal).text(operate);
+							addOperation[found] = {
+								"id": id,
+								"rubro": rubro,
+								"description": description,
+								"concept": $('input[name=operations]:checked', '#addOptions').val(),
+								"value":parseInt($(createId).val()),
+								"balance":operate,
+								"byEject":operateEject,
+								"realBudget": realBudget
+							}
+							validator="True";				
+						}	
+						}else{
+							console.log(data)
+						}			
+						if (validator=="True"){
+								totalOperate = totalOperate - totalOperateArray[found]['subtotalOp'];	
+								totalValor = totalValor - totalOperateArray[found]['valorOp'];
+								totalOperateArray[found] = {
+								"id": id,
+								"subtotalOp": operateEject,
+								"valorOp":  parseInt($(createId).val())
+								}				
+								totalOperate = totalOperate + totalOperateArray[found]['subtotalOp'];	
+								totalValor = totalValor + totalOperateArray[found]['valorOp'];
+								$("#totalPresupuestoOp").text("PRESUPUESTO POR EJECUTAR: "+ totalOperate);														
+								$("#totalValorOp").text("VALOR: "+ totalValor);
+							}
+
+						}
+				});
+				}
+				}
 			}
 	});
-	}else{
-		$.ajax({
-			url: '{% url "getOperationByOperate"  0 %}'.replace('0', localStorage.getItem('userID')),
-			data: {
-				'origin': originID,
-				'operation': $('input[name=operations]:checked', '#addOptions').val(),
-			},
-			dataType: 'json',
-			success: function (data) {
-			
-			if(data.OP == '+'){
-				operate = realBudget +  parseInt($(createId).val());
-				$(result).text(operate);
-				addOperation[found] = {
-					"id": id,
-					"rubro": rubro,
-					"description": description,
-					"concept": $('input[name=operations]:checked', '#addOptions').val(),
-					"value":parseInt($(createId).val()),
-					"balance":operate,
-					"realBudget": realBudget
-			}
-			validator="True";
-			}else if(data.OP == '-'){
-			operate = realBudget - parseInt($(createId).val());
-			if(operate<0){
-				swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
-				validator="False"
-			}else{
-				$(result).text(operate);
-				addOperation[found] = {
-					"id": id,
-					"rubro": rubro,
-					"description": description,
-					"concept": $('input[name=operations]:checked', '#addOptions').val(),
-					"value":parseInt($(createId).val()),
-					"balance":operate,
-					"realBudget": realBudget
-				}
-				validator="True";				
-			}	
-			}else{
-				console.log(data)
-			}			
-			if (validator=="True"){
-					totalOperate = totalOperate - totalOperateArray[found]['subtotalOp'];	
-					totalValor = totalValor - totalOperateArray[found]['valorOp'];
-					totalOperateArray[found] = {
-					"id": id,
-					"subtotalOp": operate,
-					"valorOp":  parseInt($(createId).val())
-					}				
-					totalOperate = totalOperate + totalOperateArray[found]['subtotalOp'];	
-					totalValor = totalValor + totalOperateArray[found]['valorOp'];
-					$("#totalPresupuestoOp").text("PRESUPUESTO POR EJECUTAR: "+ totalOperate);														
-					$("#totalValorOp").text("VALOR: "+ totalValor);
-				}
 
-			}
-	});
-	}
-	}
+	
 	
 }
 
@@ -2234,7 +2249,7 @@ function getRubroByContraOperation(id,rubro,description,realBudget,typeRubro){
 			rubro,
 			description,
 			"<input type='text' onkeypress='return validaNumericos(event)'/ min='1'  pattern='^[0-9]+' size='10' oninput='validity.valid||(value='');' style='font-family: Arial; font-size: 10pt;'  id=contra"+id+" class='form-control' name='inputOperations'>",
-			realBudget,
+			"<label type='number' id=RealContrabalance"+id+" >"+realBudget+"</label>",
 			"<label type='number' id=balancecontra"+id+"  ></label>",
 			"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateContraBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description) +")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"	+			
 			"<a data-toggle='tooltip' title='Eliminar rubro'><button  onclick='deleteContraRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"
@@ -2248,121 +2263,149 @@ function getRubroByContraOperation(id,rubro,description,realBudget,typeRubro){
 
 
 function operateContraBalance(id,rubro,realBudget,description){
-	var validator;
-	var createId =  "#contra"+id;
-	var result= "#balancecontra"+id
-	var contraOperate=0;
-	
-	const found = addContraperation.findIndex(element => element['id'] == id);
-	if(parseInt($(createId).val())==0){
-		swal("No se puede generar una operacion de valor 0", " " , "error");
-	}else{
-		if(found<0){
-			console.log("normal")
 
-		if(simbolContraoperation == '+'){
-		var intBudget = parseInt(realBudget)
-		contraOperate = realBudget +  parseInt($(createId).val());
-		$(result).text(contraOperate);		
-		addContraperation.push({
-			"id": id,
-			"rubro": rubro,
-			"description": description,
-			"concept":nameContraoperation,
-			"value":parseInt($(createId).val()),
-			"balance":contraOperate,
-			"realBudget": realBudget
-		})
-		validator="True";				
-	}else if(simbolContraoperation == '-'){
-		var intBudget = parseInt(realBudget)
-		contraOperate = realBudget -  parseInt($(createId).val());
-		if(contraOperate<0){
-			validator="False";
-			swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
-		}else{
+	$.ajax({
+			url: '{% url "getDisponibilityByRubros"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'id':id,
+				'bussines':localStorage.getItem('idBussines')
+			},
+			dataType: 'json',
+			success: function (response) {
+				var disponibilityByRubro =  response.DP;
+				var validator;
+				var createId =  "#contra"+id;
+				var result= "#balancecontra"+id;
+				var resultReal= "#RealContrabalance"+id;
+				var contraOperate=0;
+				
+				const found = addContraperation.findIndex(element => element['id'] == id);
+				if(parseInt($(createId).val())==0){
+					swal("No se puede generar una operacion de valor 0", " " , "error");
+				}else{
+					if(found<0){
+						if(simbolContraoperation == '+'){
+						var intBudget = parseInt(realBudget)
+						contraOperate = realBudget +  parseInt($(createId).val());
+						contraOperateEject = realBudget +  parseInt($(createId).val())-parseInt(disponibilityByRubro);	
+						$(result).text(contraOperateEject);		
+						$(resultReal).text(contraOperate);
+						addContraperation.push({
+							"id": id,
+							"rubro": rubro,
+							"description": description,
+							"concept":nameContraoperation,
+							"value":parseInt($(createId).val()),
+							"balance":contraOperate,
+							"byEject":contraOperateEject,
+							"realBudget": realBudget
+						})
+						validator="True";				
+					}else if(simbolContraoperation == '-'){
+						var intBudget = parseInt(realBudget)
+						contraOperate = realBudget -  parseInt($(createId).val());
+						contraOperateEject = realBudget -  parseInt($(createId).val())-parseInt(disponibilityByRubro);
+						if(contraOperate<0){
+							validator="False";
+							swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
+						}else{
 
-			$(result).text(contraOperate);
-			addContraperation.push({
-				"id": id,
-				"rubro": rubro,
-				"description": description,
-				"concept":nameContraoperation,
-				"value":parseInt($(createId).val()),
-				"balance":contraOperate,
-				"realBudget": realBudget
-			})
-			validator="True";						
-		}			
-		}else{
-			console.log("sno")
-		}
-	if (validator=="True"){
-		totalContraOpArray.push({
-		"id": id,
-		"subtotalContraOp": contraOperate,
-		"valorContraOp":  parseInt($(createId).val())
-		})
-		totalcontraOperate = totalcontraOperate - parseInt($(createId).val());	
-		totalValorContraOp = totalValorContraOp + parseInt($(createId).val());
-		$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);														
-		$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);
-	}
-	}else{
-		if(simbolContraoperation == '+'){
-		var intBudget = parseInt(realBudget)
-		contraOperate = realBudget +  parseInt($(createId).val());
-		$(result).text(contraOperate);		
-		addContraperation[found] = {
-			"id": id,
-			"rubro": rubro,
-			"description": description,
-			"concept": nameContraoperation,
-			"value":parseInt($(createId).val()),
-			"balance":contraOperate,
-			"realBudget": realBudget
-		}
-		validator="True";				
-		}else if(simbolContraoperation == '-'){
-			var intBudget = parseInt(realBudget)
-			contraOperate = realBudget -  parseInt($(createId).val());
-			if(contraOperate<0){
-				validator="False";
-				swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
-			}else{
-
-				$(result).text(contraOperate);
-				addContraperation[found] = {
-					"id": id,
-					"rubro": rubro,
-					"description": description,
-					"concept": nameContraoperation,
-					"value":parseInt($(createId).val()),
-					"balance":contraOperate,
-					"realBudget": realBudget
+							$(result).text(contraOperateEject);		
+							$(resultReal).text(contraOperate);
+							addContraperation.push({
+								"id": id,
+								"rubro": rubro,
+								"description": description,
+								"concept":nameContraoperation,
+								"value":parseInt($(createId).val()),
+								"balance":contraOperate,
+								"byEject":contraOperateEject,
+								"realBudget": realBudget
+							})
+							validator="True";						
+						}			
+						}else{
+							console.log("sno")
+						}
+					if (validator=="True"){
+						totalContraOpArray.push({
+						"id": id,
+						"subtotalContraOp": contraOperate,
+						"valorContraOp":  parseInt($(createId).val())
+						})
+						totalcontraOperate = totalcontraOperate - parseInt($(createId).val());	
+						totalValorContraOp = totalValorContraOp + parseInt($(createId).val());
+						$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);														
+						$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);
+					}
 				}
-				validator="True";						
-			}			
-			}else{
-				console.log("sno")
+				else{
+
+					if(simbolContraoperation == '+'){
+
+					var intBudget = parseInt(realBudget)
+					contraOperate = realBudget +  parseInt($(createId).val());
+					contraOperateEject = (realBudget +  parseInt($(createId).val()))-parseInt(disponibilityByRubro);
+					$(result).text(contraOperateEject);		
+					$(resultReal).text(contraOperate);	
+					addContraperation[found] = {
+						"id": id,
+						"rubro": rubro,
+						"description": description,
+						"concept": nameContraoperation,
+						"value":parseInt($(createId).val()),
+						"balance":contraOperate,
+						"byEject":contraOperateEject,
+						"realBudget": realBudget
+					}
+					validator="True";				
+					}else if(simbolContraoperation == '-'){
+						var intBudget = parseInt(realBudget)
+						contraOperate = realBudget -  parseInt($(createId).val());
+						contraOperateEject = realBudget -  parseInt($(createId).val())-parseInt(disponibilityByRubro);
+						if(contraOperate<0){
+							validator="False";
+							swal("Esta intentando sacar mas de lo posible", "No se puede realizar la operación", "error");
+						}else{
+
+							$(result).text(contraOperateEject);		
+							$(resultReal).text(contraOperate);
+							addContraperation[found] = {
+								"id": id,
+								"rubro": rubro,
+								"description": description,
+								"concept": nameContraoperation,
+								"value":parseInt($(createId).val()),
+								"balance":contraOperate,
+								"byEject":contraOperateEject,
+								"realBudget": realBudget
+							}
+							validator="True";						
+						}			
+						}else{
+							console.log("sno")
+						}
+					if (validator=="True"){
+						totalcontraOperate = totalcontraOperate - totalContraOpArray[found]['subtotalContraOp'];	
+						totalValorContraOp = totalValorContraOp - totalContraOpArray[found]['valorContraOp'];
+						totalcontraOperate = totalcontraOperate + totalContraOpArray[found]['valorContraOp'];
+						totalContraOpArray[found] = {
+						"id": id,
+						"subtotalContraOp": contraOperate,
+						"valorContraOp":  parseInt($(createId).val())
+						}
+						totalcontraOperate = totalcontraOperate - totalContraOpArray[found]['valorContraOp'];				
+						totalcontraOperate = totalcontraOperate + totalContraOpArray[found]['subtotalContraOp'];	
+						totalValorContraOp = totalValorContraOp + totalContraOpArray[found]['valorContraOp'];
+						$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);														
+						$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);
+					}
+				}		
 			}
-		if (validator=="True"){
-			totalcontraOperate = totalcontraOperate - totalContraOpArray[found]['subtotalContraOp'];	
-			totalValorContraOp = totalValorContraOp - totalContraOpArray[found]['valorContraOp'];
-			totalcontraOperate = totalcontraOperate + totalContraOpArray[found]['valorContraOp'];
-			totalContraOpArray[found] = {
-			"id": id,
-			"subtotalContraOp": contraOperate,
-			"valorContraOp":  parseInt($(createId).val())
-			}
-			totalcontraOperate = totalcontraOperate - totalContraOpArray[found]['valorContraOp'];				
-			totalcontraOperate = totalcontraOperate + totalContraOpArray[found]['subtotalContraOp'];	
-			totalValorContraOp = totalValorContraOp + totalContraOpArray[found]['valorContraOp'];
-			$("#totalPresupuestoContraOp").text("FALTA POR CONTRA OPERAR: "+ totalcontraOperate);														
-			$("#totalValorContraOp").text("VALOR: "+ totalValorContraOp);
 		}
-	}		
-	}
+	})
+
+	
 	
 }
  
@@ -2566,6 +2609,7 @@ function cancels(option){
 		$('#MyModalImport').modal('toggle');
 		var table = $('#dataTableImports').DataTable(); 
  		var rows = table.rows().remove().draw();
+		jsonImport.length=0;
 	}
 	if(option==5){
 		$('#myModalAgreementUpdate').modal('toggle');
@@ -2641,7 +2685,7 @@ function validateDataImport(){
 		acumulatorImport = acumulatorImport + parseInt(pattern.match(regex)[i]);
 		arrayImport.push(acumulatorImport)
 	}
-	var filteredData = table.column( 1 ).data().filter( function ( value, index ) {
+ 	var filteredData = table.column( 1 ).data().filter( function ( value, index ) {
     for (var i = 0; i < arrayImport.length; i++) {
 		if(value <= 0){
 			$("#import"+value).text("Numero negativo");	
@@ -2657,8 +2701,9 @@ function validateDataImport(){
 			}
 		}
     });
-
-    data.each(function (value, index) {	
+		
+		 
+   data.each(function (value, index) {	
 		
 		if(value[3]<0){
 			countOk -= 1														
@@ -2679,8 +2724,9 @@ function validateDataImport(){
 			}
 		}	
     });
-
-	var validator= jsonImport;
+	
+/*	
+ 	var validator= jsonImport;
 	var reverse = validator.reverse();
 	for (var i=jsonImport.length - 1; i>=0; i--){
 		if(jsonImport[i].TC=='M'){
@@ -2688,9 +2734,10 @@ function validateDataImport(){
 			if(sum!=jsonImport[i].PI){
 				countOk -= 1
 				$("#import"+jsonImport[i].RB).text("El total de la cuenta mayor no coincide");	
-			}
+			}			
 		}
-	} 
+}*/
+	 
 
    	if(countOk==nRow) {
 		nextImport = true;
@@ -2722,9 +2769,9 @@ function sendDataToBD(){
 							data.RUBRO[i].typeRubro,
 							data.RUBRO[i].description,
 							data.RUBRO[i].initialBudget,
+							data.RUBRO[i].budgetEject,
 							"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
 							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button></a>"+ //agregue button
-							"<a data-toggle='tooltip' href='#' id='detalleIR' title='Detalle Informe Rubro'><button onclick=\'getDetalleInformRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDetailInformRubro' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"+
 							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+	
 							"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
 							])
@@ -2736,14 +2783,92 @@ function sendDataToBD(){
 						var rowsImport = tableImport.rows().remove().draw();
 		
 					}else{
-						swal("Importacion incompleta ","existen datos repetidos", "error");
+						deleteRubroToPassword();						
 					}
+					
 				}
 		});
 	}else{
 		swal("No todos los datos son correctos ","Verifique el archivo", "error");
 	}
 	
+}
+
+function deleteRubroToPassword(){
+	
+	swal({
+			title: "Existen datos repetidos, desea eliminar los rubros previos? ",
+			text: "Al confirmar este acción, todos los rubros previos seran eliminado.",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+	})
+	.then((willDelete) => {
+		if (willDelete) {	
+			$.ajax({
+				url: '{% url "getMovementsByOrigin"  0 %}'.replace('0', localStorage.getItem('userID')),
+				data: {
+					'idBussines':localStorage.getItem('idBussines'),
+					'origin': originID,
+				},
+				dataType: 'json',
+				success: function (data) {
+					if(data.MOVEMENTS=="TRUE"){
+						confirmatePassword();
+					}else{
+						swal("Ya se han realizado movimientos en este presupuesto ","No se puede eliminar", "error");
+					}
+				}
+			});						
+			
+		}
+	});	
+}
+function confirmatePassword(){
+	swal({
+		content: {
+			element: "input",
+			attributes: {
+			placeholder: "Por favor ingrese su contraseña:",
+			type: "password",
+			},
+		}
+	})
+	.then((value) => {
+		$.ajax({
+			url: '{% url "getValidatePassword"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'password': value,
+				'user':localStorage.getItem('userID')
+			},
+			dataType: 'json',
+			success: function (data) {
+				if(data.EQUALS== "TRUE"){
+					var token = '{{csrf_token}}';
+					$.ajax({
+							headers: { "X-CSRFToken": token },
+							url: '{% url "deleteRubrosImported"  0 %}'.replace('0', localStorage.getItem('userID')),
+							data: {
+								'idBussines':localStorage.getItem('idBussines'),
+								'rubros': JSON.stringify(jsonImport),
+								'origin': originID,
+							},	
+							type: 'POST',
+							dataType: 'json',
+							success: function (data) {
+								if(data.DELETE== "TRUE"){
+									swal("Se han borrado los  rubros", "Vuelve a importar", "success");
+								}else{
+									swal("Ha ocurrido un error inesperado ","Vuelva a intentarlo", "error");
+								}
+						}
+					});		
+				}else{
+					return confirmatePassword();
+				}
+			}
+	});
+	});
 }
 
 function sumIncludes(mayor){

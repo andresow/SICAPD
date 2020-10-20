@@ -7,7 +7,7 @@ from apps.budgets.forms import *
 from django.urls import reverse_lazy, reverse
 from django.http import JsonResponse,HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -87,3 +87,15 @@ class StartApp(View):
             'userID': request.user.id
         }
         return JsonResponse(data)
+
+class GetValidatePassword(View):
+
+    def  get(self, request, *args, **kwargs):
+
+        user = User.objects.get(id=request.GET.get('user'))
+        if check_password(request.GET.get('password'), user.password):
+            print("coinciden")
+            return JsonResponse({"EQUALS": "TRUE"})
+        else:
+            return JsonResponse({"EQUALS": "FALSE"})
+

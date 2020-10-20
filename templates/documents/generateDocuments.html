@@ -225,6 +225,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto inicial</th>
+											<th>Presupuesto real</th>
 											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
@@ -235,6 +236,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto inicial</th>
+											<th>Presupuesto real</th>
 											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
@@ -361,6 +363,7 @@ $(document).ready(function() {
 } );
 $(document).ready(function() {
 		$('#dataTableSelectRubro').DataTable( {
+			"ordering": false,
 			"columnDefs": [
             {
                 "targets": [ 0 ],
@@ -572,6 +575,7 @@ function getRubrosByOrigin(){
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,
 				data.RUBRO[i].initialBudget,
+				data.RUBRO[i].realBudget,
 				data.RUBRO[i].budgetEject,
 				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByDisponibilty("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].budgetEject)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
 				])

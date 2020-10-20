@@ -124,6 +124,7 @@ class Movement(models.Model):
     register = models.BigIntegerField(null=True)
     obligation = models.BigIntegerField(null=True)
     origin =  models.ForeignKey(Origin, null=True, blank=True, on_delete=models.CASCADE)
+    budgetEject = models.BigIntegerField(null=True)
     observation = models.TextField(null=True)
 
 class RubroMovement(models.Model):

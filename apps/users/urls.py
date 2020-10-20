@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'users/createUser', CreateUser.as_view(), name='createUser'),
     url(r'ajax/getAP', GetAccountPeriod.as_view(), name='getAcccountPeriod'),
     url(r'ajax/startApp',StartApp.as_view() , name='getStartApp'),
+    url(r'ajax/getValidatePassword/(?P<pkUser>\d+)/',GetValidatePassword.as_view() , name='getValidatePassword'),
 
 ]

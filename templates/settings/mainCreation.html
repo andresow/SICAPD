@@ -87,44 +87,68 @@
         </div>
 </div>
 <div class="modal fade" id="myModalOrigin" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Registrar Origen</h4>
             </div>
-                <div class="modal-body">
+                <div class="modal-body-row">
                     <div  class="container-fluid">
-                        <form id="addOrigin" action="">
-                            {% csrf_token %}
-                            {% bootstrap_form OriginformS %}
-                            <div id="divCreateButtonsOrigin"  class="form-group">
-                                <button id="btnCreateOrigin" type="submit" class="genric-btn success circle" >Registrar Origen</button>
-                                <button type="button" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
-                            </div>   
-                    
-                        </form>  
+                            <form id="addOrigin" action="">
+                                <div class="form-row">
+                                    <div class="form-group col-md-8">
+                                        {% csrf_token %}
+                                        {% bootstrap_form OriginformS %}
+                                        <div id="divCreateButtonsOrigin"  class="form-group">
+                                            <button id="btnCreateOrigin" type="submit" class="genric-btn success circle" >Registrar Origen</button>
+                                            <button type="button" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                                        </div>  
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                       <h1> Origenes</h1>
+                                       <br>
+                                       <br>
+                                       <ul class="list-group" id="listOriginByAC">
+                                      </ul>
+                                    </div>
+                                                                    
+                                </div>
+                                 
+                            </form> 
                     </div>
+                    
                 </div>
             </div>         
         </div>  
 </div>
 <div class="modal fade" id="myModalOperacion" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Registrar Operación</h4>
             </div>
                 <div class="modal-body">
                     <div  class="container-fluid">
+
                         <form id="addOperacion" action="">
-                            {% csrf_token %}
-                            {% bootstrap_form Operationform %}
-                            <div id="divCreateButtonsOrigin"  class="form-group">
-                                <button id="btnCreateOperation" type="submit" class="genric-btn success circle" >Registrar Operación</button>
-                                <button type="button" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
-                            </div>   
-                    
-                        </form>  
+                            <div class="form-row">
+                                <div class="form-group col-md-8">
+                                    {% csrf_token %}
+                                    {% bootstrap_form Operationform %}
+                                    <div id="divCreateButtonsOrigin"  class="form-group">
+                                        <button id="btnCreateOperation" type="submit" class="genric-btn success circle" >Registrar Operación</button>
+                                        <button type="button" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                                    </div>  
+                                </div>
+                                <div class="form-group col-md-4">
+                                   <h1> Operaciones</h1>
+                                   <br>
+                                   <br>
+                                   <ul class="list-group" id="listOperationByOrigin">
+                                  </ul>
+                                </div>                                                              
+                            </div>                        
+                        </form> 
                     </div>
                 </div>
             </div>         
@@ -205,8 +229,23 @@ var acccountPeriodId;
 var nameAccountPeriod;
 
 function CreateOrigin(id){
+    
     accountPeriodId =  id;
     document.getElementById('id_finalDateOrigin').type = 'date';
+    $.ajax({
+        url: '{% url "settingsOP" 0 %}'.replace('0', localStorage.getItem('userID')),
+        data: {
+            'accountPeriod': accountPeriodId,
+        },
+        dataType: 'json',
+        success: function (data) {
+            $("#listOriginByAC").empty()
+
+            for (var i=0; i<data.OR.length; i++){
+                $("#listOriginByAC").append("<li class='list-group-item'>"+ data.OR[i].nameOrigin +"</li>")
+            }						
+        }
+    });
 }
  
 function changeType(){
@@ -277,6 +316,7 @@ $("form#addOrigin").submit(function() {
                 if(data.CREATE == "TRUE"){
                     swal("Creado exitoso del origen!", "Continua con tu proceso!", "success");
                     $('#myModalOrigin').modal('toggle');
+                    $("#listOriginByAC").empty()
                 }else{
                     swal("No se puede crear un origen con el mismo nombre para este origen", "Verifique sus datos!", "error");
                     $('#myModalOrigin').modal('toggle');
@@ -314,6 +354,7 @@ function getOriginOperation(id){
 			}						
 		}
     });
+    
 }
 function getOrigin(id){
     accountPeriodId =  id; 
@@ -363,6 +404,7 @@ $("form#addOperacion").submit(function() {
                 if(data.CREATE == "TRUE"){
                     swal("Creado exitoso de la operación!", "Continua con tu proceso!", "success");
                     $('#myModalOperacion').modal('toggle');
+                    $("#listOperationByOrigin").empty()
                 }else{
                     swal("No se puede crear una operación con el mismo nombre para este origen", "Verifique sus datos!", "error");
                     $('#myModalOperacion').modal('toggle');
@@ -531,7 +573,24 @@ $("form#addSeleOriginToOperation").submit(function() {
             }
         });
 });
+$(document).on('change', '#id_origin', function(event) {
+    var originName = $('#id_origin').val()
+		$.ajax({
+			url: '{% url "getOperationsByOrigin"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+                'accountPeriod': accountPeriodId,
+				'originID': originName[0]
+			},
+			dataType: 'json',
+			success: function (data) {
+                $("#listOperationByOrigin").empty()
 
+            for (var i=0; i<data.OP.length; i++){
+                $("#listOperationByOrigin").append("<li class='list-group-item'>"+data.OP[i].nameOp+"</li>")
+            }	
+	}
+});
+});
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 </script>
 {% endblock %}
