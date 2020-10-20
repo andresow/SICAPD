@@ -706,14 +706,14 @@ class ImportRubrosBD(LoginRequiredMixin,View):
                             bussines_id = bussines,origin_id = origin, rubroFather= getRubro.id, 
                             rubro = rubros[x]['RB'], nivel =getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
-                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
+                        movement = Movement.objects.create(bussines_id = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
                     else:
                         newRubro =Rubro.objects.create(
                             bussines_id = bussines, 
                             origin_id = origin, rubroFather= getRubro.id,
                             rubro = rubros[x]['RB'], nivel =  getRubro.nivel+1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
-                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
+                        movement = Movement.objects.create(bussines_id = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
 
                 else: 
                     if  rubros[x]['TC'] == "A":
@@ -721,13 +721,13 @@ class ImportRubrosBD(LoginRequiredMixin,View):
                                 bussines_id = bussines,origin_id = origin, 
                                 rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "A", realBudget=rubros[x]['PI'],budgetEject=rubros[x]['PI'], imported="TRUE"
                         )
-                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today)                 
+                        movement = Movement.objects.create(bussines_id = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today)                 
                     else:
                         newRubro = Rubro.objects.create(
                                 bussines_id = bussines, origin_id = origin, 
                                 rubro = rubros[x]['RB'], nivel = 1, description = rubros[x]['DC'], dateCreation = today, initialBudget =rubros[x]['PI'] , typeRubro = "M", realBudget=rubros[x]['PI'], budgetEject=rubros[x]['PI'],imported="TRUE"
                         ) 
-                        movement = Movement.objects.create(bussines = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
+                        movement = Movement.objects.create(bussines_id = bussines, nameRubro = newRubro.id, concept = 'CREACION', value = rubros[x]['PI'], balance = rubros[x]['PI'], date = today) 
                    
             else:
                 return JsonResponse({"IMPORT": "FALSE"})
