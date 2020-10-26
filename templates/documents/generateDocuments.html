@@ -158,22 +158,22 @@
 				<div class="form-row">
 					<div class="col-6">
 						<label>Numero de registro:</label>
-						<input type="number" name="register" id="register" class="form-control" placeholder="Numero de disponibilidad" >
+						<input type="number" name="registerNumber" id="registerNumber" class="form-control" placeholder="Numero de registro" >
 					</div>
 					<div class="col-6">
 						<label>Fecha de registro:</label>				  
-						<input name="date" id="dateRe" type="dateRe" class="form-control" >
+						<input name="dateRegister" id="dateRegister" type="date" class="form-control" >
 					</div>
 				</div>
 				<br>
 				<div class="form-row">
 					<div class="col-6" >
-						<label>Disponibilidad:</label>
+						<label>Disponibilidad:</label><button type="button" onclick="getDisponibilitysRg()" data-toggle="modal" data-target="#myModalDisponibilityOrigin" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
 						<select class="form-control" id="disponibilitySelectRegister" >
 						</select>
 					</div>	
 					<div class="col-6" >
-						<label>Terceros:</label>
+						<label>Terceros:</label><button type="button" onclick="getThirdsRg()" data-toggle="modal" data-target="#myModalThirds" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
 						<select class="form-control" id="terceroSelectRegister" >
 						</select>
 					</div>					
@@ -189,14 +189,243 @@
 				<div class="form-row">
 					<div class="col-6">
 						<label for="exampleFormControlTextarea1">Observación:</label>
-						<textarea placeholder="Observación" name="observationRe" class="form-control" id="observationRe" rows="3"></textarea>
+						<textarea placeholder="Observación" name="observationRegister" class="form-control" id="observationRegister" rows="3"></textarea>
 					</div>					
 				</div>	
 				<br>
+				<div  class="container-fluid mb-3" style="float:left">
+					<div class="card" >
+					<div class="card-header" ><i class="fas fa-table mr-1" ></i>Rubros de registro</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<table class="table table-bordered dataTable" id="dataTableRegister" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">
+									
+									<thead>
+										<tr>
+											<th>Rubro</th>	
+											<th>Descripción</th>
+											<th>Valor Disponibilidad</th>
+											<th>Valor registro</th>
+											<th>Saldo</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Rubro</th>	
+											<th>Descripción</th>
+											<th>Valor Disponibilidad</th>
+											<th>Valor registro</th>
+											<th>Saldo</th>
+											<th>Acciones</th>
+										</tr>
+									</tfoot>
+									</table>
+							</div>
+							<div class="form-row col-12 mb-2">
+						
+								<div class="col-4" >
+									<h6  id="totalRegister" for="totalRegister">SALDO: 0</h6>														
+								</div>
+								<div class="col-8" >
+									<h6  id="totalRegisterBalance" for="totalRegisterBalance" align="center">REGISTRO: 0</h6>
+								</div>
+							</div>	
+						</div>
+					</div>
+				</div>
+				<div  class="container-fluid mb-3" style="float:left">
+					<div class="card" >
+					<div class="card-header" ><i class="fas fa-table mr-1" ></i>Lista de registros realizados</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<table class="table table-bordered dataTable" id="dataTableGetRegisters" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">
+									
+									<thead>
+										<tr>
+											<th>Registro</th>	
+											<th>Descripción</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Registro</th>	
+											<th>Descripción</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Acciones</th>
+										</tr>
+									</tfoot>
+									</table>
+							</div>
+						</div>
+					</div>
+				</div>		
 				<div class="form-row">
 					<div >
-						<button type="submit" class="btn btn-primary">Guardar registro</button>
-						<button type="submit" class="btn btn-primary">Guardar y generar obligacion</button>
+						<button onclick="createRegister(1)" type="button" class="btn btn-primary">Guardar registro</button>
+						<button onclick="createRegister(2)" type="submit" class="btn btn-primary">Guardar y generar obligacion</button>
+						<button type="button" class="btn btn-secondary">Cancelar</button>
+					</div>					
+				</div>  
+			</form>
+		</div>	
+	</div>
+</div>
+<div id="divObligation" class="container-fluid" style="display:none">
+	<div class="card mb-4">
+		<div class="card-header"><i class="fas fa-table mr-1"></i>Agregar Obligacion</div>
+		<div class="card-body">
+			<form id="createRegister">
+				<div class="form-row">
+					<div class="col-6">
+						<label>Numero de obligacion:</label>
+						<input type="number" name="registerObligation" id="registerObligation" class="form-control" placeholder="Numero de registro" >
+					</div>
+					<div class="col-6">
+						<label>Fecha de obligacion:</label>				  
+						<input name="dateObligation" id="dateObligation" type="date" class="form-control" >
+					</div>
+				</div>
+				<br>
+				<div class="form-row">
+					<div class="col-6" >
+						<label>Seccion de derechos economicos o personales:</label>
+						<select class="form-control" id="sectionObligation" >
+						</select>
+					</div>	
+					<div class="col-6" >
+						<label>Terceros:</label><button type="button" onclick="getThirdsRg()" data-toggle="modal" data-target="#myModalThirds" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
+						<select class="form-control" name="terceroSelectObligation" id="terceroSelectObligation" >
+						</select>
+					</div>					
+				</div>
+				<br>
+				<div class="form-row">
+					<div class="col-6">
+						<label for="exampleFormControlTextarea1">Observación:</label>
+						<textarea placeholder="Observación" name="observationObligation" class="form-control" id="observationObligation" rows="3"></textarea>
+					</div>					
+				</div>	
+				<br>
+				<div  class="container-fluid mb-3" style="float:left">
+					<div class="card" >
+					<div class="card-header" ><i class="fas fa-table mr-1" ></i>Rubros de obligacion</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<table class="table table-bordered dataTable" id="dataTableObligation" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">
+									
+									<thead>
+										<tr>
+											<th>Registro</th>	
+											<th>Inputacion</th>
+											<th>Valor Registro</th>
+											<th>Saldo Registro</th>
+											<th>Valor Obligacion</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Registro</th>	
+											<th>Inputacion</th>
+											<th>Valor Registro</th>
+											<th>Saldo Registro</th>
+											<th>Valor Obligacion</th>
+											<th>Acciones</th>
+										</tr>
+									</tfoot>
+									</table>
+							</div>
+							<div class="form-row col-12 mb-2">
+						
+								<div class="col-4" >
+									<h6  id="totalv" for="totalObligation">SALDO: 0</h6>														
+								</div>
+								<div class="col-8" >
+									<h6  id="totalObligationBalance" for="totalObligationBalance" align="center">REGISTRO: 0</h6>
+								</div>
+							</div>	
+						</div>
+					</div>
+					<br>
+					<br>
+					<div  class="container-fluid mb-3" style="float:left">
+						<div class="card" >
+						<div class="card-header" ><i class="fas fa-table mr-1" ></i>Ingreso datos contables</div>
+							<div class="card-body" >
+								<div class="table-responsive">
+									<table class="table table-bordered dataTable" id="dataTableGetAccountsObligation" cellspacing="0" 
+										role="grid" aria-describedby="dataTable_info">
+										
+										<thead>
+											<tr>
+												<th>Codigo</th>	
+												<th>Descripción</th>
+												<th>Debito</th>
+												<th>Credito</th>
+												<th>Acciones</th>
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>
+												<th>Codigo</th>	
+												<th>Descripción</th>
+												<th>Debito</th>
+												<th>Credito</th>
+												<th>Acciones</th>
+											</tr>
+										</tfoot>
+										</table>
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>		
+				<div  class="container-fluid mb-3" style="float:left">
+					<div class="card" >
+					<div class="card-header" ><i class="fas fa-table mr-1" ></i>Lista de obligaciones realizadas</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<table class="table table-bordered dataTable" id="dataTableGetObligation" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">
+									
+									<thead>
+										<tr>
+											<th>Registro</th>	
+											<th>Descripción</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Registro</th>	
+											<th>Descripción</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Acciones</th>
+										</tr>
+									</tfoot>
+									</table>
+							</div>
+						</div>
+					</div>
+				</div>
+					
+				<div class="form-row">
+					<div >
+						<button onclick="createRegister(1)" type="button" class="btn btn-primary">Guardar obligacion</button>
+						<button onclick="createRegister(2)" type="submit" class="btn btn-primary">Guardar y generar comprobante de pago</button>
 						<button type="button" class="btn btn-secondary">Cancelar</button>
 					</div>					
 				</div>  
@@ -311,6 +540,127 @@
         </div>  
 </div>
 
+<div class="modal fade bd-example-modal-lg" id="myModalDisponibilityOrigin" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de disponibilidades</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Disponibilidades</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+					
+								<table class="table table-bordered dataTable " id="dataTableSelectDisponibility" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>Disponibilidad</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Descripcion</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Disponibilidad</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Descripcion</th>
+											<th>Seleccionar</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+									
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="myModalThirds" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de terceros</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Terceros</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<button class="genric-btn primary small" onclick="viewFormThirds()"  data-toggle="modal" data-target="#myModalCreateThird">Crear terceros</button>  
+								<table class="table table-bordered dataTable " id="dataTableThirds" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>Nombre</th>
+											<th>Apellido</th>
+											<th>Tipo de identificacion</th>
+											<th>Identificacion</th>
+											<th>Telefono</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Nombre</th>
+											<th>Apellido</th>
+											<th>Tipo de identificacion</th>
+											<th>Identificacion</th>
+											<th>Telefono</th>
+											<th>Seleccionar</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+									
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+<div class="modal fade" id="myModalCreateThird" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Añadir nuevo tercero</h4>
+            </div>
+                <div class="modal-body">
+                    <div  class="container-fluid">
+                        <form id="addThird" action="">
+                            {% csrf_token %}
+                            {% bootstrap_form thirdForm %}
+
+                            <div id="divCreateThird"  class="form-group">
+                                <button id="btnCreatenThird" type="button" onclick="submitThird()" class="genric-btn success circle" >Registrar Tercero</button>
+                                <button type="button"  onclick="cancels(1)" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                            </div>   
+                    
+                        </form>  
+                    </div>
+                </div>
+            </div>         
+        </div>  
+</div>
+
 <script>
 
 var originID=0;
@@ -321,6 +671,10 @@ var totalOperate=0;
 var totalOperateArray=[];
 var totalDisponibility=0;
 var oTable;
+var addRegister=[];
+var totalRegister=0;
+var totalOperateRegister=0;
+var totalOperateArrayRegister=[];
 
 $(document).ready(function() {
 		$('#dataTableTest').DataTable( {
@@ -338,9 +692,75 @@ $(document).ready(function() {
 		  }
 		  );		 	
 } );
-
-
-
+$(document).ready(function() {
+		$('#dataTableSelectDisponibility').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableObligation').DataTable( { 
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableGetObligation').DataTable( { 
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableGetRegisters').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableGetAccountsObligation').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableThirds').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );$(document).ready(function() {
+		$('#dataTableRegister').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
 $(document).ready(function() {
 		$('#dataTableDispo').DataTable( {
 			
@@ -432,6 +852,10 @@ function getRadioButon(){
 		getVoucher();
 
 	}
+	if($('input[name=typeComprobante]:checked', '#addVoucher').val()=="OBLIGACION"){
+		getVoucher();
+
+	}
 	else{
 		
 	}
@@ -443,6 +867,7 @@ function generateButton(){
 
 	if(nameVoucher=="DISPONIBILIDAD"){
 		$("#divCreate").css("display", "none");
+		
 		$("#generator").text("GENERAR DISPONIBILIDAD DE PRESUPUESTO DE "+ nameOrigin)															
 		$("#separatorButton").css("display", "block");
 		$.ajax({
@@ -462,6 +887,24 @@ function generateButton(){
 	if(nameVoucher=="REGISTRO"){
 		$("#divCreate").css("display", "none");
 		$("#generator").text("GENERAR REGISTRO DE PRESUPUESTO DE "+ nameOrigin);
+		$("#separatorButton").css("display", "block");
+		$.ajax({
+			url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'option': '3',
+				'nameAC': localStorage.getItem('nameAC'),
+				'idBussines': localStorage.getItem('idBussines'),
+				'origin': nameOrigin
+			},
+			dataType: 'json',
+			success: function (data) {
+				originID = data.ID;
+			}
+		});																	
+	}
+	if(nameVoucher=="OBLIGACION"){
+		$("#divCreate").css("display", "none");
+		$("#generator").text("GENERAR OBLIGACION DE PRESUPUESTO DE "+ nameOrigin);
 		$("#separatorButton").css("display", "block");
 		$.ajax({
 			url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -509,6 +952,8 @@ function generateDisponibilty(){
 	var nameVoucher = $('input[name=typeComprobante]:checked', '#addVoucher').val();
 	if(nameVoucher=="DISPONIBILIDAD"){
 		$("#divCreate").css("display", "block");
+		$("#divRegister").css("display", "none");
+		$("#divObligation").css("display", "none");
 		var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
 		var fecha = new Date(); //Fecha actual
 		var mes = fecha.getMonth()+1; //obteniendo mes
@@ -552,7 +997,14 @@ function generateDisponibilty(){
 	}
 	if(nameVoucher=="REGISTRO"){
 		$("#divCreate").css("display", "none");
+		$("#divRegister").css("display", "block");
+		$("#divObligation").css("display", "none");
 		getDataToRegister();
+	}
+	if(nameVoucher=="OBLIGACION"){
+		$("#divCreate").css("display", "none");
+		$("#divRegister").css("display", "none");
+		$("#divObligation").css("display", "block");
 	}
 														
 }
@@ -858,6 +1310,7 @@ function createDisponibility(option){
 							var rows = table.rows().remove().draw();
 							$("#totalBalance").text("SALDO: "+ totalOperate);	
 							$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);	
+							$("#observationRegister").val(observation);
 							getDataToRegister();
 
 						}
@@ -915,7 +1368,7 @@ function getDataToRegister(){
 			},
 			dataType: 'json',
 			success: function (data) {
-
+				console.log(data)
 				const $select = document.querySelector("#typeContract");
 				const $selectTH = document.querySelector("#terceroSelectRegister");
 				const $selectTC = document.querySelector("#disponibilitySelectRegister");
@@ -935,18 +1388,46 @@ function getDataToRegister(){
 				$('#typeContract').append(`<option  hidden  selected"> Selecciona una opción</option>`);
 
 				for (var i=0; i<data.MV.length; i++){
-					$('#disponibilitySelectRegister').append(`<option value="`+data.MV[i].nameI+`">`+data.MV[i].disponibility+`</option>`)
+					$('#disponibilitySelectRegister').append('<option value='+data.MV[i].id+'>'+data.MV[i].disponibility+'</option>')
 				}
 				for (var i=0; i<data.TH.length; i++){
-					$('#terceroSelectRegister').append(`<option value="`+data.TH[i].name+`">`+data.TH[i].name+`</option>`)
+					$('#terceroSelectRegister').append('<option value='+data.TH[i].id+'>'+data.TH[i].name + " " +data.TH[i].surnames+'</option>')
 				}
 				for (var i=0; i<data.TC.length; i++){
-					$('#typeContract').append(`<option value="`+data.TC[i].nameTC+`">`+data.TC[i].nameTC+`</option>`)
+					$('#typeContract').append('<option value='+data.TC[i].id+'>'+data.TC[i].nameTC+'</option>')
 				}
 				$("#divRegister").css("display", "block");
 
+				var table = $('#dataTableGetRegisters').DataTable(); 
+				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RG.length; i++){
+
+					table.row.add( [
+					data.RG[i].register,
+					data.RG[i].observation,
+					data.RG[i].value,
+					data.RG[i].balance,
+					data.RG[i].date,
+					"<a data-toggle='tooltip' title='Actualizar registro'><button  class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+					"<a data-toggle='tooltip'  id='deleteDisponibility' title='Eliminar registro'><button onclick=\'deleteRegister("+JSON.stringify(data.RG[i].id)+','+JSON.stringify(data.RG[i].register)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
+					])
+				}
+				table.draw( false );
+
 			}
-		});
+	});
+	$.ajax({
+			url: '{% url "getRegisterSerial"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#registerNumber").val(data.RE); 
+
+			}
+	});
 }
 function cancels(option){
 	if(option==1){
@@ -985,6 +1466,390 @@ function cancels(option){
 
 	}
 }
+
+function getDisponibilitysRg(){
+	$.ajax({
+			url: '{% url "getDisponibilityRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+
+				var table = $('#dataTableSelectDisponibility').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.DP.length; i++){
+
+				table.row.add( [
+				data.DP[i].disponibility,
+				data.DP[i].value,
+				data.DP[i].balance,
+				data.DP[i].date,
+				data.DP[i].observation,
+				"<a data-toggle='tooltip' title='Seleccionar disponibilidad'><button  onclick=\'selectDisponibilty("+JSON.stringify(data.DP[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+				])
+				
+			}
+			table.draw( false );
+
+			}
+		});
+}
+
+
+function selectDisponibilty(id){
+	$('#myModalDisponibilityOrigin').modal('toggle');
+	$('#disponibilitySelectRegister> option[value='+id+']').attr('selected', 'selected');
+	$.ajax({
+			url: '{% url "fillDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'disponibility':id,
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#observationRegister").val(data.OBSERVATION); 
+				var table = $('#dataTableRegister').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].description,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=register"+data.RUBRO[i].id+" class='form-control' name='inputRegister'>",
+				"<label type='number' id=registerBalance"+data.RUBRO[i].id+"></label>",
+				"<a data-toggle='tooltip' title='Validar operacion'><button type='button' onclick=\'operateBalanceRegister("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idDispo)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			}
+	});
+
+}
+
+function getThirdsRg(){
+	$.ajax({
+			url: '{% url "getThirds"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+
+				var table = $('#dataTableThirds').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.TH.length; i++){
+
+				table.row.add( [
+				data.TH[i].name,
+				data.TH[i].surnames,
+				data.TH[i].typeIdentification,
+				data.TH[i].identification,
+				data.TH[i].phone,
+				"<a data-toggle='tooltip' title='Seleccionar tercero'><button  id="+JSON.stringify(data.TH[i].id)+" onclick=\'selectThirds("+JSON.stringify(data.TH[i].id)+','+JSON.stringify(data.TH[i].name)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+				])
+				
+			}
+			table.draw( false );
+
+			}
+		});
+}
+
+function selectThirds(id,name){
+    $('#terceroSelectRegister> option[value='+id+']').attr('selected', 'selected');
+	$('#myModalThirds').modal('toggle');
+}
+
+function submitThird() {
+	var typeIdentification = $("#id_typeIdentification option:selected").text();
+	var identification = $('input[name="identification"]').val();
+	var name = $('input[name="name"]').val();
+	var surnames = $('input[name="surnames"]').val();
+	var reason = $('input[name="reason"]').val();
+	var phone = $('input[name="phone"]').val();
+	var city = $('input[name="city"]').val();   
+
+	if (typeIdentification, identification, name, surnames, reason, phone, city) {
+		// Create Ajax Call
+		$.ajax({
+			url: '{% url "createThird"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines': localStorage.getItem('idBussines'),
+				'typeIdentification': typeIdentification,
+				'identification': identification,
+				'name': name,
+				'surnames': surnames,    
+				'reason': reason,
+				'phone': phone,
+				'city': city, 
+			},
+			dataType: 'json',
+			success: function (data) {
+				console.log(data);
+				if (data.CREATE=="TRUE"){
+					swal("Creado exitoso del nuevo tercero!", "Continua con tu proceso!", "success");
+					$('#myModalCreateThird').modal('toggle');
+					$('#myModalThirds').modal('toggle');
+					$.ajax({
+						url: '{% url "getThirds"  0 %}'.replace('0', localStorage.getItem('userID')),
+						data: {
+							'bussines':localStorage.getItem('idBussines'),
+							'origin': originID
+						},
+						dataType: 'json',
+						success: function (data) {
+
+							var table = $('#dataTableThirds').DataTable(); 
+							var rows = table.rows().remove().draw();
+							for (var i=0; i<data.TH.length; i++){
+
+							table.row.add( [
+							data.TH[i].name,
+							data.TH[i].surnames,
+							data.TH[i].typeIdentification,
+							data.TH[i].identification,
+							data.TH[i].phone,
+							"<a data-toggle='tooltip' title='Seleccionar tercero'><button  id="+JSON.stringify(data.TH[i].id)+" onclick=\'selectThirds("+JSON.stringify(data.TH[i].id)+','+JSON.stringify(data.TH[i].name)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+							])
+							
+						}
+						table.draw( false );
+
+						}
+					});
+				}else{
+					swal("No se puede crear un tercero con el mismo nombre para esta empresa", "Verifique sus datos!", "error");
+				}
+				
+			}
+		});
+	} else {
+		alert("Por favor llene todos los campos");
+	}
+	$('form#addThird').trigger("reset");
+	return false;
+}
+
+function viewFormThirds(){
+	$('#myModalThirds').modal('toggle');
+}
+function cancels(option){
+	if(option==1){
+		$('#myModalCreateThird').modal('toggle');
+		$('#myModalThirds').modal('toggle');
+	}
+
+}
+$(document).on('change', '#disponibilitySelectRegister', function(event) {
+	$.ajax({
+			url: '{% url "fillDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'disponibility':$( "#disponibilitySelectRegister" ).val(),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				console.log(data)
+				$("#observationRegister").val(data.OBSERVATION); 
+				var table = $('#dataTableRegister').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].description,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=register"+data.RUBRO[i].id+" class='form-control' name='inputRegister'>",
+				"<label type='number' id=registerBalance"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
+				"<a data-toggle='tooltip' title='Validar operacion'><button type='button' onclick=\'operateBalanceRegister("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idDispo)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			
+			}
+	});
+});
+
+function operateBalanceRegister(id,rubro,value,idDispo,valueP){
+
+	var createId =  "#register"+id;
+	var result= "#registerBalance"+id
+	var operate=0;
+	var valueRegister = parseInt(value);
+	operate = parseInt(valueP) - parseInt($(createId).val());
+	const found = addRegister.findIndex(element => element['id'] == id);
+	if(parseInt($(createId).val())==0){
+		swal("No se puede generar una operacion de valor 0", " " , "error");
+	}else{
+		if(found<0){
+			if(operate<0){
+					swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor de  "+ value, " No se puede realizar el registro", "error");
+				}else{
+					$(result).text(operate);
+					addRegister.push({
+						"idDispo":idDispo,
+						"id": id,
+						"rubro": rubro,
+						"value":parseInt($(createId).val()),
+						"balance":operate
+					})
+					totalOperateArrayRegister.push({
+						"id": id,
+						"subtotal": operate,
+						"register":  parseInt($(createId).val())
+					})
+					totalOperateRegister = totalOperateRegister + operate;	
+					totalRegister = totalRegister + parseInt($(createId).val());
+					$("#totalRegister").text("SALDO: "+ totalOperateRegister);														
+					$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);														
+
+				}
+				console.log(addRegister)
+				console.log(totalOperateArrayRegister)
+			}else{
+
+				if(operate<0){
+					swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor de  "+ value, " No se puede realizar el registro", "error");
+				}else{
+					$(result).text(operate);
+					addRegister[found] ={
+						"idDispo":idDispo,
+						"id": id,
+						"rubro": rubro,
+						"value":parseInt($(createId).val()),
+						"balance":operate
+					}
+					totalOperateRegister = totalOperateRegister - totalOperateArrayRegister[found]['subtotal'];	
+					totalRegister = totalRegister - totalOperateArrayRegister[found]['register'];
+					totalOperateArrayRegister[found] = {
+						"id": id,
+						"subtotal": operate,
+						"register":  parseInt($(createId).val())
+					}
+					totalOperateRegister = totalOperateRegister + totalOperateArrayRegister[found]['subtotal'];	
+					totalRegister = totalRegister + totalOperateArrayRegister[found]['register'];
+					$("#totalRegister").text("SALDO: "+ totalOperateRegister);														
+					$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);														
+
+				}
+				console.log(addRegister)
+				console.log(totalOperateRegister)
+			}
+	}	
+	
+}
+
+function createRegister(option){
+	if(option==1){
+		
+		swal({
+        title: "Desea terminar el registro ?",
+        text: "Al confirmar esta acción,el registro sera guardado",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        }).then((willDelete) => {
+        if (willDelete) {
+
+			var registerCode = $('input[name="registerNumber"]').val();
+			var observation = $('textarea[name="observationRegister"]').val();
+			var date = $('input[name="dateRegister"]').val();
+			console.log($('input[name="registerNumber"]').val(),observation,date)
+			if (registerCode,observation,date) {
+				// Create Ajax Call
+				$.ajax({
+					url: '{% url "createRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
+					data: {
+						'bussines':localStorage.getItem('idBussines'), 
+						'registerCode': registerCode,
+						'origin': originID,
+						'date': date,
+						'observation': observation,
+						'value':totalRegister,
+						'balance': totalOperateRegister,
+						'registers': JSON.stringify(addRegister)
+					},
+					dataType: 'json',
+					success: function (data) {
+						$("#divRegister").css("display", "none");
+						swal("Creado exitoso del registro!", "Continua con tu proceso!", "success");
+						$('textarea[name="observationRegister"]').val("");
+						addRegister.length=0;
+						totalRegister=0;
+						totalOperateArrayRegister.length=0;
+						totalOperateRegister=0;
+						var table = $('#dataTableRegister').DataTable(); 
+ 						var rows = table.rows().remove().draw();
+						$("#totalRegister").text("SALDO: "+ totalOperateRegister);														
+						$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);		
+					}
+				});
+			} else {
+				alert("Por favor llene todos los campos");
+			}
+			return false;
+        }
+        });
+	}else{
+		
+			swal({
+			title: "Desea terminar la disponibilidad ?",
+			text: "Al confirmar esta acción, la disponibilidad sera guardada",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			}).then((willDelete) => {
+			if (willDelete) {
+
+				var registerCode = $('input[name="registerNumber"]').val();
+				var observation = $('textarea[name="observationRegister"]').val();
+				var date = $('input[name="dateRegister"]').val();
+				if (registerCode,observation,date) {
+					// Create Ajax Call
+					$.ajax({
+						url: '{% url "createRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
+						data: {
+							'bussines':localStorage.getItem('idBussines'), 
+							'registerCode': registerCode,
+							'origin': originID,
+							'date': date,
+							'observation': observation,
+							'value':totalRegister,
+							'balance': totalOperateRegister,
+							'registers': JSON.stringify(addRegister)
+						},
+						dataType: 'json',
+						success: function (data) {
+							
+							swal("Creado exitoso del registro!", "Continua con tu proceso!", "success");
+							$('textarea[name="observationRegister"]').val("");
+							addRegister.length=0;
+							totalRegister=0;
+							totalOperateArrayRegister.length=0;
+							totalOperateRegister=0;
+							var table = $('#dataTableRegister').DataTable(); 
+							var rows = table.rows().remove().draw();
+							$("#totalRegister").text("SALDO: "+ totalOperateRegister);														
+							$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);		
+							//getDataToObligation();
+
+						}
+					});
+				} else {
+					alert("Por favor llene todos los campos");
+				}
+				return false;
+			}
+			});
+
+		}
+	
+}
+
 </script>
 
 {% endblock %}

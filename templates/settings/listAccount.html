@@ -1,0 +1,297 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+{% block main %}
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div id=divCreate class="container-fluid">
+    <h1 class="mt-4">Lista de cuentas</h1>
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Lista de cuentas</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <button data-toggle="modal" data-target="#myModalAccount" type="button" class="genric-btn primary small">Añadir cuenta</button>              
+                <table class="table table-bordered dataTable" id="dataTableAccount" width="100%" cellspacing="0"
+                      role="grid" aria-describedby="dataTable_Account" style="width: 100%;">
+                    
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Descripción</th>
+                            <th>Natural</th>
+                            <th>Nivel</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Código</th>
+                            <th>Descripción</th>
+                            <th>Natural</th>
+                            <th>Nivel</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if object_list %}
+                        {% for account in object_list %}                        
+                              <tr>                          
+                                <td>{{account.code}}</td>                        
+                                <td>{{account.description}}</td>
+                                <td>{{account.nature}}</td>
+                                <td>{{account.level}}</td>
+                                <td>
+                        </div>
+                      </div>
+                      <a href="#" data-toggle="tooltip"   title="Eliminar cuenta">
+                        <button onclick="deleteAccount('{{account.id}}','{{account.code}}')" class="btn btn-primary btn-sm"  >
+                        <i class="fa fa-trash"></i>
+                        </button>
+                      </a>
+                      <a href="#" data-toggle="tooltip" id="updateAccount"  title="Actualizar cuenta">
+                        <button onclick="changeTypeUpdateAccount('{{account.id}}','{{account.code}}','{{account.description}}','{{account.nature}}','{{account.level}}')"data-toggle="modal" data-target="#myModalAccountUpdate" class="btn btn-primary btn-sm">
+                        <i class="fa fa-pencil"></i>
+                        </button>
+                      </a> 
+                                </td>
+                              </tr>
+                            {% endfor %}
+                            {% else %}
+                            <h1 class="black-color">No hay cuentas registradas de esta empresa</h1>
+                            {% endif %}  
+                    </tbody>
+                </table>
+        </div>
+</div>
+<div class="modal fade" id="myModalAccount" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Añadir nueva cuenta</h4>
+            </div>
+                <div class="modal-body">
+                    <div  class="container-fluid">
+                        <form id="addAccount" action="">
+                            {% csrf_token %}
+                            {% bootstrap_form AccountForm %}
+
+                            <div id="divCreateAccount"  class="form-group">
+                                <button id="btnCreateAccount" type="submit" class="genric-btn success circle" >Registrar cuenta</button>
+                                <button type="submit" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                            </div>   
+                    
+                        </form>  
+                    </div>
+                </div>
+            </div>         
+        </div>  
+</div>
+<div class="modal fade" id="myModalAccountUpdate" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Actualizar cuenta</h4>
+            </div>
+                <div class="modal-body">
+                    <div  class="container-fluid">
+                        <form id="formAPUpdateAccount" action="">
+                            {% csrf_token %}
+                            {% bootstrap_form AccountUpdate %}
+                            <div id="divCreateButtons"  class="form-group">
+                                <button id="btnCreate" type="submit" class="genric-btn success circle" >Actualizar cuenta</button>
+                                <button type="button" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                            </div> 
+                            
+                        </form>  
+                    </div>
+                </div>
+            </div>         
+        </div>  
+</div>
+<script>
+
+$(document).ready(function() {
+		$('#dataTableAccount').DataTable( {
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',
+			buttons: [
+				'copy', 'csv', 'excel', 'pdf', 'print'
+			]
+			
+		  } );
+		 
+	
+} );
+
+var accountId;
+var accountCurrentCode
+
+function getAccount(id){
+    accountId =  id; 
+ 
+}
+function changeTypeUpdateAccount(id, code, description, nature, level){
+    accountId =  id;
+    accountCurrentCode = code;
+    
+    var codeAUpdate = document.getElementById("id_codeAccountUpdate");
+    codeAUpdate.value = code;
+    var descriptionAUpdate = document.getElementById("id_descriptionAccountUpdate");
+    descriptionAUpdate.value = description;
+    var natureAUpdate = document.getElementById("id_natureAccountUpdate");
+    natureAUpdate.value = nature;
+    var levelAUpdate = document.getElementById("id_levelAccountUpdate");
+    levelAUpdate.value = level;
+}
+
+$("form#addAccount").submit(function() {
+
+    var code = $('input[name="code"]').val();
+    var description = $('input[name="description"]').val();
+    var nature = $('input[name="nature"]').val();
+    var level = $('input[name="level"]').val();
+
+    if (code,description,nature, level) {
+        // Create Ajax Call
+        $.ajax({
+            url: '{% url "createAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
+            data: {
+                'bussines': localStorage.getItem('idBussines'),
+                'code': code,
+                'description': description,
+                'nature': nature,
+                'level': level,
+
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                $("#dataTableAccount").load(" #dataTableAccount");
+                if(data.CREATE == "TRUE"){
+                    swal("Creado exitoso del nueva cuenta!", "Continua con tu proceso!", "success");
+                    $('#myModalAccount').modal('toggle');
+                }else{
+                    swal("No se puede crear la cuenta", "Ya existe una cuenta con este código", "error");
+                    $('#myModalAccount').modal('toggle');
+                }
+                
+            }
+        });
+    } else {
+        alert("Por favor llene todos los campos");
+    }
+    $('form#addAccount').trigger("reset");
+    return false;
+});
+
+$("form#formAPUpdateAccount").submit(function() {
+     
+    var codeAUpdate = $('input[name="codeAccountUpdate"]').val();
+    var descriptionAUpdate = $('input[name="descriptionAccountUpdate"]').val();
+    var natureAUpdate = $('input[name="natureAccountUpdate"]').val();
+    var levelAUpdate = $('input[name="levelAccountUpdate"]').val();
+
+    if (codeAUpdate, descriptionAUpdate, natureAUpdate, levelAUpdate) {
+
+        // Create Ajax Call
+        if(accountCurrentCode==codeAUpdate){
+            $.ajax({
+
+                url: '{% url "updateAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
+                data: {
+                    'bussinesId': localStorage.getItem('idBussines'),
+                    'equalCode': 'TRUE',
+                    'id': accountId,
+                    'code': codeAUpdate,
+                    'description': descriptionAUpdate,
+                    'nature': natureAUpdate,
+                    'level': levelAUpdate,
+                    
+                },
+                dataType: 'json',
+                success: function (data) {                   
+                    if(data.CREATE == "TRUE"){
+                        $("#dataTableAccount").load(" #dataTableAccount");
+                        swal("Actualización exitosa!", "Continua con tu proceso!", "success");
+                        $('#myModalAccountUpdate').modal('toggle');
+                    }else{
+                        swal("No se puede actualizar la cuenta", "Ya existe una cuenta con este código", "error");
+                        $('#myModalAccountUpdate').modal('toggle');
+                    } 
+                }
+                });
+        }else{
+            $.ajax({
+
+            url: '{% url "updateAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
+            data: {
+                'bussinesId': localStorage.getItem('idBussines'),
+                'equalCode': 'FALSE',
+                'id': accountId,
+                'code': codeAUpdate,
+                'description': descriptionAUpdate,
+                'nature': natureAUpdate,
+                'level': levelAUpdate,
+                
+            },
+            dataType: 'json',
+            success: function (data) {               
+                if(data.CREATE == "TRUE"){
+                    $("#dataTableAccount").load(" #dataTableAccount");
+                    swal("Actualización exitosa!", "Continua con tu proceso!", "success");
+                    $('#myModalAccountUpdate').modal('toggle');
+                }else{
+                    swal("No se puede actualizar la cuenta", "Ya existe una cuenta con este código", "error");
+                    $('#myModalAccountUpdate').modal('toggle');
+                } 
+            }
+            });
+        }
+       
+    } else {
+        alert("All fields must have a valid value.");
+    }
+   
+    return false;
+ });
+ 
+function deleteAccount(id, code){
+
+    swal({
+    title: "Desea eliminar la cuenta con el número de código " + code + "?",
+    text: "Al confirmar esta acción, la cuenta con el número de código " + code + " sera eliminado.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+    })
+    .then((willDelete) => {
+    if (willDelete) {
+
+        $.ajax({
+            url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
+            data: {
+                'id': id,
+                'option': '9'
+            },
+            dataType: 'json',
+            success: function (data) {   
+                $("#dataTableAccount").load(" #dataTableAccount");
+                swal("La cuenta con el número de código " + code + " se ha eliminado con éxito.", {
+                icon: "success",
+                });
+            }
+        });
+    }
+    });
+}
+
+</script>
+{% endblock %}

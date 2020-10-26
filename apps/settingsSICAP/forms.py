@@ -109,6 +109,32 @@ class InformFormDetall(forms.ModelForm):
                 'Actividad':forms.TextInput(),
         }
 
+class AccountForm(forms.ModelForm):
+
+    class Meta:
+        model = Account
+        fields = [
+                'code',
+                'description',
+                'nature',
+                'level',
+        ]
+        
+        labels = {
+                'code': 'Código',
+                'description': 'Descripción',
+                'nature': 'Natural',
+                'level': 'Nivel',                
+        }
+
+        widgets = { 				
+                'Código':forms.TextInput(),
+                'Descripción':forms.TextInput(),
+                'Natural':forms.TextInput(),
+                'Nivel':forms.TextInput(),                
+        }
+
+
 class ByAccountUpdate(forms.Form):
 
         CHOICES = [('Activo','Activo'),('Inactivo', 'Inactivo')]
@@ -189,3 +215,18 @@ class ByBudgetOriginForm(forms.Form):
                 super(ByBudgetOriginForm, self).__init__(*args, **kwargs)
                 
                 self.fields['originSelectO'].label = 'Seleccione el origen'
+
+class AccountUpdate(forms.Form):
+
+        codeAccountUpdate = forms.CharField()
+        descriptionAccountUpdate = forms.CharField()
+        natureAccountUpdate = forms.CharField()          
+        levelAccountUpdate= forms.CharField()
+        
+        def __init__(self, *args, **kwargs):
+                super(AccountUpdate, self).__init__(*args, **kwargs)
+                
+                self.fields['codeAccountUpdate'].label = 'Código'
+                self.fields['descriptionAccountUpdate'].label = 'Descripción'
+                self.fields['natureAccountUpdate'].label = 'Natural'
+                self.fields['levelAccountUpdate'].label = 'Nivel'

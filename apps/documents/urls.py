@@ -23,5 +23,10 @@ urlpatterns = [
     url(r'ajax/getDataToRegister/(?P<pkUser>\d+)/', GetDataToRegister.as_view(), name='getDataToRegister'),
     url(r'ajax/getDataRubroDisponibility/(?P<pkUser>\d+)/', GetDataRubroDisponibility.as_view(), name='getDataRubroDisponibility'),
     url(r'ajax/getOperationsByOrigin/(?P<pkUser>\d+)/', GetOperationsByOrigin.as_view(), name='getOperationsByOrigin'),
+    url(r'ajax/getDisponibilityRegister/(?P<pkUser>\d+)/', GetDisponibilityRegister.as_view(), name='getDisponibilityRegister'),
+    url(r'ajax/getThirds/(?P<pkUser>\d+)/', GetThirds.as_view(), name='getThirds'),
+    url(r'ajax/fillDisponibility/(?P<pkUser>\d+)/', FillDisponibility.as_view(), name='fillDisponibility'),
+    url(r'ajax/getRegisterSerial/(?P<pkUser>\d+)/', GetRegisterSerial.as_view(), name='getRegisterSerial'),
+    url(r'ajax/createRegister/(?P<pkUser>\d+)/', CreateRegister.as_view(), name='createRegister'),
 
 ]

@@ -2730,12 +2730,24 @@ function validateDataImport(){
 	var reverse = validator.reverse();
 	for (var i=jsonImport.length - 1; i>=0; i--){
 		if(jsonImport[i].TC=='M'){
-			var sum = sumIncludes(jsonImport[i].RB)
+			var sum=0;
+			for (var j=jsonImport.length-1; j>=0; j--){
+				if(jsonImport[j].TC=='A'){
+					if(jsonImport[j].RB.substr(0,jsonImport[i].RB.length).includes(jsonImport[i].RB)){
+						sum = sum + parseInt(jsonImport[j].PI)
+					
+					}
+				}
+
+			}
 			if(sum!=jsonImport[i].PI){
 				countOk -= 1
 				$("#import"+jsonImport[i].RB).text("El total de la cuenta mayor no coincide");	
-			}			
+			}
+					
 		}
+	sum	=0;
+		
 }*/
 	 
 

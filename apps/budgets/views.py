@@ -733,7 +733,7 @@ class ImportRubrosBD(LoginRequiredMixin,View):
                 return JsonResponse({"IMPORT": "FALSE"})
                 break
 
-        rubros = Rubro.objects.filter(bussines_id=bussines,origin_id=origin).values('id','rubro','description','initialBudget','typeRubro').order_by('rubro')
+        rubros = Rubro.objects.filter(bussines_id=bussines,origin_id=origin).values('id','rubro','description','initialBudget','budgetEject','typeRubro').order_by('rubro')
         return JsonResponse({"IMPORT": "TRUE","RUBRO": list(rubros)})
 
 class UpdateAgreementRubro(LoginRequiredMixin, View):

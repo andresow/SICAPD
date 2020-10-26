@@ -184,3 +184,10 @@ class TypeContractDetail(models.Model):
     descriptionTypeC = models.TextField() 
     activity = models.CharField(max_length=100)
 
+class Account(models.Model):
+
+    bussines = models.ForeignKey(Bussines, null=True, blank=True, on_delete=models.CASCADE)
+    code = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    nature = models.CharField(max_length=100)
+    level = models.IntegerField()

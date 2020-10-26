@@ -382,11 +382,15 @@ class DeleteAll(LoginRequiredMixin, View):
             agreement.delete()
             listAgreement = Agreement.objects.filter(origin_id=request.GET.get('origin')).values('id', 'typeAgreement', 'numberAg', 'descriptionAg')
             return JsonResponse({'Eliminado': 'True', 'AG':list(listAgreement)})
-        else:
+        elif option=='8':
             movement = Movement.objects.get(id=request.GET.get('id'))
             movement.delete()
             listMovement = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="DISPONIBILIDAD").values('id','value','balance','disponibility','observation')
             return JsonResponse({'Eliminado': 'True', 'MV':list(listMovement)})
+        else:
+            account = Account.objects.get(id=request.GET.get('id'))
+            account.delete()
+            return JsonResponse({'Eliminado': 'True'})
 
 
 
@@ -427,3 +431,72 @@ class ChangeWindowsOperation(LoginRequiredMixin, View):
         origin = Origin.objects.get(nameOrigin=request.GET.get('origin')[:-1],accountPeriod_id=request.GET.get('accountPeriod'))
         return JsonResponse({'TRUE': 'OK', 'OR': origin.id})
 
+
+class ListAccount(LoginRequiredMixin, ListView):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+    model = Account
+    queryset= model.objects.order_by('name')
+    template_name = 'settings/listAccount.html'
+
+    def get_context_data(self):
+        context = super(ListAccount, self).get_context_data()
+        context['AccountForm'] = AccountForm
+        context['AccountUpdate'] = AccountUpdate
+
+        return context  
+
+    def get_queryset(self):
+        queryset = super(ListAccount, self).get_queryset()
+        return Account.objects.filter(bussines_id=self.kwargs['pk'])
+
+class CreateAccount(LoginRequiredMixin, View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+      
+        code=request.GET.get('code')
+        bussinesId= request.GET.get('bussines')
+        bussines = Bussines.objects.get(id=bussinesId)
+        AccountExist = Account.objects.filter(code=code.upper(), bussines_id=bussinesId).exists()
+        if AccountExist == False:
+            newAccount = Account.objects.create(
+            bussines= bussines,           
+            code=code.upper(), 
+            description=request.GET.get('description').upper(), 
+            nature=request.GET.get('nature').upper(),
+            level=request.GET.get('level')
+        )
+            return JsonResponse({'CREATE':"TRUE"})
+        else:
+            return JsonResponse({'CREATE':"FALSE"})  
+
+class UpdateAccount(LoginRequiredMixin, View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+    def  get(self, request, *args, **kwargs): 
+        
+        updateAccount = Account.objects.get(id=request.GET.get('id'))
+        code=request.GET.get('code').upper()
+        if request.GET.get('equalCode') == 'TRUE':
+    
+            updateAccount.description = request.GET.get('description').upper()
+            updateAccount.nature = request.GET.get('nature')
+            updateAccount.level = request.GET.get('level')
+            updateAccount.save() 
+            return JsonResponse({'CREATE':"TRUE"})
+        else:
+            accountExist = Account.objects.filter(code=request.GET.get('code').upper(),bussines_id=request.GET.get('bussinesId')).exists()
+            if accountExist == False:
+                updateAccount.code = code
+                updateAccount.description = request.GET.get('description').upper()
+                updateAccount.nature = request.GET.get('nature')
+                updateAccount.level = request.GET.get('level')
+                updateAccount.save()  
+                return JsonResponse({'CREATE':"TRUE"})
+            else:
+                return JsonResponse({'CREATE':"FALSE"}) 
