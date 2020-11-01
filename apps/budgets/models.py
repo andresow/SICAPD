@@ -123,6 +123,7 @@ class Movement(models.Model):
     disponibility = models.BigIntegerField(null=True)
     register = models.BigIntegerField(null=True)
     obligation = models.BigIntegerField(null=True)
+    vouchePayment = models.BigIntegerField(null=True)
     origin =  models.ForeignKey(Origin, null=True, blank=True, on_delete=models.CASCADE)
     budgetEject = models.BigIntegerField(null=True)
     observation = models.TextField(null=True)
@@ -191,3 +192,18 @@ class Account(models.Model):
     description = models.CharField(max_length=100)
     nature = models.CharField(max_length=100)
     level = models.IntegerField()
+
+
+class AccountTypeRubro(models.Model):
+
+    bussines = models.ForeignKey(Bussines, null=True, blank=True, on_delete=models.CASCADE)
+    rubro = models.ForeignKey(Rubro, null=True, blank=True, on_delete=models.CASCADE)
+    typeAccount = models.CharField(max_length=100)
+    document = models.CharField(max_length=100)
+
+class InformationMovement(models.Model):
+
+    movement = models.ForeignKey(Movement, null=True, blank=True, on_delete=models.CASCADE)
+    typeMovement =  models.CharField(max_length=100)
+    third = models.ForeignKey(Third, null=True, blank=True, on_delete=models.CASCADE)
+    RightsEconomic = models.BooleanField()

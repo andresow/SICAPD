@@ -160,36 +160,38 @@ $("form#addAccount").submit(function() {
     var level = $('input[name="level"]').val();
 
     if (code,description,nature, level) {
+        
         // Create Ajax Call
         $.ajax({
-            url: '{% url "createAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
-            data: {
-                'bussines': localStorage.getItem('idBussines'),
-                'code': code,
-                'description': description,
-                'nature': nature,
-                'level': level,
+                url: '{% url "createAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
+                data: {
+                    'bussines': localStorage.getItem('idBussines'),
+                    'code': code,
+                    'description': description,
+                    'nature': nature,
+                    'level': level,
 
-            },
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-                $("#dataTableAccount").load(" #dataTableAccount");
-                if(data.CREATE == "TRUE"){
-                    swal("Creado exitoso del nueva cuenta!", "Continua con tu proceso!", "success");
-                    $('#myModalAccount').modal('toggle');
-                }else{
-                    swal("No se puede crear la cuenta", "Ya existe una cuenta con este código", "error");
-                    $('#myModalAccount').modal('toggle');
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    $("#dataTableAccount").load(" #dataTableAccount");
+                    if(data.CREATE == "TRUE"){
+                        swal("Creado exitoso de la cuenta!", "Continua con tu proceso!", "success");
+                        $('#myModalAccount').modal('toggle');
+                    }else{
+                        swal("No se puede crear la cuenta", "Ya existe una cuenta con este código", "error");
+                        $('#myModalAccount').modal('toggle');
+                    }
+                    
                 }
-                
-            }
-        });
+            });
     } else {
         alert("Por favor llene todos los campos");
     }
     $('form#addAccount').trigger("reset");
     return false;
+            
 });
 
 $("form#formAPUpdateAccount").submit(function() {
@@ -266,8 +268,8 @@ $("form#formAPUpdateAccount").submit(function() {
 function deleteAccount(id, code){
 
     swal({
-    title: "Desea eliminar la cuenta con el número de código " + code + "?",
-    text: "Al confirmar esta acción, la cuenta con el número de código " + code + " sera eliminado.",
+    title: "Desea eliminar la cuenta número " + code + "?",
+    text: "Al confirmar esta acción, la cuenta número " + code + " sera eliminada.",
     icon: "warning",
     buttons: true,
     dangerMode: true,
@@ -284,7 +286,7 @@ function deleteAccount(id, code){
             dataType: 'json',
             success: function (data) {   
                 $("#dataTableAccount").load(" #dataTableAccount");
-                swal("La cuenta con el número de código " + code + " se ha eliminado con éxito.", {
+                swal("La cuenta número " + code + " se ha eliminado con éxito.", {
                 icon: "success",
                 });
             }
@@ -292,6 +294,45 @@ function deleteAccount(id, code){
     }
     });
 }
+//---------------------------------
+function validateAccounPattern(accountCode){
+
+    var regex = /(\d+)/g;
+    var patternAccount = localStorage.getItem('account');
+    var acumulatorImport = 0;
+    var arrayImport = [];
+
+    for (var i = 0; i < (patternAccount.match(regex)).length; i++) {
+        acumulatorImport = acumulatorImport + parseInt(patternAccount.match(regex)[i]);
+        arrayImport.push(acumulatorImport)
+    }
+    for (var i = 0; i < patronArray.length; i++) {
+        if(accountCode.length==patronArray[i]){
+            return true;
+        }else{
+
+            $("#import").text("No cumple con el patrón cuenta");	
+        }
+    }
+
+}
+// firma esto es lo que estube implementando para el patron cuenta
+$("#id_code").keyup(function(){
+
+    var campoInputCodigoCuenta = $('#id_code').val();
+    accountCode = $('input[name="code"]').val()
+    if(validateAccounPattern(accountCode)==true){
+        $("#id_code").text("Código valido");
+        $("#id_code").css("color", "green");
+    }
+    else if(campoInputCodigoCuenta === ''){
+            $("#id_code").text("Código");
+            $("#id_code").css("color", "gray");
+    }else{
+        $("#id_code").text("Código inválido");
+        $("#id_code").css("color", "red");
+    }
+}); 
 
 </script>
 {% endblock %}

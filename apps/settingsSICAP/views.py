@@ -500,3 +500,58 @@ class UpdateAccount(LoginRequiredMixin, View):
                 return JsonResponse({'CREATE':"TRUE"})
             else:
                 return JsonResponse({'CREATE':"FALSE"}) 
+
+def generateAccounting(request,pkUser):
+
+    return render(request, 'settings/generateAccounting.html')
+
+class GetAccountSettings(LoginRequiredMixin,  View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def  get(self, request, *args, **kwargs):
+        print("entre eeee")
+        print(self.kwargs['pkUser'])
+
+        accounts = Account.objects.filter(bussines_id=request.GET.get('bussinesId')).values('id', 'code', 'description')
+        return JsonResponse({"ACC": list(accounts)})
+
+class CreateAccountingOpTip(LoginRequiredMixin, View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+      
+        account=request.GET.get('account')
+        bussinesId= request.GET.get('bussines')
+        bussines = Bussines.objects.get(id=bussinesId)
+        accountingOpExist = Account.objects.filter(account=account.upper(), bussines_id=bussinesId).exists()
+        if accountingOpExist == False:
+            newAccountingOp = Account.objects.create(
+            bussines= bussines,           
+            account=account.upper(), 
+            operation=request.GET.get('operation').upper(), 
+            operationAccount=request.GET.get('operationAccount').upper(),
+        )
+            return JsonResponse({'CREATE':"TRUE"}) 
+        else:
+            return JsonResponse({'CREATE':"FALSE"})  
+
+
+class GetBudget(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def  get(self, request, *args, **kwargs):
+
+        nameOrigin = request.GET.get('nameOrigin')
+        accountPeriod = AccountPeriod.objects.get(name=request.GET.get('nameAC')[:-1])
+        origin = Origin.objects.get(nameOrigin=nameOrigin, accountPeriod=accountPeriod.id)
+        rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget','budgetEject').order_by('rubro')
+        return JsonResponse({"ID":origin.id ,"RUBRO": list(rubro)})
+
+# listAccounting = Agreement.objects.filter(origin_id=request.GET.get('origin')).values('id', 'typeAgreement', 'numberAg', 'descriptionAg')
+# 'ACCO':list(listAccountins)

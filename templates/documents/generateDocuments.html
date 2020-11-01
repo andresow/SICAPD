@@ -38,8 +38,8 @@
 			<form id="createDisponibility">
 				<div class="form-row">
 					<div class="col-6">
-						<label>Numero de disponibilidad</label>
-						<input type="number" name="disponibilityIn" id="disponibilityIn" class="form-control" placeholder="Numero de disponibilidad" required>
+						<label>Número de disponibilidad</label>
+						<input type="number" name="disponibilityIn" id="disponibilityIn" class="form-control" placeholder="Número de disponibilidad" required>
 					</div>
 					<div class="col-6">
 						<label>Fecha disponibilidad</label>				  
@@ -114,7 +114,7 @@
 									
 									<thead>
 										<tr>
-											<th>Numero</th>	
+											<th>Número</th>	
 											<th>Descripción</th>
 											<th>Valor</th>
 											<th>Saldo</th>
@@ -123,7 +123,7 @@
 									</thead>
 									<tfoot>
 										<tr>
-											<th>Numero</th>	
+											<th>Número</th>	
 											<th>Descripción</th>
 											<th>Valor</th>
 											<th>Saldo</th>
@@ -140,7 +140,7 @@
 				<div class="form-row mb-2">
 					<div id="divInitialBudget" >
 						<button type="button" onclick="createDisponibility(1)"   class="btn btn-primary">Guardar disponibilidad</button>
-						<button type="submit" onclick="createDisponibility(2)" class="btn btn-primary">Guardar y generar registro</button>
+						<button type="button" onclick="createDisponibility(2)" class="btn btn-primary">Guardar y generar registro</button>
 						<button type="button" onclick="cancels(2)"  class="btn btn-secondary">Cancelar</button>
 					</div>					
 				</div>  
@@ -157,8 +157,8 @@
 			<form id="createRegister">
 				<div class="form-row">
 					<div class="col-6">
-						<label>Numero de registro:</label>
-						<input type="number" name="registerNumber" id="registerNumber" class="form-control" placeholder="Numero de registro" >
+						<label>Número de registro:</label>
+						<input type="number" name="registerNumber" id="registerNumber" class="form-control" placeholder="Número de registro" >
 					</div>
 					<div class="col-6">
 						<label>Fecha de registro:</label>				  
@@ -180,7 +180,7 @@
 				</div>
 				<div class="form-row">
 					<div class="col-6" >
-						<label>Tipó de contrato o pago:</label>
+						<label>Tipo de contrato o pago:</label>
 						<select class="form-control" id="typeContract" >
 						</select>
 					</div>					
@@ -271,7 +271,7 @@
 				<div class="form-row">
 					<div >
 						<button onclick="createRegister(1)" type="button" class="btn btn-primary">Guardar registro</button>
-						<button onclick="createRegister(2)" type="submit" class="btn btn-primary">Guardar y generar obligacion</button>
+						<button onclick="createRegister(2)" type="button" class="btn btn-primary">Guardar y generar obligación</button>
 						<button type="button" class="btn btn-secondary">Cancelar</button>
 					</div>					
 				</div>  
@@ -281,29 +281,38 @@
 </div>
 <div id="divObligation" class="container-fluid" style="display:none">
 	<div class="card mb-4">
-		<div class="card-header"><i class="fas fa-table mr-1"></i>Agregar Obligacion</div>
+		<div class="card-header"><i class="fas fa-table mr-1"></i>Agregar Obligación</div>
 		<div class="card-body">
 			<form id="createRegister">
 				<div class="form-row">
 					<div class="col-6">
-						<label>Numero de obligacion:</label>
-						<input type="number" name="registerObligation" id="registerObligation" class="form-control" placeholder="Numero de registro" >
+						<label>Número de obligación:</label>
+						<input type="number" name="numberObligation" id="numberObligation" class="form-control" placeholder="Número de registro" >
 					</div>
 					<div class="col-6">
-						<label>Fecha de obligacion:</label>				  
+						<label>Fecha de obligación:</label>				  
 						<input name="dateObligation" id="dateObligation" type="date" class="form-control" >
 					</div>
 				</div>
 				<br>
 				<div class="form-row">
 					<div class="col-6" >
-						<label>Seccion de derechos economicos o personales:</label>
-						<select class="form-control" id="sectionObligation" >
+						<label>Registro</label><button type="button" onclick="getRegistersOB()" data-toggle="modal" data-target="#myModalRegister" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
+						<select class="form-control" name="registerObligation" id="registerObligation" >
 						</select>
-					</div>	
+					</div>		
 					<div class="col-6" >
 						<label>Terceros:</label><button type="button" onclick="getThirdsRg()" data-toggle="modal" data-target="#myModalThirds" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
 						<select class="form-control" name="terceroSelectObligation" id="terceroSelectObligation" >
+						</select>
+					</div>					
+				</div>
+				<br>		
+				<div class="form-row">
+					<div class="col-6" >
+						<label class="checkbox-inline">Sección de derechos economicos o personales
+							<input style=" width: 30px; height: 30px; " type="checkbox" value="">
+						</label>
 						</select>
 					</div>					
 				</div>
@@ -317,7 +326,7 @@
 				<br>
 				<div  class="container-fluid mb-3" style="float:left">
 					<div class="card" >
-					<div class="card-header" ><i class="fas fa-table mr-1" ></i>Rubros de obligacion</div>
+					<div class="card-header" ><i class="fas fa-table mr-1" ></i>Rubros de obligación</div>
 						<div class="card-body" >
 							<div class="table-responsive">
 								<table class="table table-bordered dataTable" id="dataTableObligation" cellspacing="0" 
@@ -325,21 +334,21 @@
 									
 									<thead>
 										<tr>
-											<th>Registro</th>	
-											<th>Inputacion</th>
+											<th>Rubro</th>	
+											<th>Inputación</th>
 											<th>Valor Registro</th>
+											<th>Valor Obligación</th>
 											<th>Saldo Registro</th>
-											<th>Valor Obligacion</th>
 											<th>Acciones</th>
 										</tr>
 									</thead>
 									<tfoot>
 										<tr>
-											<th>Registro</th>	
-											<th>Inputacion</th>
+											<th>Rubro</th>	
+											<th>Inputación</th>
 											<th>Valor Registro</th>
+											<th>Valor Obligación</th>
 											<th>Saldo Registro</th>
-											<th>Valor Obligacion</th>
 											<th>Acciones</th>
 										</tr>
 									</tfoot>
@@ -351,7 +360,7 @@
 									<h6  id="totalv" for="totalObligation">SALDO: 0</h6>														
 								</div>
 								<div class="col-8" >
-									<h6  id="totalObligationBalance" for="totalObligationBalance" align="center">REGISTRO: 0</h6>
+									<h6  id="totalObligationBalance" for="totalObligationBalance" align="center">OBLIGACIÓN: 0</h6>
 								</div>
 							</div>	
 						</div>
@@ -368,19 +377,19 @@
 										
 										<thead>
 											<tr>
-												<th>Codigo</th>	
+												<th>Código</th>	
 												<th>Descripción</th>
-												<th>Debito</th>
-												<th>Credito</th>
+												<th>Débito</th>
+												<th>Crédito</th>
 												<th>Acciones</th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
-												<th>Codigo</th>	
+												<th>Código</th>	
 												<th>Descripción</th>
-												<th>Debito</th>
-												<th>Credito</th>
+												<th>Débito</th>
+												<th>Crédito</th>
 												<th>Acciones</th>
 											</tr>
 										</tfoot>
@@ -424,8 +433,60 @@
 					
 				<div class="form-row">
 					<div >
-						<button onclick="createRegister(1)" type="button" class="btn btn-primary">Guardar obligacion</button>
-						<button onclick="createRegister(2)" type="submit" class="btn btn-primary">Guardar y generar comprobante de pago</button>
+						<button onclick="createObligation(1)" type="button" class="btn btn-primary">Guardar obligación</button>
+						<button onclick="createObligation(2)" type="button" class="btn btn-primary">Guardar y generar comprobante de pago</button>
+						<button type="button" class="btn btn-secondary">Cancelar</button>
+					</div>					
+				</div>  
+			</form>
+		</div>	
+	</div>
+</div>
+<div id="divVoucherPayment" class="container-fluid" style="display:none">
+	<div class="card mb-4">
+		<div class="card-header"><i class="fas fa-table mr-1"></i>Generar comprobante de pago</div>
+		<div class="card-body">
+			<form id="createRegister">    
+				<div class="form-row">
+					<div class="col-6">
+						<label>Número de comprobante de pago:</label>
+						<input type="number" name="numberVoucherPayment" id="numberVoucherPayment" class="form-control" placeholder="Número de comprobante de pago" >
+					</div>
+					<div class="col-6">
+						<label>Fecha de comprobante de pago:</label>				  
+						<input name="dateVoucherPayment" id="dateVoucherPayment" type="date" class="form-control" >
+					</div>
+				</div>
+				<br>
+				<div class="form-row">
+					<div class="col-6" >
+						<label>Obligación: </label><button type="button" onclick="getObligationVoucher()" data-toggle="modal" data-target="#myModalObligation" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
+						<select class="form-control" name="selectObligationVoucher" id="selectObligationVoucher" >
+						</select>
+					</div>		
+					<div class="col-6" >
+						<label>Terceros:</label><button type="button" onclick="getThirdsRg()" data-toggle="modal" data-target="#myModalThirds" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
+						<select class="form-control" name="terceroSelectVoucher" id="terceroSelectVoucher" >
+						</select>
+					</div>					
+				</div>
+				<br>		
+				<div class="form-row">
+					<div class="col-6" >
+						<label>Tipo de documento:</label><button type="button"  class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
+						<select class="form-control" name="typeDocument" id="typeDocument" >
+						</select>
+					</div>						
+
+					<div class="col-6">
+						<label for="exampleFormControlTextarea1">Observación:</label>
+						<textarea placeholder="Observación" name="observationVoucherPayment" class="form-control" id="observationVoucherPayment" rows="3"></textarea>
+					</div>					
+				</div>	
+				<br>					
+				<div class="form-row">
+					<div>
+						<button onclick="createObligation(1)" type="button" class="btn btn-primary">Guardar comprobante de pago</button>
 						<button type="button" class="btn btn-secondary">Cancelar</button>
 					</div>					
 				</div>  
@@ -440,13 +501,14 @@
           <h4 class="modal-title">Lista de rubros para seleccionar</h4>
             </div>
                 <div class="modal-body">
-					<div  class="container-fluid col-12" >
-						<div class="card mb-12" >
+					<div  class="container-fluid" >
+						<div class="card" >
 						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Rubros</div>
 						<div class="card-body" >
 							<div class="table-responsive">
-					
-								<table class="table table-bordered dataTable col-12" id="dataTableSelectRubro" cellspacing="0" 
+								<font size="2" face="Arial" >
+
+								<table style="width:70%" class="table table-bordered dataTable " id="dataTableSelectRubro" cellspacing="0" 
 									role="grid" aria-describedby="dataTable_info">	
 									<thead>
 										<tr>
@@ -474,7 +536,8 @@
 											<h1></h1>
 										</tbody>
 									</table>
-									
+								</font>
+	
 							</div>	
 							</div>
 						</div>
@@ -496,7 +559,7 @@
 						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Rubros implicados</div>
 						<div class="card-body" >
 							<div class="table-responsive">
-					
+
 								<table class="table table-bordered dataTable" id="datatableDetalles" cellspacing="0" 
 									role="grid" aria-describedby="dataTable_info">	
 									<thead>
@@ -521,7 +584,7 @@
 											<h1></h1>
 										</tbody>
 									</table>
-									
+
 							</div>
 							<div class="form-row col-12 mb-2">
 						
@@ -561,7 +624,7 @@
 											<th>Valor</th>
 											<th>Saldo</th>
 											<th>Fecha</th>
-											<th>Descripcion</th>
+											<th>Descripción</th>
 											<th>Seleccionar</th>
 										</tr>
 									</thead>
@@ -571,7 +634,104 @@
 											<th>Valor</th>
 											<th>Saldo</th>
 											<th>Fecha</th>
-											<th>Descripcion</th>
+											<th>Descripción</th>
+											<th>Seleccionar</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+									
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+<div class="modal fade bd-example-modal-lg" id="myModalObligation" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de obligaciones</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Obligaciones</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+					
+								<table class="table table-bordered dataTable " id="dataTableSelectObligation" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>Obligación</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Descripción</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Obligación</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Descripción</th>
+											<th>Seleccionar</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+									
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="myModalRegister" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de registro</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Registros</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+					
+								<table class="table table-bordered dataTable " id="dataTableSelecRegister" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>Registro</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Descripción</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Disponibilidad</th>
+											<th>Valor</th>
+											<th>Saldo</th>
+											<th>Fecha</th>
+											<th>Descripción</th>
 											<th>Seleccionar</th>
 										</tr>
 									</tfoot>
@@ -608,9 +768,9 @@
 										<tr>
 											<th>Nombre</th>
 											<th>Apellido</th>
-											<th>Tipo de identificacion</th>
-											<th>Identificacion</th>
-											<th>Telefono</th>
+											<th>Tipo de identificación</th>
+											<th>Identificación</th>
+											<th>Teléfono</th>
 											<th>Seleccionar</th>
 										</tr>
 									</thead>
@@ -618,9 +778,9 @@
 										<tr>
 											<th>Nombre</th>
 											<th>Apellido</th>
-											<th>Tipo de identificacion</th>
-											<th>Identificacion</th>
-											<th>Telefono</th>
+											<th>Tipo de identificación</th>
+											<th>Identificación</th>
+											<th>Teléfono</th>
 											<th>Seleccionar</th>
 										</tr>
 									</tfoot>
@@ -637,6 +797,7 @@
             </div>         
         </div>  
 </div>
+
 <div class="modal fade" id="myModalCreateThird" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -675,6 +836,12 @@ var addRegister=[];
 var totalRegister=0;
 var totalOperateRegister=0;
 var totalOperateArrayRegister=[];
+var addObligation=[];
+var totalObligation=0;
+var totalOperateObligation=0;
+var totalOperateArrayObligation=[];
+var disponibilitySec;
+var registerSec;
 
 $(document).ready(function() {
 		$('#dataTableTest').DataTable( {
@@ -694,6 +861,16 @@ $(document).ready(function() {
 } );
 $(document).ready(function() {
 		$('#dataTableSelectDisponibility').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableSelecRegister').DataTable( {
 			
 		  "destroy":true,
 		  "language": idioma_español,
@@ -856,6 +1033,10 @@ function getRadioButon(){
 		getVoucher();
 
 	}
+	if($('input[name=typeComprobante]:checked', '#addVoucher').val()=="COMPROBANTEPAGO"){
+		getVoucher();
+
+	}
 	else{
 		
 	}
@@ -920,6 +1101,24 @@ function generateButton(){
 			}
 		});																	
 	}
+	if(nameVoucher=="COMPROBANTEPAGO"){
+		$("#divCreate").css("display", "none");
+		$("#generator").text("GENERAR COMPROBANTE DE PAGO DE PRESUPUESTO DE "+ nameOrigin);
+		$("#separatorButton").css("display", "block");
+		$.ajax({
+			url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'option': '3',
+				'nameAC': localStorage.getItem('nameAC'),
+				'idBussines': localStorage.getItem('idBussines'),
+				'origin': nameOrigin
+			},
+			dataType: 'json',
+			success: function (data) {
+				originID = data.ID;
+			}
+		});																	
+	}
 	else{
 		
 	}	
@@ -954,6 +1153,7 @@ function generateDisponibilty(){
 		$("#divCreate").css("display", "block");
 		$("#divRegister").css("display", "none");
 		$("#divObligation").css("display", "none");
+		$("#divVoucherPayment").css("display", "none");
 		var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
 		var fecha = new Date(); //Fecha actual
 		var mes = fecha.getMonth()+1; //obteniendo mes
@@ -999,12 +1199,21 @@ function generateDisponibilty(){
 		$("#divCreate").css("display", "none");
 		$("#divRegister").css("display", "block");
 		$("#divObligation").css("display", "none");
+		$("#divVoucherPayment").css("display", "none");
+
 		getDataToRegister();
 	}
 	if(nameVoucher=="OBLIGACION"){
+
+		getDataToObligation();
+	}
+	if(nameVoucher=="COMPROBANTEPAGO"){
+
 		$("#divCreate").css("display", "none");
 		$("#divRegister").css("display", "none");
-		$("#divObligation").css("display", "block");
+		$("#divObligation").css("display", "none");
+		$("#divVoucherPayment").css("display", "block");
+		getDataToVoucherPayment();
 	}
 														
 }
@@ -1040,8 +1249,8 @@ function getRubrosByOrigin(){
 function deleteDisponibility(id, numero){
   
   swal({
-  title: "Desea eliminar disponibilidad con número " + numero + "?",
-  text: "Al confirmar esta acción, la disponibilidad con número " + numero + " sera eliminado.",
+  title: "Desea eliminar disponibilidad número " + numero + "?",
+  text: "Al confirmar esta acción, la disponibilidad número " + numero + " sera eliminado.",
   icon: "warning",
   buttons: true,
   dangerMode: true,
@@ -1074,7 +1283,7 @@ function deleteDisponibility(id, numero){
 				])
 			}
 			table.draw( false );
-			  swal("La disponibilidad con número " + numero + "  se ha eliminado con éxito.", {
+			  swal("La disponibilidad número " + numero + "  se ha eliminado con éxito.", {
 			  icon: "success",
 			  });
 			  
@@ -1311,7 +1520,10 @@ function createDisponibility(option){
 							$("#totalBalance").text("SALDO: "+ totalOperate);	
 							$("#totalDisponibility").text("DISPONIBILIDAD: "+ totalDisponibility);	
 							$("#observationRegister").val(observation);
+							var dateRegister = document.getElementById("dateRegister");
+							dateRegister.value = date;
 							getDataToRegister();
+							selectDisponibiltyToRegister(JSON.stringify(data.ID));
 
 						}
 					});
@@ -1436,7 +1648,7 @@ function cancels(option){
 		
 		swal({
 			title: "Desea cancelar por completo la disponibilidad?",
-			text: "No se guardar ningun valor agregado.",
+			text: "No se guardara ningun valor agregado.",
 			icon: "warning",
 			buttons: true,
 			dangerMode: true,
@@ -1499,8 +1711,10 @@ function getDisponibilitysRg(){
 
 
 function selectDisponibilty(id){
+
 	$('#myModalDisponibilityOrigin').modal('toggle');
 	$('#disponibilitySelectRegister> option[value='+id+']').attr('selected', 'selected');
+	disponibilitySec = id;
 	$.ajax({
 			url: '{% url "fillDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
@@ -1519,8 +1733,8 @@ function selectDisponibilty(id){
 				data.RUBRO[i].description,
 				data.RUBRO[i].value,
 				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=register"+data.RUBRO[i].id+" class='form-control' name='inputRegister'>",
-				"<label type='number' id=registerBalance"+data.RUBRO[i].id+"></label>",
-				"<a data-toggle='tooltip' title='Validar operacion'><button type='button' onclick=\'operateBalanceRegister("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idDispo)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				"<label type='number' id=registerBalance"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceRegister("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idDispo)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
 			}
 			table.draw( false );
@@ -1528,7 +1742,37 @@ function selectDisponibilty(id){
 	});
 
 }
+function selectDisponibiltyToRegister(id){
 
+	$('#disponibilitySelectRegister> option[value='+id+']').attr('selected', 'selected');
+	disponibilitySec = id;
+	$.ajax({
+			url: '{% url "fillDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'disponibility':id,
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#observationRegister").val(data.OBSERVATION); 
+				var table = $('#dataTableRegister').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].description,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=register"+data.RUBRO[i].id+" class='form-control' name='inputRegister'>",
+				"<label type='number' id=registerBalance"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceRegister("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idDispo)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			}
+	});
+
+}
 function getThirdsRg(){
 	$.ajax({
 			url: '{% url "getThirds"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -1561,6 +1805,7 @@ function getThirdsRg(){
 
 function selectThirds(id,name){
     $('#terceroSelectRegister> option[value='+id+']').attr('selected', 'selected');
+	$('#terceroSelectObligation> option[value='+id+']').attr('selected', 'selected');
 	$('#myModalThirds').modal('toggle');
 }
 
@@ -1653,7 +1898,8 @@ $(document).on('change', '#disponibilitySelectRegister', function(event) {
 			},
 			dataType: 'json',
 			success: function (data) {
-				console.log(data)
+				disponibilitySec = $( "#disponibilitySelectRegister" ).val();
+
 				$("#observationRegister").val(data.OBSERVATION); 
 				var table = $('#dataTableRegister').DataTable(); 
  				var rows = table.rows().remove().draw();
@@ -1665,7 +1911,36 @@ $(document).on('change', '#disponibilitySelectRegister', function(event) {
 				data.RUBRO[i].value,
 				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=register"+data.RUBRO[i].id+" class='form-control' name='inputRegister'>",
 				"<label type='number' id=registerBalance"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
-				"<a data-toggle='tooltip' title='Validar operacion'><button type='button' onclick=\'operateBalanceRegister("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idDispo)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceRegister("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idDispo)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );			
+			}
+	});
+});
+
+$(document).on('change', '#registerObligation', function(event) {
+	$.ajax({
+			url: '{% url "fillRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'register':$( "#registerObligation" ).val(),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				console.log(data)
+				$("#observationObligation").val(data.OBSERVATION); 
+				var table = $('#dataTableObligation').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].register,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=obligation"+data.RUBRO[i].id+" class='form-control' name='inputObligation'>",
+				"<label type='number' id=registerObligation"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceObligation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idRegister)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
 			}
 			table.draw( false );
@@ -1683,7 +1958,7 @@ function operateBalanceRegister(id,rubro,value,idDispo,valueP){
 	operate = parseInt(valueP) - parseInt($(createId).val());
 	const found = addRegister.findIndex(element => element['id'] == id);
 	if(parseInt($(createId).val())==0){
-		swal("No se puede generar una operacion de valor 0", " " , "error");
+		swal("No se puede generar una operación de valor 0", " " , "error");
 	}else{
 		if(found<0){
 			if(operate<0){
@@ -1758,7 +2033,6 @@ function createRegister(option){
 			var registerCode = $('input[name="registerNumber"]').val();
 			var observation = $('textarea[name="observationRegister"]').val();
 			var date = $('input[name="dateRegister"]').val();
-			console.log($('input[name="registerNumber"]').val(),observation,date)
 			if (registerCode,observation,date) {
 				// Create Ajax Call
 				$.ajax({
@@ -1771,7 +2045,8 @@ function createRegister(option){
 						'observation': observation,
 						'value':totalRegister,
 						'balance': totalOperateRegister,
-						'registers': JSON.stringify(addRegister)
+						'registers': JSON.stringify(addRegister),
+						'disponibility': disponibilitySec
 					},
 					dataType: 'json',
 					success: function (data) {
@@ -1785,7 +2060,9 @@ function createRegister(option){
 						var table = $('#dataTableRegister').DataTable(); 
  						var rows = table.rows().remove().draw();
 						$("#totalRegister").text("SALDO: "+ totalOperateRegister);														
-						$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);		
+						$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);
+						$("#observationRegister").val(observation);
+		
 					}
 				});
 			} else {
@@ -1820,11 +2097,12 @@ function createRegister(option){
 							'observation': observation,
 							'value':totalRegister,
 							'balance': totalOperateRegister,
-							'registers': JSON.stringify(addRegister)
+							'registers': JSON.stringify(addRegister),
+							'disponibility': disponibilitySec
 						},
 						dataType: 'json',
 						success: function (data) {
-							
+							$("#divRegister").css("display", "none");
 							swal("Creado exitoso del registro!", "Continua con tu proceso!", "success");
 							$('textarea[name="observationRegister"]').val("");
 							addRegister.length=0;
@@ -1834,8 +2112,372 @@ function createRegister(option){
 							var table = $('#dataTableRegister').DataTable(); 
 							var rows = table.rows().remove().draw();
 							$("#totalRegister").text("SALDO: "+ totalOperateRegister);														
-							$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);		
-							//getDataToObligation();
+							$("#totalRegisterBalance").text("REGISTRO: "+ totalRegister);	
+							$("#observationObligation").val(observation);
+							var dateObligation = document.getElementById("dateObligation");
+							dateObligation.value = date;
+							selectRegisterToObligation(JSON.stringify(data.ID));
+							getDataToObligation();
+
+						}
+					});
+				} else {
+					alert("Por favor llene todos los campos");
+				}
+				return false;
+			}
+			});
+
+		}	
+}
+
+function getDataToObligation(){
+
+	$("#divCreate").css("display", "none");
+	$("#divRegister").css("display", "none");
+	$("#divObligation").css("display", "block");
+	$("#divVoucherPayment").css("display", "none");
+
+	$.ajax({
+			url: '{% url "getDataToObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				console.log(data)
+
+				const $selectTH = document.querySelector("#terceroSelectObligation");
+				const $select = document.querySelector("#registerObligation");
+				for (let i = $select.options.length; i >= 0; i--) {
+						$select.remove(i);
+				}
+				for (let i = $selectTH.options.length; i >= 0; i--) {
+						$selectTH.remove(i);
+				}  
+				$('#terceroSelectObligation').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+				$('#registerObligation').append(`<option  hidden  selected"> Selecciona una opción</option>`);	
+				for (var i=0; i<data.MV.length; i++){
+					$('#registerObligation').append('<option value='+data.MV[i].id+'>'+data.MV[i].register+'</option>')
+				}
+				for (var i=0; i<data.TH.length; i++){
+					$('#terceroSelectObligation').append('<option value='+data.TH[i].id+'>'+data.TH[i].name + " " +data.TH[i].surnames+'</option>')
+				}
+
+				var table = $('#dataTableGetObligation').DataTable(); 
+				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.OB.length; i++){
+
+					table.row.add( [
+					data.OB[i].obligation,
+					data.OB[i].observation,
+					data.OB[i].value,
+					data.OB[i].balance,
+					data.OB[i].date,
+					"<a data-toggle='tooltip' title='Actualizar obligación'><button  class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+					"<a data-toggle='tooltip' title='Eliminar obligación'><button onclick=\'deleteObligation("+JSON.stringify(data.OB[i].id)+','+JSON.stringify(data.OB[i].register)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
+					])
+				}
+				table.draw( false );
+			}
+	});
+	$.ajax({
+			url: '{% url "getObligationSerial"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#numberObligation").val(data.OB); 
+
+			}
+	});
+}
+function getRegistersOB(){
+	$.ajax({
+			url: '{% url "getRegistersOB"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+
+				var table = $('#dataTableSelecRegister').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RG.length; i++){
+
+				table.row.add( [
+				data.RG[i].register,
+				data.RG[i].value,
+				data.RG[i].balance,
+				data.RG[i].date,
+				data.RG[i].observation,
+				"<a data-toggle='tooltip' title='Seleccionar registro'><button  onclick=\'selectRegister("+JSON.stringify(data.RG[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+				])
+				
+			}
+			table.draw( false );
+
+			}
+		});
+}
+function getRegistersOB(){
+	$.ajax({
+			url: '{% url "getObligationsVC"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+
+				var table = $('#dataTableSelectObligation').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.OB.length; i++){
+
+				table.row.add( [
+				data.OB[i].obligation,
+				data.OB[i].value,
+				data.OB[i].balance,
+				data.OB[i].date,
+				data.OB[i].observation,
+				"<a data-toggle='tooltip' title='Seleccionar registro'><button  onclick=\'selectObligation("+JSON.stringify(data.OB[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+				])
+				
+			}
+			table.draw( false );
+
+			}
+		});
+}
+function selectRegister(id){
+	$('#myModalRegister').modal('toggle');
+	$('#registerObligation> option[value='+id+']').attr('selected', 'selected');
+	$.ajax({
+			url: '{% url "fillRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'register':id,
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#observationObligation").val(data.OBSERVATION);  
+				var table = $('#dataTableObligation').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].register,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=obligation"+data.RUBRO[i].id+" class='form-control' name='inputObligation'>",
+				"<label type='number' id=registerObligation"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceObligation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idRegister)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			}
+	});
+
+}
+function selectRegisterToObligation(id){
+	$('#registerObligation> option[value='+id+']').attr('selected', 'selected');
+	registerSec = id;
+	$.ajax({
+			url: '{% url "fillRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'register':id,
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#observationObligation").val(data.OBSERVATION);  
+				var table = $('#dataTableObligation').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].register,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=obligation"+data.RUBRO[i].id+" class='form-control' name='inputObligation'>",
+				"<label type='number' id=registerObligation"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceObligation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idRegister)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			}
+	});
+
+}
+function operateBalanceObligation(id,rubro,value,idRegister,valueP){
+
+	var createId =  "#obligation"+id;
+	var result= "#registerObligation"+id
+	var operate=0;
+	var valueRegister = parseInt(value);
+	operate = parseInt(valueP) - parseInt($(createId).val());
+	const found = addObligation.findIndex(element => element['id'] == id);
+	if(parseInt($(createId).val())==0){
+		swal("No se puede generar una operacion de valor 0", " " , "error");
+	}else{
+		if(found<0){
+			if(operate<0){
+					swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor de  "+ value, " No se puede realizar  la obligacion", "error");
+				}else{
+					$(result).text(operate);
+					addObligation.push({
+						"idRegister":idRegister,
+						"id": id,
+						"rubro": rubro,
+						"value":parseInt($(createId).val()),
+						"balance":operate
+					})
+					totalOperateArrayObligation.push({
+						"id": id,
+						"subtotal": operate,
+						"obligation":  parseInt($(createId).val())
+					})
+					totalOperateObligation = totalOperateObligation + operate;	
+					totalObligation = totalObligation + parseInt($(createId).val());
+					$("#totalObligation").text("SALDO: "+ totalOperateObligation);														
+					$("#totalObligationBalance").text("OBLIGACION: "+ totalObligation);														
+
+				}
+				console.log(addObligation)
+				console.log(totalOperateArrayObligation)
+			}else{
+
+				if(operate<0){
+					swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor de  "+ value, " No se puede realizar la obligación", "error");
+				}else{
+					$(result).text(operate);
+					addObligation[found] ={
+						"idRegister":idRegister,
+						"id": id,
+						"rubro": rubro,
+						"value":parseInt($(createId).val()),
+						"balance":operate
+					}
+					totalOperateObligation = totalOperateObligation - totalOperateArrayObligation[found]['subtotal'];	
+					totalObligation = totalObligation - totalOperateArrayObligation[found]['obligation'];
+					totalOperateArrayObligation[found] = {
+						"id": id,
+						"subtotal": operate,
+						"obligation":  parseInt($(createId).val())
+					}
+					totalOperateObligation = totalOperateObligation + totalOperateArrayObligation[found]['subtotal'];	
+					totalObligation = totalObligation + totalOperateArrayObligation[found]['obligation'];
+					$("#totalObligation").text("SALDO: "+ totalOperateObligation);														
+					$("#totalObligationBalance").text("OBLIGACION: "+ totalObligation);														
+
+				}
+				console.log(addObligation)
+				console.log(totalOperateArrayObligation)
+		}
+}	
+
+}
+
+function createObligation(option){
+	if(option==1){
+		
+		swal({
+        title: "Desea terminar la obligación ?",
+        text: "Al confirmar esta acción, la obligación sera guardado",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        }).then((willDelete) => { 
+        if (willDelete) {
+
+			var obligationCode = $('input[name="numberObligation"]').val();
+			var observation = $('textarea[name="observationObligation"]').val();
+			var date = $('input[name="dateObligation"]').val();
+			if (obligationCode,observation,date) {
+				// Create Ajax Call
+				$.ajax({
+					url: '{% url "createObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
+					data: {
+						'bussines':localStorage.getItem('idBussines'), 
+						'obligationCode': obligationCode,
+						'origin': originID,
+						'date': date,
+						'observation': observation,
+						'value':totalObligation,
+						'balance': totalOperateObligation,
+						'obligations': JSON.stringify(addObligation),
+						'register':registerSec
+					},
+					dataType: 'json',
+					success: function (data) {
+
+						$("#divObligation").css("display", "none");
+						swal("Creado exitoso de la obligacion!", "Continua con tu proceso!", "success");
+						$('textarea[name="observationObligation"]').val("");
+						addObligation.length=0;
+						totalObligation=0;
+						totalOperateArrayObligation.length=0;
+						totalOperateObligation=0;
+						var table = $('#dataTableObligation').DataTable(); 
+						var rows = table.rows().remove().draw();
+						$("#totalObligation").text("SALDO: "+ totalOperateObligation);														
+						$("#totalObligationBalance").text("OBLIGACION: "+ totalObligation);		
+					}
+				});
+			} else {
+				alert("Por favor llene todos los campos");
+			}
+			return false;
+        }
+        });
+	}else{
+		
+			swal({
+			title: "Desea terminar la obligación ?",
+       		text: "Al confirmar esta acción, la obligación sera guardado",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			}).then((willDelete) => {
+			if (willDelete) {
+
+				var obligationCode = $('input[name="numberObligation"]').val();
+				var observation = $('textarea[name="observationObligation"]').val();
+				var date = $('input[name="dateObligation"]').val();
+				if (obligationCode,observation,date) {
+					// Create Ajax Call
+					$.ajax({
+						url: '{% url "createObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
+						data: {
+							'bussines':localStorage.getItem('idBussines'), 
+							'obligationCode': obligationCode,
+							'origin': originID,
+							'date': date,
+							'observation': observation,
+							'value':totalObligation,
+							'balance': totalOperateObligation,
+							'obligations': JSON.stringify(addObligation),
+							'register':registerSec
+						},
+						dataType: 'json',
+						success: function (data) {
+
+							$("#divObligation").css("display", "none");
+							swal("Creado exitoso de la obligación!", "Continua con tu proceso!", "success");
+							$('textarea[name="observationObligation"]').val("");
+							addObligation.length=0;
+							totalObligation=0;
+							totalOperateArrayObligation.length=0;
+							totalOperateObligation=0;
+							var table = $('#dataTableObligation').DataTable(); 
+							var rows = table.rows().remove().draw();
+							$("#totalObligation").text("SALDO: "+ totalOperateObligation);														
+							$("#totalObligationBalance").text("OBLIGACION: "+ totalObligation);		
+							getDataToGenerateVoucher();
 
 						}
 					});
@@ -1848,6 +2490,69 @@ function createRegister(option){
 
 		}
 	
+}
+function getDataToGenerateVoucher(){
+
+	$("#divCreate").css("display", "none");
+	$("#divRegister").css("display", "none");
+	$("#divObligation").css("display", "none");
+	$("#divVoucherPayment").css("display", "block");
+
+	$.ajax({
+			url: '{% url "getDataToVoucherPayment"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+
+				const $selectTH = document.querySelector("#terceroSelectVoucher");
+				const $select = document.querySelector("#selectObligationVoucher");
+				for (let i = $select.options.length; i >= 0; i--) {
+						$select.remove(i);
+				}
+				for (let i = $selectTH.options.length; i >= 0; i--) {
+						$selectTH.remove(i);
+				}  
+				$('#terceroSelectVoucher').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+				$('#selectObligationVoucher').append(`<option  hidden  selected"> Selecciona una opción</option>`);	
+				for (var i=0; i<data.MV.length; i++){
+					$('#selectObligationVoucher').append('<option value='+data.MV[i].id+'>'+data.MV[i].register+'</option>')
+				}
+				for (var i=0; i<data.TH.length; i++){
+					$('#terceroSelectVoucher').append('<option value='+data.TH[i].id+'>'+data.TH[i].name + " " +data.TH[i].surnames+'</option>')
+				}
+
+				var table = $('#dataTableGetObligation').DataTable(); 
+				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.VP.length; i++){
+
+					table.row.add( [
+					data.VP[i].vouchePayment,
+					data.VP[i].observation,
+					data.VP[i].value,
+					data.VP[i].balance,
+					data.VP[i].date,
+					"<a data-toggle='tooltip' title='Actualizar comprobante de pago'><button  class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+					"<a data-toggle='tooltip' title='Eliminar comprobante de pago'><button onclick=\'deleteObligation("+JSON.stringify(data.VP[i].id)+','+JSON.stringify(data.VP[i].vouchePayment)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
+					])
+				}
+				table.draw( false );
+			}
+	});
+	$.ajax({
+			url: '{% url "getSerialVoucherPayment"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#observationVoucherPayment").val(data.OB); 
+
+			}
+	});
 }
 
 </script>

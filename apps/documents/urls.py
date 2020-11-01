@@ -28,5 +28,13 @@ urlpatterns = [
     url(r'ajax/fillDisponibility/(?P<pkUser>\d+)/', FillDisponibility.as_view(), name='fillDisponibility'),
     url(r'ajax/getRegisterSerial/(?P<pkUser>\d+)/', GetRegisterSerial.as_view(), name='getRegisterSerial'),
     url(r'ajax/createRegister/(?P<pkUser>\d+)/', CreateRegister.as_view(), name='createRegister'),
+    url(r'ajax/getDataToObligation/(?P<pkUser>\d+)/', GetDataToObligation.as_view(), name='getDataToObligation'),
+    url(r'ajax/getObligationSerial/(?P<pkUser>\d+)/', GetObligationSerial.as_view(), name='getObligationSerial'),
+    url(r'ajax/fillRegister/(?P<pkUser>\d+)/', FillRegister.as_view(), name='fillRegister'),
+    url(r'ajax/getRegistersOB/(?P<pkUser>\d+)/', GetRegistersOB.as_view(), name='getRegistersOB'),
+    url(r'ajax/createObligation/(?P<pkUser>\d+)/', CreateObligation.as_view(), name='createObligation'),
+    url(r'ajax/getObligationsVC/(?P<pkUser>\d+)/', GetObligationsVC.as_view(), name='getObligationsVC'),
+    url(r'ajax/getDataToVoucherPayment/(?P<pkUser>\d+)/', GetDataToVoucherPayment.as_view(), name='getDataToVoucherPayment'),
+    url(r'ajax/getSerialVoucherPayment/(?P<pkUser>\d+)/', GetSerialVoucherPayment.as_view(), name='getSerialVoucherPayment'),
 
 ]

@@ -1239,8 +1239,8 @@ function getRadioButon(){
 				data.AG[i].numberAg,
 				data.AG[i].typeAgreement,
 				"<a data-toggle='tooltip' href='#' id='deleteAgreement'title='Eliminar Tipo de Acuerdo'><button onclick=\'deleteAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].numberAg)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-				"<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-				"<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
+				"<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo '><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
+				"<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del Acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
 				])
 			}
 			table.draw(false);
@@ -1382,8 +1382,8 @@ $("form#updateAG").submit(function() {
 				 data.AG[i].typeAgreement,
 					  
 				 "<a data-toggle='tooltip' href='#' id='deleteAgreement'title='Eliminar Tipo de Acuerdo'><button onclick=\'deleteAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].numberAg)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-				 "<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-				 "<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
+				 "<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
+				 "<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del Acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
 				 ])
 			 }
 			 tableUpdateAg.draw(false);
@@ -1405,8 +1405,8 @@ $("form#updateAG").submit(function() {
 function deleteAgreement(id, numberAg){
   
 	 swal({
-	 title: "Desea eliminar el tipo de acuerdo con número " + numberAg + "?",
-	 text: "Al confirmar esta acción, el tipo de acuerdo con número " + numberAg + " sera eliminado.",
+	 title: "Desea eliminar el tipo de acuerdo número " + numberAg + "?",
+	 text: "Al confirmar esta acción, el tipo de acuerdo número " + numberAg + " sera eliminado.",
 	 icon: "warning",
 	 buttons: true,
 	 dangerMode: true,
@@ -1433,12 +1433,12 @@ function deleteAgreement(id, numberAg){
 					 data.AG[i].typeAgreement,
 							 
 					 "<a data-toggle='tooltip' href='#' id='deleteAgreement'title='Eliminar Tipo de Acuerdo'><button onclick=\'deleteAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].numberAg)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					 "<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
-					 "<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
+					 "<a data-toggle='tooltip' href='#' id='updateAgreement' title='Actualizar Tipo de Acuerdo'><button  onclick=\'changeUpdateAgreement("+JSON.stringify(data.AG[i].id)+','+JSON.stringify(data.AG[i].typeAgreement)+','+JSON.stringify(data.AG[i].numberAg)+','+JSON.stringify(data.AG[i].dateAg)+','+JSON.stringify(data.AG[i].descriptionAg)+")\' data-toggle='modal' data-target='#myModalAgreementUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
+					 "<a data-toggle='tooltip' href='#' id='detalleAR' title='Detalles del Acuerdo'><button onclick=\'getDetallAgreement("+JSON.stringify(data.AG[i].id)+")\' data-toggle='modal' data-target='#myModalAgreeementOperation' class='btn btn-primary btn-sm'><i class='fa fa-search'></i></button></a>"
 					 ])
 				 }
 				 tableUpdateAg.draw(false);
-				 swal("El tipo de acuerdo con número " + numberAg + "  se ha eliminado con éxito.", {
+				 swal("El tipo de acuerdo número " + numberAg + "  se ha eliminado con éxito.", {
 				 icon: "success",
 				 });
 				 
@@ -1850,7 +1850,7 @@ $("form#createRubro").submit(function() {
 		});
 			}		
 		}else{
-			swal("Patron rubro invalido", "Por favor verifique el codigo", "error");
+			swal("Patrón rubro inválido", "Por favor verifique el código", "error");
 		}
 		
 	} else {
@@ -1990,7 +1990,7 @@ function getRubroByOperation(id,rubro,description,realBudget,typeRubro){
 			"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' min='1'  pattern='^[0-9]+'  oninput='validity.valid||(value='');'  style='font-family: Arial; font-size: 10pt;' id="+id+" class='form-control' name='inputOperations'>",
 			"<label type='number'   id=Realbalance"+id+"  >"+realBudget+"</label>",
 			"<label type='number'   id=balance"+id+"  ></label>",
-			"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description)+")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
+			"<a data-toggle='tooltip' title='Validar operación'><button  onclick='operateBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description)+")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+
 			"<a data-toggle='tooltip' title='Eliminar rubro'><button  onclick='deleteRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"						
 			]).node().id = rubro+"IDtr";
 			table.draw(false);
@@ -2019,7 +2019,7 @@ function operateBalance(id,rubro,realBudget,description){
 				var operate=0;
 				var intBudget = parseInt(realBudget);
 				if(parseInt($(createId).val())==0){
-					swal("No se puede generar una operacion de valor 0", " " , "error");
+					swal("No se puede generar una operación de valor 0", " " , "error");
 				}else{
 				const found = addOperation.findIndex(element => element['id'] == id);
 				if(found<0){
@@ -2251,7 +2251,7 @@ function getRubroByContraOperation(id,rubro,description,realBudget,typeRubro){
 			"<input type='text' onkeypress='return validaNumericos(event)'/ min='1'  pattern='^[0-9]+' size='10' oninput='validity.valid||(value='');' style='font-family: Arial; font-size: 10pt;'  id=contra"+id+" class='form-control' name='inputOperations'>",
 			"<label type='number' id=RealContrabalance"+id+" >"+realBudget+"</label>",
 			"<label type='number' id=balancecontra"+id+"  ></label>",
-			"<a data-toggle='tooltip' title='Validar operacion'><button  onclick='operateContraBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description) +")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"	+			
+			"<a data-toggle='tooltip' title='Validar operación'><button  onclick='operateContraBalance("+id+','+rubro+','+realBudget+','+ JSON.stringify(description) +")' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"	+			
 			"<a data-toggle='tooltip' title='Eliminar rubro'><button  onclick='deleteContraRubroSelected("+id+")' class='btn btn-primary btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button></a>"
 			]).node().id = "contra"+rubro+"IDtr";
 			table.draw(false);
@@ -2544,7 +2544,7 @@ $("#id_rubro").keyup(function(event){
 			$("#coreRubroPattern").text("Código rubro");
 			$("#coreRubroPattern").css("color", "gray");
 	}else{
-		$("#coreRubroPattern").text("Código rubro invalido");
+		$("#coreRubroPattern").text("Código rubro inválido");
 		$("#coreRubroPattern").css("color", "red");
 	}
 }); 
@@ -2566,7 +2566,7 @@ function cancels(option){
 	if(option==2){
 		
 		swal({
-			title: "Desea cancelar por completo la operacion?",
+			title: "Desea cancelar por completo la operación?",
 			text: "No se guardar ningun valor agregado.",
 			icon: "warning",
 			buttons: true,
@@ -2696,7 +2696,7 @@ function validateDataImport(){
 						countOk += 1;														
 						return false;
 				}else{
-					$("#import"+value).text("No cumple con el patron");	
+					$("#import"+value).text("No cumple con el patrón");	
 				}
 			}
 		}

@@ -76,14 +76,13 @@
 								<li><a id="createInform" href="#" style="color:rgb(0,0,0);" onclick="redirect(3);return false;" >Tipos de informes</a></li>								
 							</ul>
 						</li>
-						<li><a href="menu-has-children" style="color:rgb(0,0,0);">Parametrización Contable</a>
+						<li><a href="#" style="color:rgb(0,0,0);">Contabilidad</a>
 							<ul>
-								<li><a id="createVoucher " href="#" style="color:rgb(0,0,0);" onclick="redirect(9);return false;" >Cuenta</a></li>								
-								
+								<li><a id="createAccount " href="#" style="color:rgb(0,0,0);" onclick="redirect(9);return false;" >Cuenta</a></li>
+								<li><a id="createPC " href="#" style="color:rgb(0,0,0);" onclick="redirect(10);return false;" >Parametrización Ppto Contable</a></li>	
 							</ul>
-						
 						</li>
-						<li><a href="menu-has-children" style="color:rgb(0,0,0);">Movimientos</a>
+						<li><a href="#" style="color:rgb(0,0,0);">Movimientos</a>
 							<ul>
 								<li><a id="createVoucher " href="#" style="color:rgb(0,0,0);" onclick="redirect(5);return false;" >Comprobantes</a></li>								
 								<li><a id="documents" href="#" style="color:rgb(0,0,0);" onclick="redirect(6);return false;">Documentos Presupuestales</a></li>
@@ -219,14 +218,17 @@
 				window.location.href = "https://sicapdeploys.herokuapp.com/documents/generateDocuments/"+localStorage.getItem('userID');
 			}
 			if(option==7){
-				window.location.href = "https://sicapdeploys.herokuapp.com/documents/listThird/"+localStorage.getItem('idBussines')+"/"+localStorage.getItem('userID');	
+				window.location.href = "https://sicapdeploys.herokuapp.com/documents/documents/listThird/"+localStorage.getItem('idBussines')+"/"+localStorage.getItem('userID');	
 			}
 			if(option==8){
 				window.location.href = "https://sicapdeploys.herokuapp.com/documents/documents/listTypeContract/"+localStorage.getItem('idBussines')+"/"+localStorage.getItem('userID');	
-			}	
+			}
 			if(option==9){
 				window.location.href = "https://sicapdeploys.herokuapp.com/settings/listAccount/"+localStorage.getItem('idBussines')+"/"+localStorage.getItem('userID');	
-			}					
+			}
+			if(option==10){
+				window.location.href = "https://sicapdeploys.herokuapp.com/settings/generateAccounting/"+localStorage.getItem('idBussines')+"/"+localStorage.getItem('userID');	
+			}						
 		}
 	</script>
 	
