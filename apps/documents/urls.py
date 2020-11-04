@@ -7,12 +7,10 @@ urlpatterns = [
     url(r'ajax/createVoucher/(?P<pkUser>\d+)/', CreateVoucher.as_view(), name='createVoucher'),
     url(r'ajax/updateVoucher/(?P<pkUser>\d+)/', UpdateVoucher.as_view(), name='updateVoucher'),
     url(r'documents/generateDocuments/(?P<pkUser>\d+)/', generateDocuments , name='generateDocuments'),
-    url(r'ajax/getVoucher/(?P<pkUser>\d+)/', GetVoucher.as_view(), name='getVoucher'),
-    
+    url(r'ajax/getVoucher/(?P<pkUser>\d+)/', GetVoucher.as_view(), name='getVoucher'),   
     url(r'documents/listThird/(?P<pk>\d+)/(?P<pkUser>\d+)/$', ListThird.as_view() , name='listThird'),
     url(r'ajax/createThird/(?P<pkUser>\d+)/', CreateThird.as_view(), name='createThird'),
     url(r'ajax/updateThird/(?P<pkUser>\d+)/', UpdateThird.as_view(), name='updateThird'),
-
     url(r'documents/listTypeContract/(?P<pk>\d+)/(?P<pkUser>\d+)/$', ListTypeContract.as_view() , name='listTypeContract'),
     url(r'ajax/createDetailTypeContract/(?P<pkUser>\d+)/', CreateDetailTypeContract.as_view(), name='createDetailTypeContract'),
     url(r'ajax/createTypeContract/(?P<pkUser>\d+)/', CreateTypeContract.as_view(), name='createTypeContract'),

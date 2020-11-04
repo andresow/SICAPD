@@ -198,8 +198,16 @@ class AccountTypeRubro(models.Model):
 
     bussines = models.ForeignKey(Bussines, null=True, blank=True, on_delete=models.CASCADE)
     rubro = models.ForeignKey(Rubro, null=True, blank=True, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, null=True, blank=True, on_delete=models.CASCADE)
     typeAccount = models.CharField(max_length=100)
     document = models.CharField(max_length=100)
+
+class ValuesAccountObligation(models.Model):
+
+    account = models.ForeignKey(AccountTypeRubro, null=True, blank=True, on_delete=models.CASCADE)
+    obligation = models.ForeignKey(RubroMovement, null=True, blank=True, on_delete=models.CASCADE)
+    typeAccount = models.CharField(max_length=100)
+    value = models.BigIntegerField(null=True)
 
 class InformationMovement(models.Model):
 

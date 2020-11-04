@@ -553,5 +553,36 @@ class GetBudget(LoginRequiredMixin,View):
         rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget','budgetEject').order_by('rubro')
         return JsonResponse({"ID":origin.id ,"RUBRO": list(rubro)})
 
-# listAccounting = Agreement.objects.filter(origin_id=request.GET.get('origin')).values('id', 'typeAgreement', 'numberAg', 'descriptionAg')
-# 'ACCO':list(listAccountins)
+class CreateAccountRubro(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def post(self, request, *args, **kwargs):
+
+        
+        accountRubro = json.loads(request.POST.get('accountRubro'))
+        bussines = Bussines.objects.get(id=request.POST.get('bussines'))
+        for x in range(0,len(accountRubro)):
+             
+            rubro = Rubro.objects.get(id=accountRubro[x]['rubro'])
+            account = Account.objects.get(id=accountRubro[x]['account'])
+            typeAccount = accountRubro[x]['operationAccount']
+            document = accountRubro[x]['document']
+            accountType = AccountTypeRubro.objects.filter(rubro_id=rubro.id,account_id=account.id,typeAccount=typeAccount).exists()
+            if accountType == True:
+                return JsonResponse({"CREATE": "FALSE","TA":typeAccount})
+            else:
+                AccountTypeRubro.objects.create(bussines=bussines,rubro=rubro,account=account,typeAccount=typeAccount,document=document)
+        return JsonResponse({"CREATE": "TRUE"})
+
+class GetAccountsByRubro(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        accountsByRubro = AccountTypeRubro.objects.filter(rubro_id=request.GET.get('rubro')).values('rubro__id','account__code','account__description','typeAccount','document','account_id','id')        
+        print(accountsByRubro)
+        return JsonResponse({"AC":list(accountsByRubro)})

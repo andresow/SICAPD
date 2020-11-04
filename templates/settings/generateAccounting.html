@@ -43,6 +43,7 @@
                                                 
                                                 <thead>
                                                     <tr>
+                                                        <th>ID</th>
                                                         <th>Rubro</th>
                                                         <th>Descripción</th>
                                                         <th>Tipo</th>
@@ -50,6 +51,7 @@
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
+                                                        <th>ID</th>
                                                         <th>Rubro</th>
                                                         <th>Descripción</th>
                                                         <th>Tipo</th>
@@ -74,24 +76,25 @@
                                         <div class="col-5 mb-4" >
                                             <label>Operación:</label>
                                             <select class="form-control" id="operationSelect" name="operationSelect" >
-                                                <option value="selectionO" selected>----------</option>
-                                                <option value="debito">Débito</option>      
-                                                <option value="credito">Crédito</option>
+                                                <option  hidden  selected> Selecciona una opción</option>
+                                                <option value="Debito">Débito</option>      
+                                                <option value="Credito">Crédito</option>
                                             </select>
                                         </div>	                                       
                                     </div>
                                     <div class="col-5 mb-4" >
                                         <label>Operación Cuenta:</label>
                                         <select class="form-control" id="operationAccountSelect" name="operationAccountSelect">
-                                            <option value="selectionOC" selected>----------</option>
-                                            <option value="obligacion">Obligación</option>      
-                                            <option value="comprobantePago">Comprobante de pago</option>
+                                            <option  hidden  selected> Selecciona una opción</option>
+                                            <option value="Obligacion">Obligación</option>      
+                                            <option value="Comprobante de Pago">Comprobante de pago</option>
                                         </select>
                                     </div>
                                     <div class="form-row col-5 mb-4">
                                         <div>
-                                            <button onclick="createAccount(1)" type="button" id="addAccountOperation"class="btn btn-primary">Agregar</button>
+                                            <button onclick="createAccount()" type="button" id="addAccountOperation"class="btn btn-primary">Agregar</button>
                                             <button type="button" class="btn btn-secondary">Cancelar</button>
+                                            <button onclick="sendAccounts()" type="button" class="btn btn-primary">Guardar cuentas</button>
                                         </div>					
                                     </div>
                                 </form>   
@@ -105,6 +108,7 @@
                                                     
                                                     <thead>
                                                         <tr>
+                                                            <th>Rubro</th>
                                                             <th>Cuenta</th>
                                                             <th>Doc. Presupuesto</th>
                                                             <th>Débito-Crédito</th>
@@ -112,7 +116,8 @@
                                                         </tr>
                                                     </thead>
                                                     <tfoot>
-                                                        <tr>
+                                                        <tr>  
+                                                            <th>Rubro</th>
                                                             <th>Cuenta</th>
                                                             <th>Doc. Presupuesto</th>
                                                             <th>Débito-Crédito</th>
@@ -136,6 +141,7 @@
 var dataRow;
 var accountId;
 var originID=0;
+var accountRubro=[];
 
 $(document).ready(function() {
 		$('#dataTableAccountingOp').DataTable( {
@@ -145,10 +151,18 @@ $(document).ready(function() {
 		  
 			dom: 'Bfrtip',			
 		  }
+          
 		  );		 	
 
 		$('#dataTableAccountRubro').DataTable( {
-			
+            "ordering": false,
+
+            "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            }
+        ],
 		  "destroy":true,
 		  "language": idioma_español,
 		  
@@ -216,6 +230,7 @@ function generateButton(){
 			originID = data.ID;
 			for (var i=0; i<data.RUBRO.length; i++){
 				table.row.add( [
+                data.RUBRO[i].id,
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,			
 				"PRESUPUESTO DE "+nameOrigin,			
@@ -253,106 +268,48 @@ function generateAccount(){
     });
 }
 
-function createAccount(option){
-    console.log(dataRow)
+function createAccount(){
 
-    swal({
-        title: "Desea agregar la cuenta ?",
-        text: "Al confirmar esta acción, la cuenta sera guardada",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-        }).then((willDelete) => {
-        if (willDelete) {
-             
-			var account = $("#accountSelect option:selected").text();
-			var operation = $("#operationSelect option:selected").text();
-			var operationAccount = $("#operationAccountSelect option:selected").text();
-			if (account,operation,operationAccount) {
-				// Create Ajax Call
-				$.ajax({
-					url: '{% url "createAccountingOpTip"  0 %}'.replace('0', localStorage.getItem('userID')),
-					data: {
-						'bussines':localStorage.getItem('idBussines'), 
-						'account': account,
-						'operation': operation,
-						'operationAccount': operationAccount,
-					},
-					dataType: 'json',
-					success: function (data) {
-                        console.log(data);
-                        if(data.CREATE == "TRUE"){
-                            var tableAccountingOp = $('#dataTableAccountingOp').DataTable(); 
-                            var rows = tableAccountingOp.rows().remove().draw();
-                            for (var i=0; i<data.AG.length; i++){
-                                        
-                                tableAccountingOp.row.add( [
-                                data.ACCO[i].account,
-                                data.ACCO[i].operation,
-                                data.ACCO[i].operationAccount,
-                                    
-                                "<a data-toggle='tooltip' href='#' id='deleteAccounting'title='Eliminar Cuenta'><button onclick=\'deleteAccounting("+JSON.stringify(data.ACCO[i].id)+','+JSON.stringify(data.ACCO[i].account)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-                                "<a data-toggle='tooltip' href='#' id='updateAccounting' title='Actualizar Cuenta'><button  onclick=\'changeUpdateAccounting("+JSON.stringify(data.ACCO[i].id)+','+JSON.stringify(data.ACCO[i].account)+','+JSON.stringify(data.ACCO[i].operation)+','+JSON.stringify(data.ACCO[i].operationAccount)+")\' data-toggle='modal' data-target='#myModalAccountingUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"//agregue button
-                                ])
-                            }
-                            tableAccountingOp.draw(false);
-                            swal("Creado exitoso de la cuenta!", "Continua con tu proceso!", "success"); 
-                        }else{
-                            swal("No se puede crear la cuenta", "Ya existe una cuenta con este código", "error");
-                        }
-					}
-				});
-			}else {
-				alert("Por favor llene todos los campos");
-			}
-			return false;
-        }
-        });	
-}
-function deleteAccounting(id, account){
+    var account = $("#accountSelect option:selected").text();
+	var operationAccount = $("#operationSelect option:selected").val();
+	var document = $("#operationAccountSelect option:selected").val();
 
-    swal({
-    title: "Desea eliminar la cuenta número " + account + "?",
-    text: "Al confirmar esta acción, la cuenta número " + account + " sera eliminada.",
-    icon: "warning",
-    buttons: true,
-    dangerMode: true,
-    })
-    .then((willDelete) => {
-    if (willDelete) {
+    var tableAccountingOp = $('#dataTableAccountingOp').DataTable(); 
+    accountRubro.push({"rubro": dataRow[0],"account": $("#accountSelect option:selected").val(),"document": document,"operationAccount":operationAccount})    
+    console.log(accountRubro)                              
+    tableAccountingOp.row.add( [
+        dataRow[1],
+        account,
+        operationAccount,
+        document,                            
+        "<a data-toggle='tooltip' href='#' id='deleteAccounting'title='Eliminar Cuenta'><button onclick=\'deleteAccounting()\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
+    ])
     
-        $.ajax({
-            url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
-            data: {
-                'id': id,
-                'option': '--'
-            },
-            dataType: 'json',
-            success: function (data) {   
-                var tableAccountingOp = $('#dataTableAccountingOp').DataTable();
-                var rows = tableAccountingOp.rows().remove().draw();
-                for (var i=0; i<data.AG.length; i++){                      
-                    tableAccountingOp.row.add( [
-
-                    data.ACCO[i].account,
-                    data.ACCO[i].operation,
-                    data.ACCO[i].operationAccount,
-                                        
-                    "<a data-toggle='tooltip' href='#' id='deleteAccounting'title='Eliminar Cuenta'><button onclick=\'deleteAccounting("+JSON.stringify(data.ACCO[i].id)+','+JSON.stringify(data.ACCO[i].account)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-                    "<a data-toggle='tooltip' href='#' id='updateAccounting' title='Actualizar Cuenta'><button  onclick=\'changeUpdateAccounting("+JSON.stringify(data.ACCO[i].id)+','+JSON.stringify(data.ACCO[i].account)+','+JSON.stringify(data.ACCO[i].operation)+','+JSON.stringify(data.ACCO[i].operationAccount)+")\' data-toggle='modal' data-target='#myModalAccountingUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"//agregue button
-                    ])
-                }
-                tableAccountingOp.draw(false); 
-                            
-                swal("La cuenta número " + account + "  se ha eliminado con éxito.", {
-                icon: "success",
-                });
-                
-            }
-        });
-    }
-    });
+    tableAccountingOp.draw(false);
 }
+
+function sendAccounts(){
+    var token = '{{csrf_token}}';
+    $.ajax({
+			headers: { "X-CSRFToken": token },
+			url: '{% url "createAccountRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'accountRubro': JSON.stringify(accountRubro),
+				'bussines':localStorage.getItem('idBussines'),
+			},
+			type: 'POST',
+			dataType: 'json',
+			success: function (data) { 
+                if(data.CREATE=="TRUE"){
+                    swal("Se ha añadido cuenta", "Continua con tu proceso", "success");
+                }else{
+                    swal("No se ha podido añadir cuenta", "Esta cuenta ya tiene "+data.TA, "error");
+                }
+            }       
+    });
+
+}
+
 </script>
 
 {% endblock %}

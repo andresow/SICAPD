@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'ajax/getAccountSettings/(?P<pkUser>\d+)/', GetAccountSettings.as_view(), name='getAccountSettings'),
     url(r'ajax/createAccountingOpTip/(?P<pkUser>\d+)/$', CreateAccountingOpTip.as_view(), name='createAccountingOpTip'),
     url(r'ajax/getBudget/(?P<pkUser>\d+)/', GetBudget.as_view(), name='getBudget'),
+    url(r'ajax/createAccountRubro/(?P<pkUser>\d+)/', CreateAccountRubro.as_view(), name='createAccountRubro'),
+    url(r'ajax/getAccountsByRubro/(?P<pkUser>\d+)/', GetAccountsByRubro.as_view(), name='getAccountsByRubro'),
 
     
 ]

@@ -379,8 +379,9 @@
 											<tr>
 												<th>Código</th>	
 												<th>Descripción</th>
-												<th>Débito</th>
-												<th>Crédito</th>
+												<th>Tipo de cuenta</th>
+												<th>Documento</th>
+												<th>Valor</th>
 												<th>Acciones</th>
 											</tr>
 										</thead>
@@ -388,8 +389,9 @@
 											<tr>
 												<th>Código</th>	
 												<th>Descripción</th>
-												<th>Débito</th>
-												<th>Crédito</th>
+												<th>Tipo de cuenta</th>
+												<th>Documento</th>
+												<th>Valor</th>
 												<th>Acciones</th>
 											</tr>
 										</tfoot>
@@ -842,6 +844,8 @@ var totalOperateObligation=0;
 var totalOperateArrayObligation=[];
 var disponibilitySec;
 var registerSec;
+var accountsWithValues =[] 
+var arrayIdAccount=[]
 
 $(document).ready(function() {
 		$('#dataTableTest').DataTable( {
@@ -2313,14 +2317,16 @@ function selectRegisterToObligation(id){
 	});
 
 }
-function operateBalanceObligation(id,rubro,value,idRegister,valueP){
 
+function operateBalanceObligation(id,rubro,value,idRegister,valueP){
 	var createId =  "#obligation"+id;
 	var result= "#registerObligation"+id
 	var operate=0;
 	var valueRegister = parseInt(value);
 	operate = parseInt(valueP) - parseInt($(createId).val());
+	var valueAccount=parseInt($(createId).val());
 	const found = addObligation.findIndex(element => element['id'] == id);
+	console.log(parseInt($(createId).val()))
 	if(parseInt($(createId).val())==0){
 		swal("No se puede generar una operacion de valor 0", " " , "error");
 	}else{
@@ -2378,9 +2384,80 @@ function operateBalanceObligation(id,rubro,value,idRegister,valueP){
 				console.log(addObligation)
 				console.log(totalOperateArrayObligation)
 		}
+		$.ajax({
+					url: '{% url "getAccountsByRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
+					data: {
+						'bussines':localStorage.getItem('idBussines'), 
+						'rubro': id,
+					},
+					dataType: 'json',
+					success: function (response) {
+						console.log(response)
+						var table = $('#dataTableGetAccountsObligation').DataTable(); 
+						var rows = table.rows().remove().draw();
+						arrayIdAccount.push(response.AC[0].id)
+						arrayIdAccount.push(response.AC[1].id)
+						for (var i=0; i<response.AC.length; i++){
+							table.row.add( [
+							response.AC[i].account__code,
+							response.AC[i].account__description,
+							response.AC[i].typeAccount,			
+							response.AC[i].document,
+							"<input type='text'  onkeypress='return validaNumericos(event)'/ value='"+valueAccount+"'  size='10'   id=obligationAccount"+response.AC[i].id+" class='form-control' name='obligationAccountInput'>",
+							"<a data-toggle='tooltip' title='Aceptar valores cuenta'><button type='button' onclick=\'createArrayAccount("+JSON.stringify(id)+','+JSON.stringify(valueAccount)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+							])
+						}
+						table.draw( false );
+					}
+				});
+			} 
 }	
 
+
+function createArrayAccount(obligationID,valueAcount){
+	var table = $('#dataTableGetAccountsObligation').DataTable(); 
+	var data = table.rows().data();
+	var debit;
+	var credit;
+
+	data.each(function (value, index) {	
+		
+		if(value[2]=='Debito'){
+			debit =  parseInt($("#obligationAccount"+arrayIdAccount[0]).val());
+		}else{
+			credit = parseInt($("#obligationAccount"+arrayIdAccount[1]).val());	
+		}	
+    });
+	console.log(credit)
+	console.log(debit)
+
+	if(debit==credit){
+		if(debit==valueAcount &&  credit==valueAcount){
+			accountsWithValues.push({"accountID": arrayIdAccount[0],"obligationID": obligationID,"typeAccount":"Debito","value":valueAcount})
+			accountsWithValues.push({"accountID": arrayIdAccount[1],"obligationID": obligationID,"typeAccount":"Credito","value":valueAcount})
+
+		}else{
+			swal({
+			title: "Suma no coincide en los valores contables?",
+			text: "Al confirmar esta acción, los valores seran guardado",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			}).then((willDelete) => { 
+			if (willDelete) {
+				accountsWithValues.push({"accountID": arrayIdAccount[0],"obligationID": obligationID,"typeAccount":"Debito","value":debit});
+				accountsWithValues.push({"accountID": arrayIdAccount[1],"obligationID": obligationID,"typeAccount":"Credito","value":debit}) 		 		
+			}
+			});	
+		}
+	}else{
+		swal("Credito y debito no son iguales","Verifique los valores", "error");
+	}
+	
+
+
 }
+
 
 function createObligation(option){
 	if(option==1){
@@ -2410,6 +2487,7 @@ function createObligation(option){
 						'value':totalObligation,
 						'balance': totalOperateObligation,
 						'obligations': JSON.stringify(addObligation),
+						'accounts': JSON.stringify(accountsWithValues),						
 						'register':registerSec
 					},
 					dataType: 'json',
@@ -2461,6 +2539,7 @@ function createObligation(option){
 							'value':totalObligation,
 							'balance': totalOperateObligation,
 							'obligations': JSON.stringify(addObligation),
+							'accounts': JSON.stringify(accountsWithValues),						
 							'register':registerSec
 						},
 						dataType: 'json',
