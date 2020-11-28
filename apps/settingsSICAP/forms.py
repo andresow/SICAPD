@@ -117,23 +117,31 @@ class AccountForm(forms.ModelForm):
                 'code',
                 'description',
                 'nature',
+                'typeAccount',
                 'level',
+                'state',
+                'corriente'
         ]
         
         labels = {
                 'code': 'Código',
                 'description': 'Descripción',
+                'typeAccount': 'Tipó de cuenta',
                 'nature': 'Natural',
-                'level': 'Nivel',                
+                'level': 'Nivel',
+                'state': 'Estado',
+                'corriente': 'Corriente'               
         }
 
         widgets = { 				
                 'Código':forms.TextInput(),
                 'Descripción':forms.TextInput(),
-                'Natural':forms.TextInput(),
-                'Nivel':forms.TextInput(),                
+                'Tipó de cuenta':forms.TextInput(),
+                'Naturaleza':forms.TextInput(),
+                'Nivel':forms.TextInput(),  
+                'Estado':forms.TextInput(),
+                'Corriente':forms.TextInput(),               
         }
-
 
 class ByAccountUpdate(forms.Form):
 
@@ -230,3 +238,4 @@ class AccountUpdate(forms.Form):
                 self.fields['descriptionAccountUpdate'].label = 'Descripción'
                 self.fields['natureAccountUpdate'].label = 'Natural'
                 self.fields['levelAccountUpdate'].label = 'Nivel'
+

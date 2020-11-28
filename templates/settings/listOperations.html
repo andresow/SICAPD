@@ -242,7 +242,6 @@ $("form#formAPUpdateOperation").submit(function() {
                 'id': operationId,
                 'codeOp': codeOpUpdate,
                 'nameOp': nameOpUpdate,
-                'descriptionOp': descriptionOpUpdate,
                 'operation': operationOpUpdate,
                 'orderOp': orderOpUpdate,
                  
@@ -297,32 +296,32 @@ return false;
 
 function deleteOperation(id, nameOp){
 
-swal({
-title: "Desea eliminar la operación " + nameOp + "?",
-text: "Al confirmar esta acción, la operación " + nameOp + " sera eliminado.",
-icon: "warning",
-buttons: true,
-dangerMode: true,
-})
-.then((willDelete) => {
-if (willDelete) {
+  swal({
+  title: "Desea eliminar la operación " + nameOp + "?",
+  text: "Al confirmar esta acción, la operación " + nameOp + " sera eliminado.",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+  })
+  .then((willDelete) => {
+  if (willDelete) {
 
-    $.ajax({
-        url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
-        data: {
-            'id': id,
-            'option': '7'
-        },
-        dataType: 'json',
-        success: function (data) {   
-            $("#dataTableOperation").load(" #dataTableOperation");
-            swal("La operación " + nameOp + "  se ha eliminado con éxito.", {
-            icon: "success",
-            });
-        }
-    });
-}
-});
+      $.ajax({
+          url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
+          data: {
+              'id': id,
+              'option': '7'
+          },
+          dataType: 'json',
+          success: function (data) {   
+              $("#dataTableOperation").load(" #dataTableOperation");
+              swal("La operación " + nameOp + "  se ha eliminado con éxito.", {
+              icon: "success",
+              });
+          }
+      });
+  }
+  });
 }
 </script>
 

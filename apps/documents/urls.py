@@ -34,5 +34,14 @@ urlpatterns = [
     url(r'ajax/getObligationsVC/(?P<pkUser>\d+)/', GetObligationsVC.as_view(), name='getObligationsVC'),
     url(r'ajax/getDataToVoucherPayment/(?P<pkUser>\d+)/', GetDataToVoucherPayment.as_view(), name='getDataToVoucherPayment'),
     url(r'ajax/getSerialVoucherPayment/(?P<pkUser>\d+)/', GetSerialVoucherPayment.as_view(), name='getSerialVoucherPayment'),
+    url(r'ajax/getRubroImpDisponibility/(?P<pkUser>\d+)/', GetRubroImpDisponibility.as_view(), name='getRubroImpDisponibility'),
+    url(r'ajax/updateRID/(?P<pkUser>\d+)/', UpdateRID.as_view(), name='updateRID'),
 
+    url(r'ajax/getDetailRegister/(?P<pkUser>\d+)/', GetDetailRegister.as_view(), name='getDetailRegister'),
+    url(r'ajax/getRubroImpDetailRegister/(?P<pkUser>\d+)/', GetRubroImpDetailRegister.as_view(), name='getRubroImpDetailRegister'),
+    url(r'ajax/updateDetailRegister/(?P<pkUser>\d+)/', UpdateDetailRegister.as_view(), name='updateDetailRegister'),
+
+    url(r'ajax/getDetailObligation/(?P<pkUser>\d+)/', GetDetailObligation.as_view(), name='getDetailObligation'),
+    url(r'ajax/getRubroImpDetailObligation/(?P<pkUser>\d+)/', GetRubroImpDetailObligation.as_view(), name='getRubroImpDetailObligation'),
+    url(r'ajax/updateDetailObligation/(?P<pkUser>\d+)/', UpdateDetailObligation.as_view(), name='updateDetailObligation'),
 ]

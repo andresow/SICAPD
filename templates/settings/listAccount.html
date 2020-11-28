@@ -16,36 +16,40 @@
         <div class="card-header"><i class="fas fa-table mr-1"></i>Lista de cuentas</div>
         <div class="card-body">
             <div class="table-responsive">
-                <button data-toggle="modal" data-target="#myModalAccount" type="button" class="genric-btn primary small">Añadir cuenta</button>              
+                <button onclick="generateAccountPattern()" data-toggle="modal" data-target="#myModalAccount" type="button" class="genric-btn primary small">Añadir cuenta</button>              
+                <button class="genric-btn primary small" data-toggle='modal' data-target='#MyModalImport'>Importar cuentas</button>  
                 <table class="table table-bordered dataTable" id="dataTableAccount" width="100%" cellspacing="0"
                       role="grid" aria-describedby="dataTable_Account" style="width: 100%;">
                     
                     <thead>
                         <tr>
+                            <th>Tipo cuenta</th>
                             <th>Código</th>
                             <th>Descripción</th>
-                            <th>Natural</th>
-                            <th>Nivel</th>
+                            <th>Naturaleza</th>
+                            <th>Corriente</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
+                            <th>Tipo cuenta</th>
                             <th>Código</th>
                             <th>Descripción</th>
-                            <th>Natural</th>
-                            <th>Nivel</th>
+                            <th>Naturaleza</th>
+                            <th>Corriente</th>
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         {% if object_list %}
                         {% for account in object_list %}                        
-                              <tr>                          
+                              <tr>      
+                                <td>{{account.typeAccount}}</td>                                            
                                 <td>{{account.code}}</td>                        
                                 <td>{{account.description}}</td>
                                 <td>{{account.nature}}</td>
-                                <td>{{account.level}}</td>
+                                <td>{{account.corriente}}</td>
                                 <td>
                         </div>
                       </div>
@@ -76,13 +80,36 @@
           <h4 class="modal-title">Añadir nueva cuenta</h4>
             </div>
                 <div class="modal-body">
-                    <div  class="container-fluid">
+                    <div class="container-fluid">
                         <form id="addAccount" action="">
-                            {% csrf_token %}
-                            {% bootstrap_form AccountForm %}
+                            <input type="hidden" name="csrfmiddlewaretoken" value="0u1oJWxpjn4V4uoZjUxWXgq45qJumoJhu6hZ7bOptjBAfGHtR5aPj2ism7Zdbg2z">
+                            <div class="form-group"><label for="id_code" id="id_code_label">Código</label><input type="text" name="code" maxlength="100" class="form-control" placeholder="Código" title="" required="" id="id_code"></div>
+                            <div class="form-group" id="div_banco" style="display:none"><label >Banco</label><input maxlength="100" class="form-control" placeholder="Banco" title="" id="banco_description_input"></div>
+                            <div class="form-group" id="div_description" style="display:none"><label >#</label><input maxlength="100" class="form-control"  placeholder="#" title="" id="numero_description_input" ></div>
+                            <div class="form-group"><label for="id_description">Descripción</label><input type="text" name="description" maxlength="100" class="form-control" placeholder="Descripción" title="" required="" id="id_description"></div>
 
-                            <div id="divCreateAccount"  class="form-group">
-                                <button id="btnCreateAccount" type="submit" class="genric-btn success circle" >Registrar cuenta</button>
+                            <div class="form-group"><label for="id_nature">Natural</label><input type="text" name="nature" maxlength="100" class="form-control" placeholder="Natural" title="" required="" id="id_nature" disabled></div>
+                            <div class="form-group"><label for="id_typeAccount">Tipó de cuenta</label><select name="typeAccount" class="form-control" title="" required="" id="id_typeAccount">
+                            <option value="" selected="">---------</option>
+
+                            <option value="M">Mayor</option>
+
+                            <option value="A">Auxiliar</option>
+
+                            </select></div>
+                            <div class="form-group"><label for="id_level">Nivel</label><input type="number" name="level" class="form-control" placeholder="Nivel" title="" required="" id="id_level" disabled></div>
+                            <div class="form-group"><label for="id_state">Estado</label><select name="state" class="form-control" title="" required="" id="id_state">
+                            <option value="" selected="">---------</option>
+
+                            <option value="Activo">Activo</option>
+
+                            <option value="Inactivo">Inactivo</option>
+
+                            </select></div>
+                            <div class="form-group"><label for="id_corriente">Corriente</label><input type="text" name="corriente" maxlength="100" class="form-control" placeholder="Corriente" title="" required="" id="id_corriente" disabled></div>
+                            <div class="form-group"><input type="hidden" maxlength="100" class="form-control"  title="" id="account_father"></div>
+                            <div id="divCreateAccount" class="form-group">
+                                <button id="btnCreateAccount" type="submit" class="genric-btn success circle">Registrar cuenta</button>
                                 <button type="submit" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
                             </div>   
                     
@@ -114,25 +141,95 @@
             </div>         
         </div>  
 </div>
-<script>
 
+<div class="modal fade bd-example-modal-lg" id="MyModalImport" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Importar plan de cuentas</h4>
+            </div>
+                <div class="modal-body">
+					
+						<form enctype="multipart/form-data">
+							<input id="upload" type=file  name="files[]">
+						</form>
+
+						<div  class="container-fluid col-12" >
+							<div class="card mb-12" >
+							<div class="card-header " ><i class="fas fa-table mr-1" ></i>Importar plan de cuentas</div>
+							<div class="card-body" >
+								<div class="table-responsive">
+									<button onclick="validateDataImport();return false;" class="genric-btn primary small">Validar</button>  
+									<button onclick="sendDataToBD();return false;" class="genric-btn primary small" >Importar</button>  
+									<button onclick="cancels(4)" class="genric-btn primary small">Cancelar</button>  
+									<font size="2" face="Arial" >
+									<table class="table table-bordered dataTable" id="dataTableImports" cellspacing="0" 
+										role="grid" aria-describedby="dataTable_informDetailRubro">	
+										<thead>
+											<tr>
+												<th>Tipo cuenta</th>
+												<th>Codigo</th>
+												<th>Descripcion</th>																				
+                                                <th>Naturaleza</th>
+                                                <th>Corriente</th>
+												<th>Observaciones</th>																																										
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>
+												<th>Tipo cuenta</th>
+												<th>Codigo</th>
+												<th>Descripcion</th>																				
+                                                <th>Naturaleza</th>
+                                                <th>Corriente</th>
+												<th>Observaciones</th>
+											</tr>
+										</tfoot>
+											<tbody>
+												<h1></h1>
+											</tbody>
+										</table>
+									</font>
+								</div>	
+								</div>
+							</div>
+						</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+
+<script>
+var searchRubro;
+var accountId;
+var accountCurrentCode
+var patronArray = [];
+var typeRubroCreate;
+var multiDescription;
+var jsonImport=[]
 $(document).ready(function() {
 		$('#dataTableAccount').DataTable( {
 		  "destroy":true,
 		  "language": idioma_español,
-		  
+		  "paging":   true,
 			dom: 'Bfrtip',
 			buttons: [
 				'copy', 'csv', 'excel', 'pdf', 'print'
 			]
 			
 		  } );
-		 
+} );
+$(document).ready(function() {
+	
+    $('#dataTableImports').DataTable( {
+		  "destroy":true,
+		  "paging":   false,
+		  "language": idioma_español,
+		  
+    dom: 'Bfrtip',			
+	} );		 
 	
 } );
-
-var accountId;
-var accountCurrentCode
 
 function getAccount(id){
     accountId =  id; 
@@ -154,43 +251,96 @@ function changeTypeUpdateAccount(id, code, description, nature, level){
 
 $("form#addAccount").submit(function() {
 
-    var code = $('input[name="code"]').val();
-    var description = $('input[name="description"]').val();
-    var nature = $('input[name="nature"]').val();
-    var level = $('input[name="level"]').val();
+    if(multiDescription==false){
+        var code = $('#id_code').val();
+        var description = $('#banco_description_input').val()+ $('#numero_description_input').val()+ $('#id_description').val();
+        var nature = $('#id_nature').val();
+        var level = $('#id_level').val();
+        var state = $("#id_state option:selected").val();
+        var corriente = $('#id_corriente').val();
+        var accountFather = $('#account_father').val();
+        var typeAccount = $("#id_typeAccount option:selected").val();
 
-    if (code,description,nature, level) {
-        
-        // Create Ajax Call
-        $.ajax({
-                url: '{% url "createAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
-                data: {
-                    'bussines': localStorage.getItem('idBussines'),
-                    'code': code,
-                    'description': description,
-                    'nature': nature,
-                    'level': level,
-
-                },
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    $("#dataTableAccount").load(" #dataTableAccount");
-                    if(data.CREATE == "TRUE"){
-                        swal("Creado exitoso de la cuenta!", "Continua con tu proceso!", "success");
-                        $('#myModalAccount').modal('toggle');
-                    }else{
-                        swal("No se puede crear la cuenta", "Ya existe una cuenta con este código", "error");
-                        $('#myModalAccount').modal('toggle');
+        if (code,description,nature, level,typeAccount,state) {
+            
+            // Create Ajax Call
+            $.ajax({
+                    url: '{% url "createAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
+                    data: {
+                        'accountId': localStorage.getItem('idAC'),
+                        'code': code,
+                        'description': description,
+                        'nature': nature,
+                        'level': level,
+                        'state': state,
+                        'corriente': corriente,
+                        'accountFather': accountFather,
+                        'typeAccount':typeAccount
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#dataTableAccount").load(" #dataTableAccount");
+                        if(data.CREATE == "TRUE"){
+                            swal("Creado exitoso de la cuenta!", "Continua con tu proceso!", "success");
+                            $('#myModalAccount').modal('toggle');
+                        }else{
+                            swal("No se puede crear la cuenta", "Ya existe una cuenta con este código", "error");
+                            $('#myModalAccount').modal('toggle');
+                        }
+                        
                     }
-                    
-                }
-            });
-    } else {
-        alert("Por favor llene todos los campos");
+                });
+        } else {
+            alert("Por favor llene todos los campos");
+        }
+        $('form#addAccount').trigger("reset");
+        return false;
+    }else{
+        var code = $('#id_code').val();
+        var description = $('#id_description').val();
+        var nature = $('#id_nature').val();
+        var level = $('#id_level').val();
+        var state = $("#id_state option:selected").val();
+        var corriente = $('#id_corriente').val();
+        var accountFather = $('#account_father').val();
+        var typeAccount = $("#id_typeAccount option:selected").val();
+
+        if (code,description,nature, level,typeAccount,state) {
+            
+            // Create Ajax Call
+            $.ajax({
+                    url: '{% url "createAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
+                    data: {
+                        'accountId': localStorage.getItem('idAC'),
+                        'code': code,
+                        'description': description,
+                        'nature': nature,
+                        'level': level,
+                        'state': state,
+                        'corriente': corriente,
+                        'accountFather': accountFather,
+                        'typeAccount':typeAccount
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#dataTableAccount").load(" #dataTableAccount");
+                        if(data.CREATE == "TRUE"){
+                            swal("Creado exitoso de la cuenta!", "Continua con tu proceso!", "success");
+                            $('#myModalAccount').modal('toggle');
+                        }else{
+                            swal("No se puede crear la cuenta", "Ya existe una cuenta con este código", "error");
+                            $('#myModalAccount').modal('toggle');
+                        }
+                        
+                    }
+                });
+        } else {
+            alert("Por favor llene todos los campos");
+        }
+        $('form#addAccount').trigger("reset");
+        return false;
     }
-    $('form#addAccount').trigger("reset");
-    return false;
+
             
 });
 
@@ -281,7 +431,7 @@ function deleteAccount(id, code){
             url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'id': id,
-                'option': '9'
+                'option': '14'
             },
             dataType: 'json',
             success: function (data) {   
@@ -320,19 +470,287 @@ function validateAccounPattern(accountCode){
 $("#id_code").keyup(function(){
 
     var campoInputCodigoCuenta = $('#id_code').val();
-    accountCode = $('input[name="code"]').val()
-    if(validateAccounPattern(accountCode)==true){
-        $("#id_code").text("Código valido");
+
+    if(searchImport(campoInputCodigoCuenta)==true){
+        $("#id_code_label").text("Código valido");
+        $("#id_code_label").css("color", "green");
         $("#id_code").css("color", "green");
+
+        if(campoInputCodigoCuenta.length==1){
+            if(campoInputCodigoCuenta.substring(0,1)=='1'){
+                $('#id_nature').val('DEBITO');
+            }
+            if(campoInputCodigoCuenta.substring(0,1)=='2'){
+                $('#id_nature').val('CREDITO');
+                $('#id_corriente').val('CO');
+            }
+            if(campoInputCodigoCuenta.substring(0,1)=='3' || campoInputCodigoCuenta.substring(0,1)=='4'|| campoInputCodigoCuenta.substring(0,1)=='5'||campoInputCodigoCuenta.substring(0,1)=='6'|| campoInputCodigoCuenta.substring(0,1)=='7'||campoInputCodigoCuenta.substring(0,1)=='8'||campoInputCodigoCuenta.substring(0,1)=='9'){
+                if(campoInputCodigoCuenta.substring(0,1)=='4'|| campoInputCodigoCuenta.substring(0,1)=='3'){
+                    $('#id_nature').val('CREDITO');
+                }else if(campoInputCodigoCuenta.substring(0,1)=='9'){
+                    $('#id_nature').val('CREDITO');
+                }
+                else{
+                    $('#id_nature').val('DEBITO');
+                }
+                $('#id_corriente').val('NCO');
+            }
+        }
+        if(campoInputCodigoCuenta.length==2){
+            if(campoInputCodigoCuenta.substring(0,2)=='11' || campoInputCodigoCuenta.substring(0,2)=='12'||  campoInputCodigoCuenta.substring(0,2)=='13'||campoInputCodigoCuenta.substring(0,2)=='14'){
+                $('#id_corriente').val('CO');            }
+            if(campoInputCodigoCuenta.substring(0,2)=='16' || campoInputCodigoCuenta.substring(0,2)=='17'|| campoInputCodigoCuenta.substring(0,2)=='18'||campoInputCodigoCuenta.substring(0,2)=='19'|| campoInputCodigoCuenta.substring(0,2)=='22'||campoInputCodigoCuenta.substring(0,2)=='23'){
+                $('#id_corriente').val('NCO');
+            }
+        }
+        
     }
     else if(campoInputCodigoCuenta === ''){
-            $("#id_code").text("Código");
+            $("#id_code_label").text("Código");
+            $("#id_code_label").css("color", "gray");
             $("#id_code").css("color", "gray");
+
     }else{
-        $("#id_code").text("Código inválido");
+        $("#id_code_label").text("Código inválido");
+        $("#id_code_label").css("color", "red");
         $("#id_code").css("color", "red");
+
     }
+    $.ajax({
+			data: {
+				'accountPeriod':localStorage.getItem('idAC'),
+				'account': campoInputCodigoCuenta
+			},
+			url: '{% url "searchAccount" 0 %}'.replace('0', localStorage.getItem('userID')),
+			dataType: 'json',
+			success: function (data) {
+				if(data.ACCOUNTFATHER=="PRIMERA CUENTA"){
+                    searchRubro = $('#id_code').val();
+                    $('#account_father').val($('#id_code').val());
+					$("#id_level").val(1);														
+				}
+				else if (data.ACCOUNTFATHER=="TRUE"){
+					typeRubroCreate = data.TYPEACCOUNT;
+					$('#id_level').val(data.LEVEL);
+                    $('#account_father').val(data.FATHER);
+
+				}
+				else{			
+					console.log("si");
+				}
+				searchRubro = $('#id_code').val();
+			},error: function(data){
+				$('#account_father').val(searchRubro);
+			}
+		});
+
+    if(campoInputCodigoCuenta.length==4 && campoInputCodigoCuenta=='1110'){
+            $('#div_description').css('display','block');
+            $('#div_banco').css('display','block');
+            multiDescription = true;
+    }
+
 }); 
 
+function searchImport(account){
+    
+	for (var i = 0; i < patronArray.length; i++) {
+        if(account.length==patronArray[i]){
+            return true;
+        }
+    }
+}
+function generateAccountPattern(){
+
+    var regex = /(\d+)/g;
+	var pattern = localStorage.getItem('patron');
+	var acumulatorImport = 0;
+    for (var i = 0; i < (pattern.match(regex)).length; i++) {
+		acumulatorImport = acumulatorImport + parseInt(pattern.match(regex)[i]);
+		patronArray.push(acumulatorImport)
+	}
+}
+document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+var ExcelToJSON = function() {
+
+    this.parseExcel = function(file) {
+    var reader = new FileReader();
+    var table = $('#dataTableImports').DataTable(); 
+    reader.onload = function(e) {
+        var data = e.target.result;
+        var workbook = XLSX.read(data, {
+        type: 'binary'
+        });
+        workbook.SheetNames.forEach(function(sheetName) {
+        // Here is your object
+        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+        var json_object = JSON.stringify(XL_row_object);
+        var corrient;
+        for (var i = 0; i < (JSON.parse(json_object)).length; i++) {
+            
+            var code = JSON.parse(json_object)[i].codigo;
+            if(code.substring(0,1)=='1'){
+                if(code.substring(0,1)=='1'){
+                    nature = 'DEBITO';
+                    corrient="CO";               
+                }
+            }
+            if(code.substring(0,1)=='3' || code.substring(0,1)=='4'||code.substring(0,1)=='5'||code.substring(0,1)=='6'||code.substring(0,1)=='7'||code.substring(0,1)=='8'||code.substring(0,1)=='9'){
+                if(code.substring(0,1)=='4'|| code.substring(0,1)=='3'){
+                    nature = 'CREDITO';
+                }else if(code.substring(0,1)=='9'){
+                    nature = 'CREDITO';
+                }
+                else{
+                    nature = 'DEBITO';
+                }
+                corrient = 'NCO';
+            }
+
+            if(code.substring(0,2)=='11' ||code.substring(0,2)=='12'|| code.substring(0,2)=='13'||code.substring(0,2)=='14'){
+                
+                corrient = 'CO';
+            }
+            if(code.substring(0,2)=='16' ||code.substring(0,2)=='17'||code.substring(0,2)=='18'||code.substring(0,2)=='19'||code.substring(0,2)=='22'||code.substring(0,2)=='23'){
+                if(code.substring(0,1)=='2'){
+                    nature = 'CREDITO';
+                }
+                corrient = 'NCO';
+            }
+             
+			jsonImport.push({
+				"TC": JSON.parse(json_object)[i].tipocu,
+				"CD": JSON.parse(json_object)[i].codigo,
+				"DC": JSON.parse(json_object)[i].descri,
+                "NT": nature,
+                "CO": corrient,
+			})
+
+            table.row.add( [
+                    JSON.parse(json_object)[i].tipocu,
+                    JSON.parse(json_object)[i].codigo,
+                    JSON.parse(json_object)[i].descri,
+                    nature,
+                    corrient,
+                    "<label type='number' id=import"+JSON.parse(json_object)[i].codigo+"></label>",			
+            ])  
+        
+           
+        }
+        table.draw(false);
+        })
+    };
+
+    reader.onerror = function(ex) {
+        console.log(ex);
+    };
+
+    reader.readAsBinaryString(file);
+    };
+};
+function handleFileSelect(evt) {
+
+    var files = evt.target.files; // FileList object
+    var xl2json = new ExcelToJSON();
+    xl2json.parseExcel(files[0]);
+}
+function fillTable(typeAC, code, description,nature,co){
+    var table = $('#dataTableImports').DataTable(); 
+    
+}
+
+function validateDataImport(){
+
+    var regex = /(\d+)/g;
+    var pattern = localStorage.getItem('patron');
+    var acumulatorImport = 0;
+    var arrayImport = [];
+    var nRow = ($("#dataTableImports tr").length)-2;
+    var countOk = 0;
+    var currentAux="";
+    var pos = ""
+    var table = $('#dataTableImports').DataTable(); 
+    var data = table.rows().data();
+
+    for (var i = 0; i < (pattern.match(regex)).length; i++) {
+        acumulatorImport = acumulatorImport + parseInt(pattern.match(regex)[i]);
+        arrayImport.push(acumulatorImport)
+    }
+    var filteredData = table.column( 1 ).data().filter( function ( value, index ) {
+    for (var i = 0; i < arrayImport.length; i++) {
+        if(value <= 0){
+            $("#import"+value).text("Numero negativo");	
+        }else{
+                if(value.length==arrayImport[i]){
+            
+                    $("#import"+value).text("OK");	
+                        countOk += 1;														
+                        return false;
+                }else{
+                    $("#import"+value).text("No cumple con el patrón");	
+                }
+            }
+        }
+    });
+        
+        
+    data.each(function (value, index) {	
+        
+       
+        if(value[0]=='A'){
+        pos = value[1]; 
+        if(currentAux==""){
+             currentAux = value[1];
+        }else{
+            if(pos.includes(currentAux)){
+                $("#import"+value[1]).text("Rubro padre como auxiliar");	
+                countOk -= 1														
+            }else{
+                currentAux = value[1];
+            }
+        }
+        }      	
+    });
+
+
+
+   if(countOk==nRow) {
+    nextImport = true;
+    }
+
+} 
+function sendDataToBD(){
+	if(nextImport==true){
+		var token = '{{csrf_token}}';
+		$.ajax({
+				headers: { "X-CSRFToken": token },
+				url: '{% url "importAccountsBD"  0 %}'.replace('0', localStorage.getItem('userID')),
+				data: {
+					'accounts': JSON.stringify(jsonImport),
+					'accountPeriod': localStorage.getItem('idAC'),
+				},	
+				type: 'POST',
+				dataType: 'json',	
+				success: function (data) {
+					if(data.IMPORT=="TRUE"){
+						var table = $('#dataTableAccount').DataTable(); 
+						var rows = table.rows().remove().draw();
+                        $("#dataTableAccount").load(" #dataTableAccount");
+						$('#MyModalImport').modal('toggle');
+						swal("Importacion completa ","", "success");
+						var tableImport = $('#dataTableImports').DataTable(); 
+						var rowsImport = tableImport.rows().remove().draw();
+						jsonImport.length=0;
+					}else{
+						swal("Existen datos repetidos ","Verifique por favor", "error");
+					}
+					
+			}
+		});
+	}else{
+		swal("No todos los datos son correctos ","Verifique el archivo", "error");
+	}
+	
+}
 </script>
 {% endblock %}

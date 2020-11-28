@@ -187,11 +187,20 @@ class TypeContractDetail(models.Model):
 
 class Account(models.Model):
 
-    bussines = models.ForeignKey(Bussines, null=True, blank=True, on_delete=models.CASCADE)
+    CHOICES = [('Activo','Activo'),('Inactivo', 'Inactivo')]
+    CHOICES2 = [('CORRIENTE','CORRIENTE'),('NOCORRIENTE', 'NOCORRIENTE')]
+    CHOICES3 = [('M','M'),('A', 'A')]
+
+    accountPeriod = models.ForeignKey(AccountPeriod, null=False, blank=True, on_delete=models.CASCADE)
     code = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
+    state = models.CharField(max_length=100,choices=CHOICES)
+    corriente = models.CharField(max_length=100)
     nature = models.CharField(max_length=100)
+    typeAccount = models.CharField(max_length=100,choices=CHOICES3)
+    dateCreation = models.DateField(auto_now_add=True)
     level = models.IntegerField()
+    accountFather = models.BigIntegerField(null=True)
 
 
 class AccountTypeRubro(models.Model):
@@ -215,3 +224,17 @@ class InformationMovement(models.Model):
     typeMovement =  models.CharField(max_length=100)
     third = models.ForeignKey(Third, null=True, blank=True, on_delete=models.CASCADE)
     RightsEconomic = models.BooleanField()
+
+class InformBank(models.Model):
+
+    bussines = models.ForeignKey(Bussines, null=True, blank=True, on_delete=models.CASCADE)
+    nameI = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    digitI = models.BigIntegerField()
+
+class InformBankDetall(models.Model):
+
+    inform = models.ForeignKey(InformBank, null=True, blank=True, on_delete=models.CASCADE)
+    codeInfD = models.CharField(max_length=100)
+    descriptionInfD = models.TextField() 
+    activity = models.CharField(max_length=100)

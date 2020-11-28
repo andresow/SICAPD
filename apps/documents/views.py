@@ -307,11 +307,11 @@ class GetDisponibility(LoginRequiredMixin,View):
 
         if disponibility == False:
             disponibilityFormat = str(today.year) + str(today.month)+str(today.day)+str(0)
-            movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="DISPONIBILIDAD").values('id','value','balance','disponibility','observation')
+            movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="DISPONIBILIDAD").values('id','value','balance','disponibility','observation','date')
             return JsonResponse({"DI": disponibilityFormat,"MV": list(movements)})
         else:        
             lastDisponibility = Movement.objects.filter(concept="DISPONIBILIDAD", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()
-            movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="DISPONIBILIDAD").values('id','value','balance','disponibility','observation')
+            movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="DISPONIBILIDAD").values('id','value','balance','disponibility','observation','date')
             return JsonResponse({"DI": lastDisponibility.disponibility+1,"MV": list(movements)})
 
 class CreateDisponibility(LoginRequiredMixin,View):
@@ -338,7 +338,7 @@ class CreateDisponibility(LoginRequiredMixin,View):
                 rubro = Rubro.objects.get(id=disponibilitys[x]['id'])
                 rubro.budgetEject = disponibilitys[x]['balance']
                 rubro.save()
-            return JsonResponse({"CREATE": "TRUE","ID":newDisponibility.id})
+            return JsonResponse({"CREATE": "TRUE","ID":newDisponibility.id,"DP": request.GET.get('disponibilityCode')})
         else:        
             lastDisponibility = Movement.objects.filter(concept="DISPONIBILIDAD", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()
             newDisponibility = Movement.objects.create(
@@ -352,23 +352,7 @@ class CreateDisponibility(LoginRequiredMixin,View):
                 rubro = Rubro.objects.get(id=disponibilitys[x]['id'])
                 rubro.budgetEject = disponibilitys[x]['balance']
                 rubro.save()
-            return JsonResponse({"CREATE": "TRUE","ID":newDisponibility.id})
-
-
-class GetDetallsDisponibility(LoginRequiredMixin,View):
-
-    login_url = '/login/'
-    redirect_field_name = '/login/'
-
-    def get(self, request, *args, **kwargs):
-
-        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('disponibility')).values('nameRubro','value','balance','valueP')
-        rubroList = []
-
-        for x in range(0,len(list(rubroMov))):
-            rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
-            rubroList.append({"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
-        return JsonResponse({"RUBRO": list(rubroList)})
+            return JsonResponse({"CREATE": "TRUE","ID":newDisponibility.id,"DP": request.GET.get('disponibilityCode')})
 
 class GetDataToRegister(LoginRequiredMixin,View):
 
@@ -440,7 +424,7 @@ class FillDisponibility(LoginRequiredMixin,View):
             rubro = Rubro.objects.get(id=list(rubroMovement)[x]['nameRubro'])
             rubroList.append({"idDispo":list(rubroMovement)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"value":list(rubroMovement)[x]['value'],"valueP":list(rubroMovement)[x]['valueP'] })
 
-        return JsonResponse({"RUBRO":list(rubroList), "OBSERVATION": movement.observation})
+        return JsonResponse({"RUBRO":list(rubroList), "OBSERVATION": movement.observation,"DATE": movement.date})
 
 class GetRegisterSerial(LoginRequiredMixin,View):
 
@@ -485,7 +469,7 @@ class CreateRegister(LoginRequiredMixin,View):
                 disponibility = RubroMovement.objects.get(id=registers[x]['idDispo'])
                 disponibility.valueP = disponibility.valueP-registers[x]['value']
                 disponibility.save()
-            return JsonResponse({"CREATE": "TRUE", "ID":newRegister.id})
+            return JsonResponse({"CREATE": "TRUE","ID":newRegister.id,"RG": newRegister.register})
         else:        
             lastRegister = Movement.objects.filter(concept="REGISTRO", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()            
             newRegister = Movement.objects.create(
@@ -499,7 +483,7 @@ class CreateRegister(LoginRequiredMixin,View):
                 disponibility = RubroMovement.objects.get(id=registers[x]['idDispo'])
                 disponibility.valueP = disponibility.valueP-registers[x]['value']
                 disponibility.save()
-            return JsonResponse({"CREATE": "TRUE","ID":newRegister.id})
+            return JsonResponse({"CREATE": "TRUE","ID":newRegister.id,"RG": newRegister.register})
 
 
 class GetDataToObligation(LoginRequiredMixin,View):
@@ -511,7 +495,7 @@ class GetDataToObligation(LoginRequiredMixin,View):
 
         third = Third.objects.filter(bussines_id=request.GET.get('bussines')).values('name','surnames','id')        
         movement = Movement.objects.filter(bussines_id=request.GET.get('bussines'),origin_id=request.GET.get('origin'), concept="REGISTRO").values('register','id')
-        obligations = Movement.objects.filter(bussines_id=request.GET.get('bussines'),origin_id=request.GET.get('origin'), concept="OBLIGACION").values('obligation','id','value','balance','observation','date')
+        obligations = Movement.objects.filter(bussines_id=request.GET.get('bussines'),origin_id=request.GET.get('origin'), concept="OBLIGACION").values('obligation','date','id','value','balance','observation','date')
         return JsonResponse({"TH": list(third),"MV":list(movement),"OB":list(obligations)}) 
 
 class GetObligationSerial(LoginRequiredMixin,View):
@@ -550,7 +534,7 @@ class FillRegister(LoginRequiredMixin,View):
             rubro = Rubro.objects.get(id=list(rubroMovement)[x]['nameRubro'])
             rubroList.append({"register":list(rubroMovement)[x]['movement__register'],"idRegister":list(rubroMovement)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"value":list(rubroMovement)[x]['value'],"valueP":list(rubroMovement)[x]['valueP'] })
 
-        return JsonResponse({"RUBRO":list(rubroList), "OBSERVATION": movement.observation})
+        return JsonResponse({"RUBRO":list(rubroList), "OBSERVATION": movement.observation,"DATE":movement.date})
 
 class GetRegistersOB(LoginRequiredMixin,View):
 
@@ -590,16 +574,25 @@ class CreateObligation(LoginRequiredMixin,View):
                 bussines=bussines,concept="OBLIGACION",value=request.GET.get('value'),balance=request.GET.get('balance'),
                 date=today,register=request.GET.get('register'),obligation=request.GET.get('obligationCode'),origin=Origin.objects.get(id=request.GET.get('origin')),observation=request.GET.get('observation')
             )
-            for x in range(0,len(obligations)):
-                rubroBalanceOperation = RubroBalanceOperation.objects.create(account=bussines,obligation='OBLIGACION',typeAccount=typeAccount[x]['value'],value=value[x]['balance']) 
-                rubroMov = RubroMovement.objects.create(bussines=bussines,value=obligations[x]['value'],valueP=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'],movement=newObligation) 
-                register = RubroMovement.objects.get(id=obligations[x]['idRegister'])
-                register.valueP = register.valueP-obligations[x]['value']
-                register.save()
-            for x in range(0,len(accounts)):
-                valuesAccount = ValuesAccountObligation.objects.create(account_id=accounts[x]['accountID'],obligation_id=accounts[x]['obligationID'],typeAccount=accounts[x]['typeAccount'],value=accounts[x]['value'])      
+            if len(accounts)!=0:
+
+                for x in range(0,len(obligations)):
+                    rubroBalanceOperation = RubroBalanceOperation.objects.create(account=bussines,obligation='OBLIGACION',typeAccount=typeAccount[x]['value'],value=value[x]['balance']) 
+                    rubroMov = RubroMovement.objects.create(bussines=bussines,value=obligations[x]['value'],valueP=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'],movement=newObligation) 
+                    register = RubroMovement.objects.get(id=obligations[x]['idRegister'])
+                    register.valueP = register.valueP-obligations[x]['value']
+                    register.save()
+                for x in range(0,len(accounts)):
+                    valuesAccount = ValuesAccountObligation.objects.create(account_id=accounts[x]['accountID'],obligation_id=accounts[x]['obligationID'],typeAccount=accounts[x]['typeAccount'],value=accounts[x]['value'])      
             
-            return JsonResponse({"CREATE": "TRUE", "ID":newObligation.id})
+                return JsonResponse({"CREATE": "TRUE", "ID":newObligation.id})
+            else:
+                for x in range(0,len(obligations)):
+                    rubroMov = RubroMovement.objects.create(bussines=bussines,value=obligations[x]['value'],valueP=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'],movement=newObligation) 
+                    register = RubroMovement.objects.get(id=obligations[x]['idRegister'])
+                    register.valueP = register.valueP-obligations[x]['value']
+                    register.save()
+                return JsonResponse({"CREATE": "TRUE", "ID":newObligation.id})          
         else:        
             lastObligation = Movement.objects.filter(concept="OBLIGACION", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()
             
@@ -607,16 +600,27 @@ class CreateObligation(LoginRequiredMixin,View):
                 bussines=bussines,concept="OBLIGACION",value=request.GET.get('value'),balance=request.GET.get('balance'),
                 date=today,register=request.GET.get('register'),obligation=lastObligation.obligation+1,origin=Origin.objects.get(id=request.GET.get('origin')),observation=request.GET.get('observation')
             )
-            for x in range(0,len(obligations)):
+            
+            if len(accounts)!=0:
+                for x in range(0,len(obligations)):
                 
-                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation='OBLIGACION',value=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'])   
-                rubroMov = RubroMovement.objects.create(bussines=bussines,value=obligations[x]['value'],valueP=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'],movement=newObligation) 
-                register = RubroMovement.objects.get(id=obligations[x]['idRegister'])
-                register.valueP = register.valueP-obligations[x]['value']
-                register.save()
-            for x in range(0,len(accounts)):
-                valuesAccount = ValuesAccountObligation.objects.create(account_id=accounts[x]['accountID'],obligation_id=accounts[x]['obligationID'],typeAccount=accounts[x]['typeAccount'],value=accounts[x]['value']) 
-           
+                    rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation='OBLIGACION',value=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'])   
+                    rubroMov = RubroMovement.objects.create(bussines=bussines,value=obligations[x]['value'],valueP=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'],movement=newObligation) 
+                    register = RubroMovement.objects.get(id=obligations[x]['idRegister'])
+                    register.valueP = register.valueP-obligations[x]['value']
+                    register.save()
+
+                for x in range(0,len(accounts)):
+                    valuesAccount = ValuesAccountObligation.objects.create(account_id=accounts[x]['accountID'],obligation_id=accounts[x]['obligationID'],typeAccount=accounts[x]['typeAccount'],value=accounts[x]['value']) 
+                    return JsonResponse({"CREATE": "TRUE","ID":newObligation.id})
+            else:
+                for x in range(0,len(obligations)):
+                
+                    rubroMov = RubroMovement.objects.create(bussines=bussines,value=obligations[x]['value'],valueP=obligations[x]['value'],balance=obligations[x]['balance'],date=request.GET.get('date'),nameRubro=obligations[x]['id'],movement=newObligation) 
+                    register = RubroMovement.objects.get(id=obligations[x]['idRegister'])
+                    register.valueP = register.valueP-obligations[x]['value']
+                    register.save() 
+
             return JsonResponse({"CREATE": "TRUE","ID":newObligation.id})
 
 
@@ -651,3 +655,289 @@ class GetSerialVoucherPayment(LoginRequiredMixin,View):
             movements = Movement.objects.filter(origin_id=request.GET.get('origin'))
             return JsonResponse({"VP": lastRegister.vouchePayment+1,"MV": list(movements)})
 
+#--------------Disponibilidad----------
+class GetDetallsDisponibility(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('disponibility')).values('nameRubro','value','balance','valueP')
+        rubroList = []
+
+        for x in range(0,len(list(rubroMov))):
+            rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+            rubroList.append({"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+        return JsonResponse({"RUBRO": list(rubroList)})
+
+class GetRubroImpDisponibility(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('disponibility')).values('id','nameRubro','value','balance','valueP')
+        rubroList = []
+
+        for x in range(0,len(list(rubroMov))):
+            rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+            rubroList.append({"dispoID":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+        return JsonResponse({"RUBRO": list(rubroList)})
+
+class UpdateRID(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        print(request.GET.get('id'))
+        print(request.GET.get('disponibility'))
+        print(request.GET.get('rubroID'))
+        print(request.GET.get('newValueOperated'))
+        print(request.GET.get('oldValue'))
+        print(request.GET.get('newValue'))
+        
+        newValueDisponibility= int(request.GET.get('newValueOperated'))
+        oldValue = request.GET.get('oldValue')
+        newValue = request.GET.get('newValue')
+
+        value = request.GET.get('value')
+        valuP = request.GET.get('valueP')
+        balance = request.GET.get('balance')
+        budgetEject = request.GET.get('budgetEject')
+
+        if oldValue > newValue:
+            print('entre al if')
+            disponibilityUpdate = Movement.objects.get(id=request.GET.get('disponibility')) #Esta es la disponibliad grande
+            disponibilityUpdate.value = newValueDisponibility
+            disponibilityUpdate.balance = newValueDisponibility
+            disponibilityUpdate.save()
+
+            rubroMovementUpdate = RubroMovement.objects.get(id=request.GET.get('id')) #Este es el rubro implicado en el movimiento anterior  
+            rubroMovementUpdate.value = newValueDisponibility
+            rubroMovementUpdate.valueP = newValueDisponibility
+            rubroMovementUpdate.balance = newValueDisponibility
+            rubroMovementUpdate.save()
+
+            rubro = Rubro.objects.get(id=request.GET.get('rubroID')) #Este es el rubro implicado pero de la tabla rubro, a este la actualizo el por ejecutar
+            rubro.budgetEject -= newValueDisponibility
+            rubro.save()
+
+            rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('disponibility')).values('id','nameRubro','value','balance','valueP')
+            rubroList = []
+            for x in range(0,len(list(rubroMov))):
+                rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+                rubroList.append({"dispoID":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+            
+                movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="DISPONIBILIDAD").values('id','value','balance','disponibility','observation','date')
+
+            return JsonResponse({'CREATE':"TRUE", "RUBRO": list(rubroList), "TMVD": list(movements)})
+        else:
+            print('entre al else')
+            
+            return JsonResponse({'CREATE':"FALSE"})
+
+#----------------registro---------
+class GetDetailRegister(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('register')).values('nameRubro','value','balance','valueP')
+        rubroList = []
+
+        for x in range(0,len(list(rubroMov))):
+            rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+            rubroList.append({"rubro":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+        return JsonResponse({"DRG": list(rubroList)})
+
+class GetRubroImpDetailRegister(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('register')).values('id','nameRubro','value','balance','valueP')
+        rubroList = []
+
+        for x in range(0,len(list(rubroMov))):
+            rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+            rubroList.append({"registerID":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+        return JsonResponse({"DRG": list(rubroList)})
+
+class UpdateDetailRegister(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        print(request.GET.get('id'))
+        print(request.GET.get('register'))
+        print(request.GET.get('rubroID'))
+        print(request.GET.get('newValueOperated'))
+        print(request.GET.get('oldValue'))
+        print(request.GET.get('newValue'))
+        
+        newValueRegister= int(request.GET.get('newValueOperated'))
+        oldValue = request.GET.get('oldValue')
+        newValue = request.GET.get('newValue')
+
+        value = request.GET.get('value')
+        valuP = request.GET.get('valueP')
+        balance = request.GET.get('balance')
+        budgetEject = request.GET.get('budgetEject')
+
+        if oldValue < newValue:
+            print('entre al if')
+            registerUpdate = Movement.objects.get(id=request.GET.get('register')) #Esta es la disponibliad grande
+            registerUpdate.value = newValueRegister
+            registerUpdate.balance = newValueRegister
+            registerUpdate.save()
+
+            rubroMovementRegistUpdate = RubroMovement.objects.get(id=request.GET.get('id')) #Este es el rubro implicado en el movimiento anterior             
+            rubroMovementRegistUpdate.value = newValueRegister
+            rubroMovementRegistUpdate.valueP = newValueRegister
+            rubroMovementRegistUpdate.balance = newValueRegister
+            rubroMovementRegistUpdate.save()
+
+            rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('register')).values('id','nameRubro','value','balance','valueP')
+            rubroList = []
+            for x in range(0,len(list(rubroMov))):
+                rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+                rubroList.append({"dispRegister":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+            
+                movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="REGISTRO").values('id','value','balance','register','observation','date')
+
+            return JsonResponse({'CREATE':"TRUE", "DRG": list(rubroList), "TMVRG": list(movements)})
+        else:
+            print('entre al else')
+            registerUpdate = Movement.objects.get(id=request.GET.get('register')) #Esta es la disponibliad grande 
+            registerUpdate.value -= newValueRegister
+            registerUpdate.balance -= newValueRegister
+            registerUpdate.save()
+
+            rubroMovementRegistUpdate = RubroMovement.objects.get(id=request.GET.get('id')) #Este es el rubro implicado en el movimiento anterior             
+            rubroMovementRegistUpdate.value -= newValueRegister
+            rubroMovementRegistUpdate.valueP -= newValueRegister
+            rubroMovementRegistUpdate.balance -= newValueRegister
+            rubroMovementRegistUpdate.save()
+
+            rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('register')).values('id','nameRubro','value','balance','valueP')
+            rubroList = []
+            for x in range(0,len(list(rubroMov))):
+                rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+                rubroList.append({"dispRegister":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+            
+                movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="REGISTRO").values('id','value','balance','register','observation','date')
+            
+            return JsonResponse({'CREATE':"TRUE", "DRG": list(rubroList), "TMVRG": list(movements)})
+#----------------Obligación---------
+class GetDetailObligation(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('obligation')).values('nameRubro','value','balance','valueP')
+        rubroList = []
+
+        for x in range(0,len(list(rubroMov))):
+            rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+            rubroList.append({"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+        return JsonResponse({"OB": list(rubroList)})
+
+class GetRubroImpDetailObligation(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('obligation')).values('id','nameRubro','value','balance','valueP')
+        rubroList = []
+
+        for x in range(0,len(list(rubroMov))):
+            rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+            rubroList.append({"idObligation":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+        return JsonResponse({"OB": list(rubroList)})
+
+class UpdateDetailObligation(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        print(request.GET.get('id'))
+        print(request.GET.get('obligation'))
+        print(request.GET.get('rubroID'))
+        print(request.GET.get('newValueOperated'))
+        print(request.GET.get('oldValue'))
+        print(request.GET.get('newValue'))
+
+        newValueObligation= int(request.GET.get('newValueOperated'))
+        oldValue = request.GET.get('oldValue')
+        newValue = request.GET.get('newValue')
+
+        value = request.GET.get('value')
+        valuP = request.GET.get('valueP')
+        balance = request.GET.get('balance')
+        budgetEject = request.GET.get('budgetEject')
+
+        if oldValue < newValue:
+            print('entre al if')
+            obligationUpdate = Movement.objects.get(id=request.GET.get('obligation')) #Esta es la disponibliad grande
+            obligationUpdate.value = newValueObligation
+            obligationUpdate.balance = newValueObligation
+            obligationUpdate.save()
+
+            rubroMovementObligationUpdate = RubroMovement.objects.get(id=request.GET.get('id')) #Este es el rubro implicado en el movimiento anterior  
+            rubroMovementObligationUpdate.value = newValueObligation
+            rubroMovementObligationUpdate.valueP = newValueObligation
+            rubroMovementObligationUpdate.balance = newValueObligation
+            rubroMovementObligationUpdate.save()
+
+            rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('obligation')).values('id','nameRubro','value','balance','valueP')
+            rubroList = []
+            for x in range(0,len(list(rubroMov))):
+                rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+                rubroList.append({"dispOblig":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+            
+                movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="OBLIGACION").values('id','value','balance','obligation','observation','date')
+
+            return JsonResponse({'CREATE':"TRUE", "OB": list(rubroList), "TMVOB": list(movements)})
+        else:
+            print('entre al else')
+            registerUpdate = Movement.objects.get(id=request.GET.get('register')) #Esta es la disponibliad grande
+            registerUpdate.value -= newValueObligation
+            registerUpdate.balance -= newValueObligation
+            registerUpdate.save()
+
+            rubroMovementObligationUpdate = RubroMovement.objects.get(id=request.GET.get('id')) #Este es el rubro implicado en el movimiento anterior   
+            rubroMovementObligationUpdate.value -= newValueObligation
+            rubroMovementObligationUpdate.valueP -= newValueObligation
+            rubroMovementObligationUpdate.balance -= newValueObligation
+            rubroMovementObligationUpdate.save()
+
+            rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('register')).values('id','nameRubro','value','balance','valueP')
+            rubroList = []
+            for x in range(0,len(list(rubroMov))):
+                rubro = Rubro.objects.get(id=list(rubroMov)[x]['nameRubro'])
+
+                rubroList.append({"dispOblig":list(rubroMov)[x]['id'],"id":rubro.id,"rubro":rubro.rubro,"description":rubro.description,"realBudget":rubro.realBudget ,"value":list(rubroMov)[x]['value'],"balance":list(rubroMov)[x]['balance'],"budgetEject":list(rubroMov)[x]['valueP']})
+            
+                movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="OBLIGACION").values('id','value','balance','obligation','observation','date')
+            
+            return JsonResponse({'CREATE':"TRUE", "OB": list(rubroList), "TMVOB": list(movements)})

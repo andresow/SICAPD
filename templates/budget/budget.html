@@ -191,6 +191,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto real</th>
+											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
 									</thead>
@@ -199,6 +200,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto real</th>
+											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
 									</tfoot>
@@ -235,6 +237,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto real</th>
+											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
 									</thead>
@@ -243,6 +246,7 @@
 											<th>Rubro</th>
 											<th>Descripción</th>
 											<th>Presupuesto real</th>
+											<th>Presupuesto por ejecutar</th>
 											<th>Seleccionar</th>
 										</tr>
 									</tfoot>
@@ -402,7 +406,7 @@
 		</div> 
 		<div  class="container-fluid col-5" style="float:right">
 			<div class="card " style="float:right">
-			<div class="card-header " style="float:right"><i class="fas fa-table mr-1" style="float:right"></i>Lista de Acuerdos</div>
+			<div class="card-header " style="float:right"><i class="fas fa-table mr-1" style="float:left"></i>Lista de Acuerdos</div>
 			<div class="card-body" style="float:right">
 				<div class="table-responsive" style="float:center">
 					<font size="2" face="Arial" >
@@ -800,13 +804,13 @@
             </div>         
         </div>  
 </div>
-<div class="modal fade bd-example-modal-lg" id="myModalAgreementUpdate" role="dialog">
+<div class="modal fade bd-example-modal-lg" id="myModalAgreementUpdate" role="dialog" >
 	<div class="modal-dialog modal-lg">
-	  <div class="modal-content">
+	  <div class="modal-content modal-lg">
 		<div class="modal-header ">
 		  <h4 class="modal-title">Actualizar Tipo de Acuerdo</h4>
 			</div>
-				<div class="modal-body">
+				<div class="modal-body modal-lg">
 					<div  class="container-fluid col-12 mb-8">
 
 						<div class="card col-12 mb-4">
@@ -827,21 +831,122 @@
 										<input  name="dateAgreementUpdate" id="dateAgreementUpdate" type="date" class="form-control" >
 									</div>
 									</div>
-									<br>
-									<div class="form-row">
+								
+									<div class="form-row mb-4">
 										
 										<div class="col-10">
 											<label>Concepto</label>				  
 											<textarea name="conceptUpdate" id="conceptUpdate" type="text" class="form-control" ></textarea>
 										</div>
 									</div>
-									<br>
-									<button id="saveUpdateAgreement" type="submit" class="btn btn-primary">Actualizar Tipo de Acuerdo</button>
-									<button type="button" onclick="cancels(5)" class="btn btn-secondary">Cancelar</button>
+
+									<div id="rubroOperationsAgreement"  class="container-fluid  mb-4" style="float:left"  style="display:none">
+										<div class="card " >
+										<div class="card-header "  id="textOperationsAgreement" ><i class="fas fa-table mr-1" ></i>Rubros de </div>
+										<div class="card-body" >
+											<div class="table-responsive">
+												              
+												<font size="2" face="Arial" >
+												<table  style="width:100%" class="table table-bordered dataTable" id="dataTableRubroOthersAgreement" cellspacing="0" 
+													role="grid" aria-describedby="dataTable_info">
+													
+													<thead>
+														<tr>
+															<th>Rubro</th>
+															
+															<th style="width:100px;">Valor</th>
+															<th>Presupuesto real</th>
+															<th>Presupuesto por ejecutar</th>
+															<th>Acciones</th>
+								
+														</tr>
+													</thead>
+													<tfoot>
+														<tr>
+															<th>Rubro</th>
+															
+															<th>Valor</th>
+															<th>Presupuesto real</th>
+															<th>Presupuesto por ejecutar</th>
+															<th>Acciones</th>
+								
+														</tr>
+													</tfoot>
+														<tbody>
+															<h1 id="rubroTable"></h1>
+														</tbody>
+													</table>
+												</font>
+												<div class="form-row col-12 mb-2">
+													
+													<div class="col-5" >
+														<h6  id="totalValorOpAgreement" for="totalValorOpAgreement">VALOR: 0</h6>					
+													</div>
+													<div class="col-7" >
+														<h6  id="totalPresupuestoOpAgreement" for="totalPresupuestoOpAgreement">PRESUPUESTO POR EJECUTAR: 0</h6>										
+													</div>
+												</div>
+												</div>
+											</div>
+										</div>
+									</div> 
+									<div  id="rubroContraOperationsAgreement" class="container-fluid mb-4" style="float:right">
+										<div class="card mb-4" style="float:right">
+										<div class="card-header " style="float:right" id="textContraperationsAgreement"><i class="fas fa-table mr-1" style="float:left"></i>Rubros contraoperacion</div>
+										<div class="card-body" style="float:right">
+											<div class="table-responsive">              
+												<font size="2" face="Arial" >
+							
+												<table class="table table-bordered dataTable" id="dataTableContraRubrosAgreement" cellspacing="0" 
+													role="grid" aria-describedby="dataTable_info">
+													
+													<thead>
+														<tr>
+															<th>Rubro</th>
+															<th>Valor</th>
+															<th>Presupuesto real</th>
+															<th>Presupuesto por ejecutar</th>
+															<th>Acciones</th>
+								
+														</tr>
+													</thead>
+													<tfoot>
+														<tr>
+															<th>Rubro</th>
+															<th>Valor</th>
+															<th>Presupuesto real</th>
+															<th>Presupuesto por ejecutar</th>
+															<th>Acciones</th>
+														</tr>
+													</tfoot>
+														<tbody>
+															<h1 id="rubroTable"></h1>
+														</tbody>
+													</table>
+													</font>
+													<div class="form-row col-12 mb-2">
+													
+														<div class="col-5" >
+															<h6  id="totalValorContraOpAgreement" for="totalValorContraOpAgreement">VALOR: 0</h6>					
+														</div>
+														<div class="col-7" >
+															<h6  id="totalPresupuestoContraOpAgreement" for="totalPresupuestoContraOpAgreement">FALTA POR CONTRA OPERAR: 0</h6>										
+														</div>
+													</div>
+													
+											</div>		
+											</div>   
+										</div>
+									</div> 
+									
+									<div class="mb-4">
+										<button id="saveUpdateAgreement" type="submit" class="btn btn-primary">Actualizar Tipo de Acuerdo</button>									
+										<button type="button" onclick="cancels(5)" class="btn btn-secondary">Cancelar</button>
+
+									</div>	
 								</form>
 							</div>
 						</div>
-
 					</div>
 				</div>
 			</div>         
@@ -983,8 +1088,23 @@ $(document).ready(function() {
 		  "language": idioma_español,
 		  
 			dom: 'Bfrtip',			
-		  }
-		  );		 	
+		  });
+		$('#dataTableRubroOthersAgreement').DataTable( {
+
+			"destroy":true,
+			"language": idioma_español,
+
+			dom: 'Bfrtip',			
+		});
+		$('#dataTableContraRubrosAgreement').DataTable( {
+
+			"destroy":true,
+			"language": idioma_español,
+
+			dom: 'Bfrtip',			
+		});
+
+		   		 	
 } );
 
 /////////////funcion para gcargar los datos de la actualizacion de rubro_________tatan
@@ -992,6 +1112,7 @@ var rubroId;
 var agreementId;
 
 function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inform, detallTypeInfor){
+	console.log(id)
 	rubroId = id;
 	var rubroRubUpdate = document.getElementById("id_rubroUpdate");
 	rubroRubUpdate.value = rubro;
@@ -1006,6 +1127,7 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 			},
 			dataType: 'json',
 			success: function (data) {
+				console.log(data)
 				$('#id_descriptionUpdate').val(data.RUBRO[0].description);
 				$('#id_valueInitialUpdate').val(initialBudget);	
 				$('#id_rubroFatherUpdate').val(data.RUBRO[0].rubroFather);
@@ -1085,20 +1207,24 @@ function changeUpdateRubro(id, rubro, typeRubro, description, initialBudget, inf
 	
 	
 }
-function changeUpdateAgreement(id, typeAgreement, numberAg, dateAg, descriptionAg){
+function changeUpdateAgreement(id, typeAgreement, numberAg, dateAg, descriptionAg,  nameRubro,value,balance,budgetEject){
+	agreementId = id;
 
-agreementId = id;
+	var numberAgUpdate = document.getElementById("numberAgreementUpdate");
+	numberAgUpdate.value = numberAg;
+	var descriptionAgUpdate = document.getElementById("conceptUpdate");
+	descriptionAgUpdate.value = descriptionAg;
 
-var numberAgUpdate = document.getElementById("numberAgreementUpdate");
-numberAgUpdate.value = numberAg;
-var descriptionAgUpdate = document.getElementById("conceptUpdate");
-descriptionAgUpdate.value = descriptionAg;
-
-$.ajax({
+	var totalDetallV=0;
+	var totalDetallByEjecute=0;
+	var totalContraDetallByEjecute=0;
+	var totalContraDetallV=0;
+	$.ajax({
 			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
-			data: {
+			data: {				
 				'option': '4',
 				'idBussines': localStorage.getItem('idBussines'),
+					
 
 		},
 		dataType: 'json',
@@ -1116,7 +1242,90 @@ $.ajax({
 			}
 	})
 
+	$.ajax({
+			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {				
+				'option': '5',
+				'id':agreementId,
+				'nameRubro': nameRubro,
+				'value': value,
+				'balance':balance,				
+				'budgetEject': budgetEject,		
+
+		},              
+		dataType: 'json',
+		success: function (data) {
+				var tableOperations = $('#dataTableRubroOthersAgreement').DataTable(); 
+ 				var rows = tableOperations.rows().remove().draw();
+
+				var tableContraOp = $('#dataTableContraRubrosAgreement').DataTable(); 
+ 				var rowsCop = tableContraOp.rows().remove().draw();
+
+				for (var i=0; i<data.AMO.length; i++){
+						console.log(data)
+					if(data.AMO[i].concept == data.AMO[0].concept){
+
+						tableOperations.row.add([
+						data.AMO[i].rubro,
+						"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' min='1'  pattern='^[0-9]+'  oninput='validity.valid||(value='');'  style='font-family: Arial; font-size: 10pt;'  id=UpdateOperation"+data.AMO[i].id+" class='form-control' name='inputOperations' value="+data.AMO[i].value+"> " ,
+						data.AMO[i].balance,
+						data.AMO[i].budgetEject,
+
+						"<a data-toggle='tooltip'  id='delete' title='Eliminar rubro implicado'><button onclick=\'deleteRID("+JSON.stringify(data.AMO[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+						"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar rubro'><button onclick=\'updateRubroImplicadoOperation("+JSON.stringify(data.AMO[i].id)+","+JSON.stringify(data.AMO[i].rubroID)+","+JSON.stringify(data.AMO[i].value)+","+JSON.stringify(data.AMO[i].balance)+","+JSON.stringify(data.AMO[i].budgetEject)+")\' data-toggle='modal' data-target='#myModalRubroImplicado' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+					])
+					totalDetallV = totalDetallV + parseInt(data.AMO[i].value);
+					totalDetallByEjecute = totalDetallByEjecute + parseInt(data.AMO[i].budgetEject);				
+					}else{
+						tableContraOp.row.add([
+						data.AMO[i].rubro,
+						"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' min='1'  pattern='^[0-9]+'  oninput='validity.valid||(value='');'  style='font-family: Arial; font-size: 10pt;'  id=UpdateContraOperation"+data.AMO[i].id+" class='form-control' name='inputOperations' value="+data.AMO[i].value+"> ",
+						data.AMO[i].balance,
+						data.AMO[i].budgetEject,
+						"<a data-toggle='tooltip'  id='delete' title='Eliminar rubro implicado'><button onclick=\'deleteRID("+JSON.stringify(data.AMO[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+						"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar rubro'><button onclick=\'updateRubroImplicadoOperation("+JSON.stringify(data.AMO[i].id)+","+JSON.stringify(data.AMO[i].rubroID)+","+JSON.stringify(data.AMO[i].value)+","+JSON.stringify(data.AMO[i].balance)+","+JSON.stringify(data.AMO[i].budgetEject)+")\' data-toggle='modal' data-target='#myModalRubroImplicado' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+						])
+						totalContraDetallV = totalContraDetallV + parseInt(data.AMO[i].value);
+						totalContraDetallByEjecute = totalContraDetallByEjecute + parseInt(data.AMO[i].budgetEject);					
+					}
+					tableOperations.draw( false );
+					tableContraOp.draw( false );
+					console.log(totalDetallByEjecute, totalDetallV);											
+					console.log(totalContraDetallByEjecute, totalContraDetallV);											
+				}
+				
+				$("#totalValorOpAgreement").text("VALOR: "+ totalDetallV);	
+				$("#totalPresupuestoOpAgreement").text("PRESUPUESTO POR EJECUTAR: "+ totalDetallByEjecute);
+
+				$("#totalValorContraOpAgreement").text("VALOR: "+ totalContraDetallV);	
+				$("#totalPresupuestoContraOpAgreement").text("PRESUPUESTO POR EJECUTAR: "+ totalContraDetallByEjecute);
+			}
+
+		})
 }
+
+function updateRubroImplicadoOperation(id,rubro,value,balance,budgetEject){
+
+	var update= "#UpdateOperation"+id;
+	var resultReal= "#Realbalance"+id;
+	var diferencieValues = parseInt($(update).val())-value;
+	console.log(diferencieValues)
+	if(diferencieValues<0){
+		diferencieValues= diferencieValues*-1;
+	}
+
+	if(operation=="+"){
+		console.log(balance+diferencieValues)
+		console.log(value+diferencieValues)
+		console.log(budgetEject+diferencieValues)
+
+	}else{
+		console.log(balance-diferencieValues)
+		console.log(value-diferencieValues)
+		console.log(budgetEject-diferencieValues)
+	}	
+}
+
 $(document).on('change', '#chargeInforUpdatem', function(event) {
 		$.ajax({
 			url: '{% url "getOriginBudget"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -1258,7 +1467,6 @@ $("form#updateRubro").submit(function() {
 	var valueInitialUpdate =  $('input[name="valueInitialUpdate"]').val();
 	var inform = JSON.stringify(arrayInformsUpdate);
 	var detallTypeInfor = JSON.stringify(arrayCodeUpdate);
-	console.log(newTypeRubroUp)
     if (rubroUpdate, descriptionUpdate,valueInitialUpdate) {
           // Create Ajax Call
           $.ajax({
@@ -1611,8 +1819,7 @@ function deleteRubro(id, rubro){
             dataType: 'json',
             success: function (data) { 
 				if (data.SOY_FATHER=="TRUE"){
-						swal("No se puede eliminar soy rubro PADRE", "Por favor verifica", "error");
-						
+						swal("No puede eliminar rubro mayor, posee auxiliares", "Por favor verifica", "error");			
 					}
 				if (data.MOVEMENTS=="TRUE"){
 					swal("El rubro tiene movimientos por ende no se puede eliminar", "Por favor verifica", "error");			
@@ -1642,12 +1849,6 @@ function deleteRubro(id, rubro){
 							icon: "success",
 							});
 					}
-					else{
-						swal("El rubro " + rubro + "  no existe.", {
-						icon: "error",
-						});
-					}
-
 				} 
             }
 
@@ -1821,7 +2022,6 @@ $("form#createRubro").submit(function() {
 						},
 						dataType: 'json',
 						success: function (dataTwo) {
-							console.log(dataTwo)
 							var tableRubro = $('#dataTableRubroTem').DataTable(); 
 							var rowsRubro = tableRubro.rows().remove().draw();
 
@@ -1967,6 +2167,7 @@ function getRubrosByOrigin(){
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,
 				data.RUBRO[i].realBudget,
+				data.RUBRO[i].budgetEject,
 				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id="+JSON.stringify(data.RUBRO[i].id)+" onclick=\'getRubroByOperation("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].realBudget)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
 			}
@@ -2230,6 +2431,7 @@ function getContraOperation(){
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,
 				data.RUBRO[i].realBudget,
+				data.RUBRO[i].budgetEject,
 				"<a data-toggle='tooltip' title='Seleccionar rubro'><button  id=contra"+data.RUBRO[i].id+" onclick=\'getRubroByContraOperation("+JSON.stringify(data.RUBRO[i].id)+','+ JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].realBudget)+','+JSON.stringify(data.RUBRO[i].typeRubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
 			}
@@ -2557,7 +2759,7 @@ function searchImport(rubro){
 }
 }
 function importRubros(){
-	window.location.href = "http://localhost:8000/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
+	window.location.href = "https://sicapdeploys.herokuapp.com/budget/importRubro/"+localStorage.getItem('idBussines')+"/"+originID;
 }
 function cancels(option){
 	if(option==1){
@@ -2793,7 +2995,7 @@ function sendDataToBD(){
 						swal("Importacion completa ","", "success");
 						var tableImport = $('#dataTableImports').DataTable(); 
 						var rowsImport = tableImport.rows().remove().draw();
-		
+						jsonImport.length=0;
 					}else{
 						deleteRubroToPassword();						
 					}
@@ -2825,7 +3027,7 @@ function deleteRubroToPassword(){
 				},
 				dataType: 'json',
 				success: function (data) {
-					if(data.MOVEMENTS=="TRUE"){
+					if(data.MOVEMENTS=="FALSO"){
 						confirmatePassword();
 					}else{
 						swal("Ya se han realizado movimientos en este presupuesto ","No se puede eliminar", "error");
@@ -2869,6 +3071,8 @@ function confirmatePassword(){
 							dataType: 'json',
 							success: function (data) {
 								if(data.DELETE== "TRUE"){
+									var table = $('#dataTableRubroTem').DataTable(); 
+									var rows = table.rows().remove().draw();
 									swal("Se han borrado los  rubros", "Vuelve a importar", "success");
 								}else{
 									swal("Ha ocurrido un error inesperado ","Vuelva a intentarlo", "error");

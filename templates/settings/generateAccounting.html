@@ -142,6 +142,8 @@ var dataRow;
 var accountId;
 var originID=0;
 var accountRubro=[];
+var indexTable;
+var oTable;
 
 $(document).ready(function() {
 		$('#dataTableAccountingOp').DataTable( {
@@ -252,6 +254,8 @@ function generateAccount(){
         url: '{% url "getAccountSettings"  0 %}'.replace('0', localStorage.getItem('userID')),
         data: {
             'bussinesId': localStorage.getItem('idBussines'),
+            'idAC': localStorage.getItem('idAC'),
+
         },
         dataType: 'json',
         success: function (data) {
@@ -282,7 +286,7 @@ function createAccount(){
         account,
         operationAccount,
         document,                            
-        "<a data-toggle='tooltip' href='#' id='deleteAccounting'title='Eliminar Cuenta'><button onclick=\'deleteAccounting()\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
+        "<a data-toggle='tooltip' type='button' id='deleteAccounting'title='Eliminar Cuenta'><button onclick=\'deleteAccounting()\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
     ])
     
     tableAccountingOp.draw(false);
@@ -309,6 +313,18 @@ function sendAccounts(){
     });
 
 }
+$('#dataTableAccountingOp tbody').on('click', 'tr', function () {
+	indexTable=$(this).index();
+    console.log(indexTable)
+} );
+
+function deleteAccounting(){
+    oTable = $('#dataTableAccountingOp').DataTable();
+	oTable.row(':eq('+indexTable +')').remove().draw();
+	accountRubro.splice(indexTable, 1);
+}
+
+
 
 </script>
 

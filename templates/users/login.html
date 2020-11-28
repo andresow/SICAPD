@@ -200,7 +200,7 @@ $('form#formLogin').trigger("reset");
 						localStorage.setItem('idBussines', id);
 						localStorage.setItem('patron', data.patron);
 						localStorage.setItem('userID', data.userID);
-
+						localStorage.setItem('patronAccount', data.patronAccount);
 						window.location.href = "https://sicapdeploys.herokuapp.com/settings/"+id+"/"+ data.userID;
 		
 					}

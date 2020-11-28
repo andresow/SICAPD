@@ -33,6 +33,14 @@ urlpatterns = [
     url(r'ajax/getBudget/(?P<pkUser>\d+)/', GetBudget.as_view(), name='getBudget'),
     url(r'ajax/createAccountRubro/(?P<pkUser>\d+)/', CreateAccountRubro.as_view(), name='createAccountRubro'),
     url(r'ajax/getAccountsByRubro/(?P<pkUser>\d+)/', GetAccountsByRubro.as_view(), name='getAccountsByRubro'),
+    url(r'ajax/searchAccount/(?P<pkUser>\d+)/', SearchAccount.as_view(), name='searchAccount'),
+    
+    url(r'settings/listInformBank/(?P<pk>\d+)/(?P<pkUser>\d+)/$', ListInformBank.as_view() , name='listInformBank'),
+    url(r'ajax/createInformBank/(?P<pkUser>\d+)/$', CreateInformBank.as_view(), name='createInformBank'), 
+    url(r'ajax/settingsInfDetailBank/(?P<pkUser>\d+)/', CreateInformDetailBank.as_view(), name='settingsInfDetailBank'),
+    url(r'ajax/updateInformBank/(?P<pkUser>\d+)/', UpdateInformBank.as_view(), name='updateInformBank'),
+    url(r'ajax/changeWindowsInformDetailBank/(?P<pkUser>\d+)/', ChangeWindowsInformDetailBank.as_view(), name='changeWindowsInformDetailBank'),
+    url(r'ajax/importAccountsBD/(?P<pkUser>\d+)/', ImportAccountsBD.as_view(), name='importAccountsBD'),
 
     
 ]

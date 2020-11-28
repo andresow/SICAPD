@@ -47,12 +47,12 @@
                         </div>
                       </div>
 
-                      <a href="#" data-toggle="tooltip"   title="Registrar Detalle">
+                      <a href="#" data-toggle="tooltip"   title="Registrar detalle">
                         <button data-toggle="modal" data-target="#myModalInformDetall" class="btn btn-primary btn-sm"  onclick="getInform('{{inform.id}}')">
                         <i class="fa fa-info-circle"></i>
                         </button>
                       </a>
-                      <a href="#" data-toggle="tooltip"   title="Eliminar Informe">
+                      <a href="#" data-toggle="tooltip"   title="Eliminar informe">
                         <button onclick="deleteInform('{{inform.id}}','{{inform.nameI}}')" class="btn btn-primary btn-sm"  >
                         <i class="fa fa-trash"></i>
                         </button>
@@ -76,7 +76,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Registrar Detalles del informe</h4>
+          <h4 class="modal-title">Registrar detalles del informe</h4>
             </div>
                 <div class="modal-body">
                     <div  class="container-fluid">
@@ -108,7 +108,7 @@
                             {% bootstrap_form InformForm %}
 
                             <div id="divCreateInform"  class="form-group">
-                                <button id="btnCreatenform" type="submit" class="genric-btn success circle" >Registrar Informe</button>
+                                <button id="btnCreatenform" type="submit" class="genric-btn success circle" >Registrar informe </button>
                                 <button type="submit" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
                             </div>   
                     
@@ -152,10 +152,8 @@ $(document).ready(function() {
 				'copy', 'csv', 'excel', 'pdf', 'print'
 			]
 			
-		  } );
-		 
-	
-} );
+		});		 	
+});
 
 var informId;
 var informCurrentName
@@ -205,7 +203,7 @@ $("form#addInformDetall").submit(function() {
                 
             }
         });
-    } else {
+    }else{
         alert("Por favor llene todos los campos");
     }
     $('form#addInformDetall').trigger("reset");
@@ -243,7 +241,7 @@ $("form#addInform").submit(function() {
                 
             }
         });
-    } else {
+    }else{
         alert("Por favor llene todos los campos");
     }
     $('form#addInform').trigger("reset");
@@ -310,12 +308,12 @@ $("form#formAPUpdateInform").submit(function() {
             });
         }
        
-    } else {
+    }else{
         alert("All fields must have a valid value.");
     }
    
     return false;
- });
+});
  
 function deleteInform(id, name){
 
