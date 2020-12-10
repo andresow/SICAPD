@@ -1,16 +1,68 @@
 {% extends 'base/base.html' %}
 {% load bootstrap4 %}
 {% block main %}
+<style>
+   .loader-page {
+    position: fixed;
+    z-index: 25000;
+    background: rgb(255, 255, 255);
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:all .3s ease;
+  }
+  .loader-page::before {
+    content: "";
+    position: absolute;
+    border: 2px solid rgb(50, 150, 176);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border-left: 2px solid rgba(50, 150, 176,0);
+    border-top: 2px solid rgba(50, 150, 176,0);
+    animation: rotarload 1s linear infinite;
+    transform: rotate(0deg);
+  }
+  @keyframes rotarload {
+      0%   {transform: rotate(0deg)}
+      100% {transform: rotate(360deg)}
+  }
+  .loader-page::after {
+    content: "";
+    position: absolute;
+    border: 2px solid rgba(50, 150, 176,.5);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border-left: 2px solid rgba(50, 150, 176, 0);
+    border-top: 2px solid rgba(50, 150, 176, 0);
+    animation: rotarload 1s ease-out infinite;
+    transform: rotate(0deg);
+  }
+ 
+</style>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<div id=divCreate class="container-fluid">
+<div class="loader-page-great">
+    
+    <div class="loader-page ">
+    </div>
+</div>
+
+<div id="accountsDivs" class="container-fluid">
     <h1 class="mt-4">Lista de cuentas</h1>
     <div class="card mb-4">
         <div class="card-header"><i class="fas fa-table mr-1"></i>Lista de cuentas</div>
@@ -72,7 +124,7 @@
                     </tbody>
                 </table>
         </div>
-</div>
+
 <div class="modal fade" id="myModalAccount" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -198,8 +250,16 @@
             </div>         
         </div>  
 </div>
-
+</div>
 <script>
+$(window).on('load', function () {
+      setTimeout(function () {
+    $(".loader-page-great").css({visibility:"hidden",opacity:"0"})
+  }, 2000);
+     
+});
+
+
 var searchRubro;
 var accountId;
 var accountCurrentCode
@@ -207,6 +267,9 @@ var patronArray = [];
 var typeRubroCreate;
 var multiDescription;
 var jsonImport=[]
+
+
+
 $(document).ready(function() {
 		$('#dataTableAccount').DataTable( {
 		  "destroy":true,
@@ -218,9 +281,9 @@ $(document).ready(function() {
 			]
 			
 		  } );
-} );
-$(document).ready(function() {
+
 	
+    
     $('#dataTableImports').DataTable( {
 		  "destroy":true,
 		  "paging":   false,
@@ -228,7 +291,7 @@ $(document).ready(function() {
 		  
     dom: 'Bfrtip',			
 	} );		 
-	
+
 } );
 
 function getAccount(id){
@@ -434,12 +497,79 @@ function deleteAccount(id, code){
                 'option': '14'
             },
             dataType: 'json',
-            success: function (data) {   
-                $("#dataTableAccount").load(" #dataTableAccount");
-                swal("La cuenta número " + code + " se ha eliminado con éxito.", {
-                icon: "success",
-                });
+            success: function (data) { 
+                console.log(data)
+                if(data.ELIMINADO='TRUE'){
+                    $("#dataTableAccount").load(" #dataTableAccount");
+                    swal("La cuenta número " + code + " se ha eliminado con éxito.", {
+                    icon: "success",
+                    });
+
+                }else{
+                    swal("No puede eliminar cuenta, posee asientos contables", "Por favor verifica", "error");
+                }
+                
             }
+        });
+    }
+    });
+}
+
+function deleteRubro(id, rubro){
+    swal({
+    title: "Desea eliminar el rubro " + rubro + "?",
+    text: "Al confirmar este acción, el rubro " + rubro + " sera eliminado.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+    })
+    .then((willDelete) => {
+    if (willDelete) {
+
+        $.ajax({
+            url: '{% url "deleteRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
+            data: {
+				'origin': originID,
+				'idBussines': localStorage.getItem('idBussines'),
+                'id': id,
+                'option': '1'
+            },
+            dataType: 'json',
+            success: function (data) { 
+				if (data.SOY_FATHER=="TRUE"){
+						swal("No puede eliminar rubro mayor, posee auxiliares", "Por favor verifica", "error");			
+					}
+				if (data.MOVEMENTS=="TRUE"){
+					swal("El rubro tiene movimientos por ende no se puede eliminar", "Por favor verifica", "error");			
+				}
+				else{
+					if  (data.ELIMINADO=='TRUE'){
+
+						var tableDeleteRubro = $('#dataTableRubroTem').DataTable(); 
+						var rows = tableDeleteRubro.rows().remove().draw();
+
+						for (var i=0; i<data.RUBRO.length; i++){
+							tableDeleteRubro.row.add( [
+							data.RUBRO[i].id,
+							data.RUBRO[i].rubro,
+							data.RUBRO[i].typeRubro,
+							data.RUBRO[i].description,
+							data.RUBRO[i].initialBudget,
+							data.RUBRO[i].budgetEject,
+							"<a data-toggle='tooltip' href='#' id='deleteRubro'title='Eliminar Rubro'><button onclick=\'deleteRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+							"<a data-toggle='tooltip' href='#' id='updateRubro' title='Actualizar Rubro'><button  onclick=\'changeUpdateRubro("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].typeRubro)+','+JSON.stringify(data.RUBRO[i].description)+','+JSON.stringify(data.RUBRO[i].initialBudget)+','+JSON.stringify(data.RUBRO[i].inform)+','+JSON.stringify(data.RUBRO[i].detallTypeInfor)+")\' data-toggle='modal' data-target='#myModalRubroUpdate' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"+ //agregue button
+							"<a data-toggle='tooltip' href='#' id='detailRubroOperation' title='Ver Movimientos Presupuestales'><button onclick=\'getDetailRubroOperation("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].description)+")\' data-toggle='modal' data-target='#myModalRubroOperation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"+		
+							"<a data-toggle='tooltip' href='#' id='detaillDisponibilitys' title='Ver Disponibilidades'><button onclick=\'getDispoinibilityByRubro("+JSON.stringify(data.RUBRO[i].id)+")\' data-toggle='modal' data-target='#myModalDatesDispoinibility' class='btn btn-primary btn-sm'><i class='fa fa-info-circle'></i></button></a>"
+							])
+						}
+						tableDeleteRubro.draw( false );	
+						swal("El rubro " + rubro + "  se ha eliminado con éxito.", {
+							icon: "success",
+							});
+					}
+				} 
+            }
+
         });
     }
     });

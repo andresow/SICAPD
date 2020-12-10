@@ -46,7 +46,8 @@
                                                         <th>ID</th>
                                                         <th>Rubro</th>
                                                         <th>Descripción</th>
-                                                        <th>Tipo</th>
+                                                        <th># de cuentas agregadas</th>
+                                                        <th>Tipo de rubro</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
@@ -54,7 +55,8 @@
                                                         <th>ID</th>
                                                         <th>Rubro</th>
                                                         <th>Descripción</th>
-                                                        <th>Tipo</th>
+                                                        <th># de cuentas agregadas</th>
+                                                        <th>Tipo de rubro</th>
                                                     </tr>
                                                 </tfoot>
                                                 </table>
@@ -67,6 +69,11 @@
                             <div class="card">
                                 <div class="card-header mb-3"><i class="fas fa-table mr-1"></i>Cuentas Contables-Operación-Tipo</div>
                                 <form id="createAccuont" class="col-6">
+                                    <div class="col-12">
+                                        <label style="color: rgb(0, 0, 0);">Buscar Cuenta:
+                                            <button id="searchAccountButton" type="button" onclick="searchAccountsButton()"  class='btn btn-primary btn-sm fa fa-search' title="Buscar Cuenta" data-toggle='modal' data-target='#myModalAccountButton'></button>
+                                        </label>
+                                    </div> 
                                     <div class="form-row col-12">
                                         <div class="col-7 mb-4" >
                                             <label>Cuenta:</label>
@@ -136,6 +143,51 @@
 		</div>	
 	</div>
 </div>
+
+<div class="modal fade bd-example-modal-lg" id="myModalAccountButton" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de cuentas para seleccionar</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+                            <div class="card-header " id="listAccountButton"><i class="fas fa-table mr-1" ></i>Seleccione la cuenta para remplazar</div>
+                                <div class="card-body" >
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered dataTable" id="datatableAccountButton" cellspacing="0" 
+                                            role="grid" aria-describedby="dataTable_accountButton">	
+                                            <thead>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </tfoot>
+                                                <tbody>
+                                                    <h1></h1> 
+                                    
+                                                </tbody>
+
+                                        </table>
+                                    </div>		
+                                </div>
+                        
+                            </div>  
+				    </div>  
+                </div>
+        </div>         
+    </div>  
+</div>
+
 <script>
 
 var dataRow;
@@ -144,7 +196,6 @@ var originID=0;
 var accountRubro=[];
 var indexTable;
 var oTable;
-
 $(document).ready(function() {
 		$('#dataTableAccountingOp').DataTable( {
 			
@@ -161,7 +212,7 @@ $(document).ready(function() {
 
             "columnDefs": [
             {
-                "targets": [ 0 ],
+                "targets": [ 0,4 ],
                 "visible": false
             }
         ],
@@ -188,7 +239,16 @@ $(document).ready(function() {
 
  
 } );
-
+$(document).ready(function() {
+		$('#datatableAccountButton').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
 
 function loadTest() {	
 	$.ajax({
@@ -213,6 +273,7 @@ function loadTest() {
 	});		
 }
 function generateButton(){
+    
 	var nameOrigin = $('input[name=origins]:checked', '#addAccount').val();
 	$("#divCreateAccount").css("display", "none");	
 	$("#generatorAccount").text("GENERAR CUENTA CONTABLE DE "+ nameOrigin)															
@@ -222,10 +283,12 @@ function generateButton(){
 		data: {
 			'nameOrigin': nameOrigin,
 			'nameAC': localStorage.getItem('nameAC'),
-			'idBussines': localStorage.getItem('idBussines')
+			'idBussines': localStorage.getItem('idBussines'),
+
 		},
 		dataType: 'json',
 		success: function (data) {
+            console.log(data)
 
 			var table = $('#dataTableAccountRubro').DataTable(); 
  			var rows = table.rows().remove().draw();
@@ -235,7 +298,9 @@ function generateButton(){
                 data.RUBRO[i].id,
 				data.RUBRO[i].rubro,
 				data.RUBRO[i].description,			
-				"PRESUPUESTO DE "+nameOrigin,			
+				"# cuentas agregadas "+data.TRA[i].total,
+                data.RUBRO[i].typeRubro,
+                			
 				])
 			}
 
@@ -274,22 +339,30 @@ function generateAccount(){
 
 function createAccount(){
 
-    var account = $("#accountSelect option:selected").text();
-	var operationAccount = $("#operationSelect option:selected").val();
-	var document = $("#operationAccountSelect option:selected").val();
+    if(dataRow[4]=='M'){
+        swal("Este rubro es MAYOR", "No se puede añadir cuenta", "error")
 
-    var tableAccountingOp = $('#dataTableAccountingOp').DataTable(); 
-    accountRubro.push({"rubro": dataRow[0],"account": $("#accountSelect option:selected").val(),"document": document,"operationAccount":operationAccount})    
-    console.log(accountRubro)                              
-    tableAccountingOp.row.add( [
-        dataRow[1],
-        account,
-        operationAccount,
-        document,                            
-        "<a data-toggle='tooltip' type='button' id='deleteAccounting'title='Eliminar Cuenta'><button onclick=\'deleteAccounting()\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
-    ])
+    }else{
+        var account = $("#accountSelect option:selected").text();
+        var operationAccount = $("#operationSelect option:selected").val();
+        var document = $("#operationAccountSelect option:selected").val();
+
+        var tableAccountingOp = $('#dataTableAccountingOp').DataTable(); 
+        accountRubro.push({"rubro": dataRow[0],"account": $("#accountSelect option:selected").val(),"document": document,"operationAccount":operationAccount})    
+        console.log(accountRubro)                              
+        tableAccountingOp.row.add( [
+            dataRow[1],
+            account,
+            operationAccount,
+            document,                            
+            "<a data-toggle='tooltip' type='button' id='deleteAccounting'title='Eliminar Cuenta'><button onclick=\'deleteAccounting()\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"
+        ])
+        
+        tableAccountingOp.draw(false);
+
+    }
+
     
-    tableAccountingOp.draw(false);
 }
 
 function sendAccounts(){
@@ -325,6 +398,45 @@ function deleteAccounting(){
 }
 
 
+function searchAccountsButton(){
+
+    var nameOrigin = $('input[name=origins]:checked', '#addAccount').val();
+
+	$.ajax({
+			url: '{% url "getSearchAccountButton"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+                'bussinesId': localStorage.getItem('idBussines'),            
+			    'idAC': localStorage.getItem('idAC')
+
+			},
+			dataType: 'json',
+			success: function (data) {
+                console.log(data)
+
+				var table = $('#datatableAccountButton').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.ACCOUNT.length; i++){
+
+				table.row.add( [
+				data.ACCOUNT[i].code,
+				data.ACCOUNT[i].description,
+				"<a data-toggle='tooltip' title='Seleccionar cuenta'><button id="+JSON.stringify(data.ACCOUNT[i].id)+" onclick=\'selectAccount("+JSON.stringify(data.ACCOUNT[i].id)+','+JSON.stringify(data.ACCOUNT[i].code)+','+JSON.stringify(data.ACCOUNT[i].description)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+				])
+				
+			}
+			table.draw( false );
+
+            $("#listAccountButton").text("Lista de cuentas de "+nameOrigin);
+
+			}
+		});
+}
+
+
+function selectAccount(id){
+    $("#accountSelect").val(id);
+    $('#myModalAccountButton').modal('toggle');
+}
 
 </script>
 

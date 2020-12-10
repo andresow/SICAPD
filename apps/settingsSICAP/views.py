@@ -7,6 +7,8 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.budgets.forms import *
 import simplejson as json
+from django.db.models import Count
+
 
 # Create your views here.
 ######################################## Vistas relacionadas con las configuraciones de periodos contable ################################################
@@ -449,9 +451,14 @@ class DeleteAll(LoginRequiredMixin, View):
             disponibility = Movement.objects.get(id=request.GET.get('disponibility'))            
             return JsonResponse({"RUBRO": list(rubroList)})
         elif option=='14':
-            account = Account.objects.get(id=request.GET.get('id'))
-            account.delete()
-            return JsonResponse({'Eliminado': 'True'})
+            deleteAccount = Account.objects.get(id=request.GET.get('id'))
+            accountExists = valueAccountObligation.objects.filter(accountRubro__account_id=request.GET.get('id')).exists()
+            if accountExists == False:
+                deleteAccount.delete()
+                return JsonResponse({'ELIMINADO': 'TRUE'})
+            else:
+                return JsonResponse({"ELIMINADO": 'FALSE'})
+            
         elif option=='15':
             informBank = InformBank.objects.get(id=request.GET.get('id'))
             informBank.delete()
@@ -504,8 +511,7 @@ class DeleteAll(LoginRequiredMixin, View):
             else:    
                 listObligation = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="OBLIGACION").values('id','date','value','balance','register','observation')
                 return JsonResponse({"OB": list(rubroList),"MV": list(listObligation)})  
-
-            
+        
 
 class GetOperationsContra(LoginRequiredMixin, View):
 
@@ -668,12 +674,20 @@ class GetBudget(LoginRequiredMixin,View):
     redirect_field_name = '/login/'
 
     def  get(self, request, *args, **kwargs):
+        print('función para contar las cuentas agregadas a el rubro')
 
         nameOrigin = request.GET.get('nameOrigin')
         accountPeriod = AccountPeriod.objects.get(name=request.GET.get('nameAC')[:-1])
         origin = Origin.objects.get(nameOrigin=nameOrigin, accountPeriod=accountPeriod.id)
         rubro = Rubro.objects.filter(origin_id=origin.id, bussines_id=request.GET.get('idBussines')).values('id','rubro','rubroFather','typeRubro','description','dateCreation','initialBudget','realBudget','budgetEject').order_by('rubro')
-        return JsonResponse({"ID":origin.id ,"RUBRO": list(rubro)})
+        listRubroAccount = []
+        for x in range(0,len(list(rubro))):
+
+            totalAccounts = AccountTypeRubro.objects.filter(rubro_id=(list(rubro)[x]['id'])).count()
+           
+            listRubroAccount.append({"id":list(rubro)[x]['id'], "total":totalAccounts})
+          
+        return JsonResponse({"ID":origin.id ,"RUBRO": list(rubro), "TRA": list(listRubroAccount)})
 
 class CreateAccountRubro(LoginRequiredMixin,View):
 
@@ -705,7 +719,7 @@ class GetAccountsByRubro(LoginRequiredMixin,View):
 
     def get(self, request, *args, **kwargs):
 
-        accountsByRubro = AccountTypeRubro.objects.filter(rubro_id=request.GET.get('rubro')).values('rubro__id','account__code','account__description','typeAccount','document','account_id','id')        
+        accountsByRubro = AccountTypeRubro.objects.filter(rubro_id=request.GET.get('rubro')).values('id','rubro__id','account__code','account__description','typeAccount','document','account_id','id')        
         print(accountsByRubro)
         return JsonResponse({"AC":list(accountsByRubro)})
 
@@ -881,3 +895,31 @@ def searchImport(request, account,accountPeriod,discount):
     else:
         request.session['numAC'] = discount
         return discount
+
+class SearchAccountButton(LoginRequiredMixin, View):
+    print('hola soy')
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+    def get(self, request, *args, **kwargs):
+
+        accountSearch = request.GET.get('account') #esta linea es para un diccionario
+        accounts = Account.objects.filter(account__startswith=accountSearch,accountPeriod_id=accountPeriod) #lista de objectos medicamentos
+        accounts = [ account_serializer(account) for account in accounts ] # lista de diccionario
+        print(accounts)
+        return HttpResponse(json.dumps(accounts), content_type='application/json')
+
+    def account_serializer(account):
+        return {'id': account.id, 'code': account.code, 'description': account.description}
+
+class GetSearchAccountButton(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+        print('hola función obtener cuenta')
+        print(request.GET.get('idAC'))
+        accounts = Account.objects.filter(accountPeriod_id=request.GET.get('idAC')).values('id','code', 'description')
+        return JsonResponse({"ACCOUNT": list(accounts)})   
+

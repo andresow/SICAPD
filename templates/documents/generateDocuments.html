@@ -69,7 +69,7 @@
 										<th>Rubro</th>
 										<th>Descripción</th>
 										<th>Disponibilidad</th>
-										<th>Valor Registro</th>
+										<th>Valor actual por ejecutar</th>
 										<th>Saldo</th>
 										<th>Acciones</th>
 									</tr>
@@ -80,7 +80,7 @@
 										<th>Rubro</th>
 										<th>Descripción</th>
 										<th>Disponibilidad</th>
-										<th>Valor Registro</th>
+										<th>Valor actual por ejecutar</th>
 										<th>Saldo</th>
 										<th>Acciones</th>
 									</tr>
@@ -334,9 +334,9 @@
 										<tr>
 											<th>Rubro</th>	
 											<th>Inputación</th>
-											<th>Valor Registro</th>
+											<th>Valor registro</th>
 											<th>Valor Obligación</th>
-											<th>Saldo Registro</th>
+											<th>Saldo</th>
 											<th>Acciones</th>
 										</tr>
 									</thead>
@@ -346,7 +346,7 @@
 											<th>Inputación</th>
 											<th>Valor Registro</th>
 											<th>Valor Obligación</th>
-											<th>Saldo Registro</th>
+											<th>Saldo</th>
 											<th>Acciones</th>
 										</tr>
 									</tfoot>
@@ -585,13 +585,12 @@
 
 							</div>
 							<div class="form-row col-12 mb-2">
-						
-								<div class="col-4" >
-									<h6  id="totalBalanceDetall" for="totalBalanceDetall">SALDO: 0</h6>														
-								</div>
 								<div class="col-8" >
-									<h6  id="totalDisponibilityDetall" for="totalDisponibilityDetall" align="center">DISPONIBILIDAD: 0</h6>
-								</div>
+									<h6  id="totalDisponibilityDetail" for="totalDisponibilityDetail" align="center">DISPONIBILIDAD: 0</h6>
+								</div>				
+								<div class="col-4" >
+									<h6  id="totalBalanceDetail" for="totalBalanceDetail">SALDO: 0</h6>														
+								</div>	
 							</div>		
 							</div>
 						</div>
@@ -841,8 +840,8 @@
 										<tr>
 											<th>Rubro</th>	
 											<th>Descripción</th>
-											<th>Disponibilidad</th>
 											<th>Presupuesto disponible</th>
+											<th>Disponibilidad</th>		
 											<th>Saldo</th>
 											<th>Acciones</th>
 										</tr>
@@ -851,8 +850,8 @@
 										<tr>
 											<th>Rubro</th>	
 											<th>Descripción</th>
-											<th>Disponibilidad</th>
 											<th>Presupuesto disponible</th>
+											<th>Disponibilidad</th>		
 											<th>Saldo</th>
 											<th>Acciones</th>
 
@@ -867,13 +866,12 @@
 
 							</div>
 							<div class="form-row col-12 mb-2">
-						
-								<div class="col-4" >
-									<h6  id="totalBalanceRID" for="totalBalanceRID">SALDO: 0</h6>														
-								</div>
 								<div class="col-8" >
 									<h6  id="totalDisponibilityRID" for="totalDisponibilityRID" align="center">DISPONIBILIDAD: 0</h6>
-								</div>
+								</div>					
+								<div class="col-4" >
+									<h6  id="totalBalanceRID" for="totalBalanceRID">SALDO: 0</h6>														
+								</div>	
 							</div>		
 							</div>
 						</div>
@@ -1017,8 +1015,8 @@
 										<tr>
 											<th>Rubro</th>	
 											<th>Descripción</th>
-											<th>Valor Disponibilidad</th>
 											<th>Valor Registro</th>
+											<th>Valor Obligación</th>
 											<th>Saldo</th>
 										</tr>
 									</thead>
@@ -1026,8 +1024,8 @@
 										<tr>
 											<th>Rubro</th>	
 											<th>Descripción</th>
-											<th>Valor Disponibilidad</th>
 											<th>Valor Registro</th>
+											<th>Valor Obligación</th>
 											<th>Saldo</th>
 										</tr>
 									</tfoot>
@@ -1073,8 +1071,8 @@
 										<tr>
 											<th>Rubro</th>	
 											<th>Descripción</th>
-											<th>Valor Disponibilidad</th>
 											<th>Valor Registro</th>
+											<th>Valor Obligación</th>
 											<th>Saldo</th>
 											<th>Acciones</th>
 										</tr>
@@ -1083,8 +1081,8 @@
 										<tr>
 											<th>Rubro</th>	
 											<th>Descripción</th>
-											<th>Valor Disponibilidad</th>
 											<th>Valor Registro</th>
+											<th>Valor Obligación</th>
 											<th>Saldo</th>
 											<th>Acciones</th>
 
@@ -1100,7 +1098,7 @@
 							</div>
 							<div class="form-row col-12 mb-2">
 								<div class="col-8" >
-									<h6  id="totalObligation" for="totalObligation" align="center">OBLIGACIÓN: 0</h6>
+									<h6  id="totalObligationImp" for="totalObligationImp" align="center">OBLIGACIÓN: 0</h6>
 								</div>
 								<div class="col-4" >
 									<h6  id="totalBalanceObligation" for="totalBalanceObligation">SALDO: 0</h6>														
@@ -1112,6 +1110,49 @@
                 </div>
             </div>         
         </div>  
+</div>
+<div class="modal fade bd-example-modal-lg" id="myModalAccountButton" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de cuentas para seleccionar</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+                            <div class="card-header " id="listAccountButton"><i class="fas fa-table mr-1" ></i>Seleccione la cuenta para remplazar</div>
+                                <div class="card-body" >
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered dataTable" id="datatableAccountButton" cellspacing="0" 
+                                            role="grid" aria-describedby="dataTable_accountButton">	
+                                            <thead>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </tfoot>
+                                                <tbody>
+                                                    <h1></h1> 
+                                    
+                                                </tbody>
+
+                                        </table>
+                                    </div>		
+                                </div>
+                        
+                            </div>  
+				    </div>  
+                </div>
+        </div>         
+    </div>  
 </div>
 
 <script>
@@ -1134,6 +1175,7 @@ var totalOperateObligation=0;
 var totalOperateArrayObligation=[];
 var disponibilitySec;
 var registerSec;
+var registerSecDispo;
 var accountsWithValues =[] 
 var arrayIdAccount=[]
 var dateValidation;
@@ -1666,6 +1708,7 @@ $("form#createDisponibility").submit(function(e) {
 function generateDisponibilty(){
 	var nameVoucher = $('input[name=typeComprobante]:checked', '#addVoucher').val();
 	var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
+	
 	if(nameVoucher=="DISPONIBILIDAD"){
 		$("#divCreate").css("display", "block");
 		$("#divRegister").css("display", "none");
@@ -1891,8 +1934,8 @@ function getDetall(id){
 			}
 			table.draw( false );
 
-			$("#totalDisponibilityDetall").text("SALDO: "+ totalDetall);	
-			$("#totalBalanceDetall").text("DISPONIBILIDAD: "+ totalDetallDisponibility);
+			$("#totalBalanceDetail").text("SALDO: "+ totalDetall);	
+			$("#totalDisponibilityDetail").text("DISPONIBILIDAD: "+ totalDetallDisponibility);
 
 		}
 	});
@@ -1931,7 +1974,7 @@ function deleteDisponibility(id, numero){
 						data.MV[i].date,
 						"<a data-toggle='tooltip' title='Ver detalles de disponibilidad'><button onclick='getDetall("+data.MV[i].id+")' data-toggle='modal' data-target='#myModalDetall' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
 						"<a data-toggle='tooltip'  id='deleteDisponibility' title='Eliminar disponibilidad'><button onclick=\'deleteDisponibility("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar disponibilidad'><button onclick=\'getRubroImplicadoDisp("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+")\' data-toggle='modal' data-target='#myModalRubroImplicado' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+						"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar disponibilidad'><button onclick=\'getRubroImplicadoDisp("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+','+JSON.stringify(data.MV[i].rubroID)+','+JSON.stringify(data.MV[i].budgetEject)+")\' data-toggle='modal' data-target='#myModalRubroImplicado' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
 						])
 					}
 					table.draw( false );
@@ -1944,47 +1987,8 @@ function deleteDisponibility(id, numero){
 	}
 	});
 }
-function getRubroImplicadoDisp(id){
 
-	var totalDetall=0;
-	var totalDetallDisponibility=0;
-	$.ajax({
-			url: '{% url "getRubroImpDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
-			data: {
-				'disponibility':id,
-			},
-			
-			dataType: 'json',
-			
-			success: function (data) {
-				console.log(data)
-
-				var table = $('#datatableRubroImplicadoDisponibility').DataTable(); 
- 				var rows = table.rows().remove().draw();
-				for (var i=0; i<data.RUBRO.length; i++){
-
-				table.row.add( [
-				data.RUBRO[i].rubro,
-				data.RUBRO[i].description,
-				"<input type='text'     size='10' value="+data.RUBRO[i].value+"  id=valueDataUpdateID"+data.RUBRO[i].id+" class='form-control'>",
-				data.RUBRO[i].budgetEject,
-				data.RUBRO[i].balance,
-
-				"<a data-toggle='tooltip'  id='deleteRID' title='Eliminar rubro implicado en disponibilidad'><button onclick=\'deleteRID("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].dispoID)+','+JSON.stringify(id)+','+JSON.stringify(data.RUBRO[i].budgetEject)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-				"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar rubro implicado en disponibilidad'><button onclick=\'updateRID("+JSON.stringify(data.RUBRO[i].dispoID)+','+id+','+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-				])
-				totalDetall = totalDetall + data.RUBRO[i].balance;
-				totalDetallDisponibility = totalDetallDisponibility + data.RUBRO[i].value;				
-			}
-			table.draw( false );
-
-			$("#totalDisponibilityRID").text("SALDO: "+ totalDetall);	
-			$("#totalBalanceRID").text("DISPONIBILIDAD: "+ totalDetallDisponibility);
-
-		}
-	});
-}
-function deleteRID(id, rubro,dispoID,disponibility,budgetEject){
+function deleteRID(id,rubro,dispoID,disponibility,budgetEject){
 	var totalDetall=0;
 	var totalDetallDisponibility=0;
 	swal({
@@ -2023,7 +2027,7 @@ function deleteRID(id, rubro,dispoID,disponibility,budgetEject){
 							data.MV[i].date,
 							"<a data-toggle='tooltip' title='Ver detalles de disponibilidad'><button onclick='getDetall("+data.MV[i].id+")' data-toggle='modal' data-target='#myModalDetall' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
 							"<a data-toggle='tooltip'  id='deleteDisponibility' title='Eliminar disponibilidad'><button onclick=\'deleteDisponibility("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-							"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar disponibilidad'><button onclick=\'getRubroImplicadoDisp("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+")\' data-toggle='modal' data-target='#myModalRubroImplicado' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+							"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar disponibilidad'><button onclick=\'getRubroImplicadoDisp("+JSON.stringify(data.MV[i].id)+','+JSON.stringify(data.MV[i].disponibility)+','+JSON.stringify(data.MV[i].rubroID)+','+JSON.stringify(data.MV[i].budgetEject)+")\' data-toggle='modal' data-target='#myModalRubroImplicado' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
 							])
 						}
 						table.draw( false );
@@ -2043,15 +2047,15 @@ function deleteRID(id, rubro,dispoID,disponibility,budgetEject){
 					data.RUBRO[i].balance,
 
 					"<a data-toggle='tooltip'  id='deleteRID' title='Eliminar rubro implicado en disponibilidad'><button onclick=\'deleteRID("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].dispoID)+','+JSON.stringify(id)+','+JSON.stringify(data.RUBRO[i].budgetEject)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar rubro implicado en disponibilidad'><button onclick=\'updateRID("+JSON.stringify(data.RUBRO[i].dispoID)+','+id+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].newValueOperated)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+					"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar rubro implicado en disponibilidad'><button onclick=\'updateRID("+JSON.stringify(data.RUBRO[i].dispoID)+','+id+','+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].budgetEject)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
 					])
 					totalDetall = totalDetall + data.RUBRO[i].balance;
 					totalDetallDisponibility = totalDetallDisponibility + data.RUBRO[i].value;				
 				}
 				table.draw( false );
-
-				$("#totalDisponibilityRID").text("SALDO: "+ totalDetall);	
-				$("#totalBalanceRID").text("DISPONIBILIDAD: "+ totalDetallDisponibility);
+				
+				$("#totalBalanceRID").text("SALDO: "+ totalDetall);	
+				$("#totalDisponibilityRID").text("DISPONIBILIDAD: "+ totalDetallDisponibility);
 				swal("El rubro implicado en disponibilidad número " + rubro + "  se ha eliminado con éxito."," ","success");
 				}			
 			}
@@ -2060,96 +2064,80 @@ function deleteRID(id, rubro,dispoID,disponibility,budgetEject){
 	});
 }
 
-
-function updateRID(id,disponibility,rubroID,oldValue){
+function getRubroImplicadoDisp(id,disponibility){
 
 	var totalDetall=0;
 	var totalDetallDisponibility=0;
-	var oldValue;
-	var valueDataUpdateID =  "#valueDataUpdateID"+rubroID; //ESTE ES EL VALOR nuevo
-	var newValue =  parseInt($(valueDataUpdateID).val());
-	var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
-	console.log(id)
-	console.log(disponibility)
-	console.log(oldValue)
-	console.log(rubroID)
-	console.log(valueDataUpdateID)
-	console.log(newValue)
-
-	if(oldValue > newValue){
-
-		var newValueOperated = parseInt(oldValue) - parseInt(newValue);
-		console.log(newValueOperated)
-		$.ajax({
-			url: '{% url "updateRID"  0 %}'.replace('0', localStorage.getItem('userID')),
+	$.ajax({
+			url: '{% url "getRubroImpDisponibility"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
-				'id':id,
+				'disponibility':id,
 				'origin':  originID,
-				'disponibility': disponibility,
-				'rubroID': rubroID,
-				'newValueOperated': newValueOperated,
-				'oldValue': oldValue,
-				'newValue': newValue,
 			},
 			
 			dataType: 'json',
 			
 			success: function (data) {
 				console.log(data)
-				if(data.CREATE == "TRUE"){
 
-					var table = $('#datatableRubroImplicadoDisponibility').DataTable(); 
-					var rows = table.rows().remove().draw();
-					for (var i=0; i<data.RUBRO.length; i++){
+				var table = $('#datatableRubroImplicadoDisponibility').DataTable(); 
+				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
 
-					table.row.add( [
-					data.RUBRO[i].rubro,
-					data.RUBRO[i].description,
-					"<input type='text'  onkeypress='return validaNumericos(event)'/  size='10' value="+data.RUBRO[i].value+"  id=valueDataUpdateID"+data.RUBRO[i].id+" class='form-control'>",
-					data.RUBRO[i].budgetEject,
-					data.RUBRO[i].balance,
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].description,
+				data.RUBRO[i].budgetEject,
+				"<input type='text'     size='10' value="+data.RUBRO[i].value+"  id=valueDataUpdateID"+data.RUBRO[i].id+" class='form-control'>",
+				data.RUBRO[i].balance,
 
-					"<a data-toggle='tooltip'  id='deleteRID' title='Eliminar rubro implicado en disponibilidad'><button onclick=\'deleteRID("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].dispoID)+','+JSON.stringify(id)+','+JSON.stringify(data.RUBRO[i].budgetEject)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar rubro implicado en disponibilidad'><button onclick=\'updateRID("+JSON.stringify(data.RUBRO[i].dispoID)+','+id+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-					])
-					totalDetall = totalDetall + data.RUBRO[i].balance;
-					totalDetallDisponibility = totalDetallDisponibility + data.RUBRO[i].value;				
-					}
-					table.draw( false );
+				"<a data-toggle='tooltip'  id='deleteRID' title='Eliminar rubro implicado en disponibilidad'><button onclick=\'deleteRID("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].dispoID)+','+JSON.stringify(id)+','+JSON.stringify(data.RUBRO[i].budgetEject)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+				"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar rubro implicado en disponibilidad'><button onclick=\'updateRID("+JSON.stringify(data.RUBRO[i].dispoID)+','+id+','+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].budgetEject)+','+disponibility+','+JSON.stringify(data.RUBRO[i].balance)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+				])
+				totalDetall = totalDetall + data.RUBRO[i].balance;
+				totalDetallDisponibility = totalDetallDisponibility + data.RUBRO[i].value;				
+			}
+			table.draw( false );
 
-					$("#totalDisponibilityRID").text("SALDO: "+ totalDetall);	
-					$("#totalBalanceRID").text("DISPONIBILIDAD: "+ totalDetallDisponibility);    
+			$("#totalBalanceRID").text("SALDO: "+ totalDetall);	
+			$("#totalDisponibilityRID").text("DISPONIBILIDAD: "+ totalDetallDisponibility);
 
-					swal("Actualización exitosa!", "Continua con tu proceso!", "success");
+		}
+	});
+}
 
-					$("#textTable").text("Lista de rubros por presupuesto de "+nameOrigin);
-					$("#divTabDispoText").text("Lista de movimientos Disponibilidad del presupuesto de "+nameOrigin);
-					var tableListMovementDispo = $('#dataTableDispo').DataTable(); 
-					var rows = tableListMovementDispo.rows().remove().draw();
-					for (var i=0; i<data.TMVD.length; i++){
+function updateRID(id,disponibility,rubroID,oldValue,budgetEject,numberDisponibility,balance){
 
-						tableListMovementDispo.row.add( [
-						data.TMVD[i].disponibility,
-						data.TMVD[i].observation,
-						data.TMVD[i].value,
-						data.TMVD[i].balance,
-						data.TMVD[i].date,
-						"<a data-toggle='tooltip' title='Ver detalles de disponibilidad'><button onclick='getDetall("+data.TMVD[i].id+")' data-toggle='modal' data-target='#myModalDetall' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
-						"<a data-toggle='tooltip'  id='deleteDisponibility' title='Eliminar disponibilidad'><button onclick=\'deleteDisponibility("+JSON.stringify(data.TMVD[i].id)+','+JSON.stringify(data.TMVD[i].disponibility)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateDisponibility' title='Actualizar disponibilidad'><button onclick=\'getRubroImplicadoDisp("+JSON.stringify(data.TMVD[i].id)+','+JSON.stringify(data.TMVD[i].disponibility)+")\' data-toggle='modal' data-target='#myModalRubroImplicado' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-				
-						])
-					}
-					tableListMovementDispo.draw( false );
-					
-				}else{
-				
-				} 	
+	var totalDetall=0;
+	var totalDetallDisponibility=0;
+	var newValue =  parseInt($("#valueDataUpdateID"+rubroID).val()); //ESTE ES EL VALOR nuevo
+
+	if(newValue<budgetEject){
+		var newBalance = parseInt(budgetEject)-newValue;
+
+		$.ajax({
+			url: '{% url "updateRID"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'id':id,
+				'disponibility':disponibility,
+				'sendValue':newValue,
+				'oldValue' : oldValue,
+				'rubro':rubroID,
+				'budgetEject':budgetEject,
+				'newBalance':newBalance,
+				'balance':balance
+			},			
+			dataType: 'json',				
+			success: function (data) {			
+				getRubroImplicadoDisp(disponibility,numberDisponibility);
+				generateDisponibilty();
 			}
 		});
-	}else if(newValue <= 0){
-		swal("El valor "+ parseInt(newValue)+" es mayor al valor del presupuesto actual "+ parseInt(newValue), " No se puede realizar la disponibilidad", "error");
-	}
+
+	}else{
+		swal("El valor de "+ newValue+" no puede ser mayor al valor por ejecutar del rubro ( "+ budgetEject+")", " Por favor verifique su operación", "error");
+	}	
+	
 }
 
 function getFinishProcessUpdateRID(){
@@ -2318,8 +2306,10 @@ function deleteRegister(id, numero){
 	});
 }
 function getRubroImplicadoRD(id,register){
+
 	var totalDetailReg=0;
 	var totalDetailRegister=0;
+
 	$.ajax({
 			url: '{% url "getRubroImpDetailRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
@@ -2336,13 +2326,13 @@ function getRubroImplicadoRD(id,register){
 
 				table.row.add( [
 				data.DRG[i].rubro,
-				data.DRG[i].description,
-				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' value="+data.DRG[i].value+"  id=valueDataUpdateDR"+data.DRG[i].id+" class='form-control'>",
-				data.DRG[i].budgetEject,
-				data.DRG[i].balance,
+				data.DRG[i].description, 
+				"<label type='number' id=valueDisponibilityUpdateDR"+data.DRG[i].id+">"+ JSON.stringify(data.DRG[i].value)+"</label>",
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' value="+data.DRG[i].budgetEject+"  id=valueRegisterUpdateDR"+data.DRG[i].id+" class='form-control'>",
+				"<label type='number' id=valueBalanceUpdateDR"+data.DRG[i].id+">"+ JSON.stringify(data.DRG[i].balance)+"</label>",
 
 				"<a data-toggle='tooltip'  id='deleteDetailRegister' title='Eliminar rubro implicado en registro'><button onclick=\'deleteDR("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].rubro)+','+register+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-				"<a data-toggle='tooltip'  id='updateDatailRegister' title='Actualizar rubro implicado en registro'><button onclick=\'updateDetailRegister("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].id)+','+JSON.stringify(data.DRG[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+				"<a data-toggle='tooltip'  id='updateDatailRegister' title='Actualizar rubro implicado en registro'><button onclick=\'updateDetailRegister("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].id)+','+JSON.stringify(data.DRG[i].value)+','+JSON.stringify(data.DRG[i].budgetEject)+','+register+','+JSON.stringify(data.DRG[i].balance)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
 				])
 				totalDetailReg = totalDetailReg + data.DRG[i].balance;
 				totalDetailRegister = totalDetailRegister + data.DRG[i].value;				
@@ -2355,6 +2345,7 @@ function getRubroImplicadoRD(id,register){
 		}
 	});
 }
+
 function deleteDR(id,registerID,rubro,register){
 	var totalDetailReg=0;
 	var totalDetailRegister=0;
@@ -2412,8 +2403,8 @@ function deleteDR(id,registerID,rubro,register){
 					data.DRG[i].budgetEject,
 					data.DRG[i].balance,
 
-					"<a data-toggle='tooltip'  id='deleteDetailRegister' title='Eliminar rubro implicado en registro'><button onclick=\'deleteDR("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].rubro)+','+register+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					"<a data-toggle='tooltip'  id='updateDatailRegister' title='Actualizar rubro implicado en registro'><button onclick=\'updateDetailRegister("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].id)+','+JSON.stringify(data.DRG[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+					"<a data-toggle='tooltip'  id='deleteDetailRegister' title='Eliminar rubro implicado en registro'><button onclick=\'deleteDR("+JSON.stringify(data.DRG[i].registerID)+','+register+','+JSON.stringify(data.DRG[i].rubro)+','+register+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+					"<a data-toggle='tooltip'  id='updateDatailRegister' title='Actualizar rubro implicado en registro'><button onclick=\'updateDetailRegister("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].id)+','+JSON.stringify(data.DRG[i].value)+','+JSON.stringify(data.DRG[i].budgetEject)+','+register+','+JSON.stringify(data.DRG[i].balance)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
 					])
 					totalDetailReg = totalDetailReg + data.DRG[i].balance;
 					totalDetailRegister = totalDetailRegister + data.DRG[i].value;				
@@ -2431,169 +2422,41 @@ function deleteDR(id,registerID,rubro,register){
 	});
 }
 
-function updateDetailRegister(id,register,rubroID,oldValue){
+function updateDetailRegister(id,register,rubroID,disponibility,oldValue,numberRegister,balance){
 
 	var totalDetailReg=0;
 	var totalDetailRegister=0;
 	var oldValue;
-	var valueDataUpdateDR =  "#valueDataUpdateDR"+rubroID; //ESTE ES EL VALOR nuevo
-	var newValue =  parseInt($(valueDataUpdateDR).val());
-	var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
-
-	console.log(id)
-	console.log(register)
-	console.log(oldValue)
-	console.log(rubroID)
-	console.log(valueDataUpdateDR)
-	console.log(newValue)
-
-	alert("por favor funciona jajajajajajaj")
-	if(oldValue<newValue){
-
-		var newValueOperated = parseInt(oldValue) - parseInt(newValue) * -1;
-		console.log(newValueOperated)
+	var disponibilityChange =   parseInt($("#valueDisponibilityUpdateDR"+rubroID).text()); 
+	var registerChange =   parseInt($("#valueRegisterUpdateDR"+rubroID).val()); //ESTE ES EL VALOR nuevo
+	var balanceChange =  disponibilityChange-registerChange; 
+	
+	if(registerChange<disponibility){
+		
 		$.ajax({
-			url: '{% url "updateDetailRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
-			data: {
-				'id':id,
-				'origin':  originID,
-				'register': register,
-				'rubroID': rubroID,
-				'newValueOperated': newValueOperated,
-				'oldValue': oldValue,
-				'newValue': newValue,
-			},
-			
-			dataType: 'json',
-			
-			success: function (data) {
-				console.log(data)
-				if(data.CREATE == "TRUE"){
+				url: '{% url "updateDetailRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
+				data: {
+					'id':id,
+					'register':register,
+					'sendValue':registerChange,
+					'balanceChange': balanceChange,
+					'oldValue': oldValue,
+					'balance':balance
 
-					var table = $('#datatableRubroImplicadoRegister').DataTable(); 
-					var rows = table.rows().remove().draw();
-					for (var i=0; i<data.DRG.length; i++){
-
-					table.row.add( [
-					data.DRG[i].rubro,
-					data.DRG[i].description,
-					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' value="+data.DRG[i].value+"  id=valueDataUpdateDR"+data.DRG[i].id+" class='form-control'>",
-					data.DRG[i].budgetEject,
-					data.DRG[i].balance,
-
-					"<a data-toggle='tooltip'  id='deleteDetailRegister' title='Eliminar rubro implicado en registro'><button onclick=\'deleteDR("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].rubro)+','+register+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					"<a data-toggle='tooltip'  id='updateDatailRegister' title='Actualizar rubro implicado en registro'><button onclick=\'updateDetailRegister("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].id)+','+JSON.stringify(data.DRG[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-					])
-					totalDetailReg = totalDetailReg + data.DRG[i].balance;
-					totalDetailRegister = totalDetailRegister + data.DRG[i].value;				
-					}
-					table.draw( false );
-
-					$("#totalBalanceDR").text("SALDO: "+ totalDetailReg);	
-					$("#totalRegisterDR").text("REGISTRO: "+ totalDetailRegister);   
-
-					swal("Actualización exitosa!", "Continua con tu proceso!", "success");
-					
-					$("#textTableRubrosRegister").text("Rubros de registro de "+nameOrigin);
-					$("#divTabRegisterText").text("Lista de registros realizados del presupuesto de "+nameOrigin);
-					var tableListMovementRegister = $('#dataTableGetRegisters').DataTable(); 
-					var rows = tableListMovementRegister.rows().remove().draw();
-					for (var i=0; i<data.TMVRG.length; i++){
-
-						tableListMovementRegister.row.add( [
-						data.TMVRG[i].register,
-						data.TMVRG[i].observation,
-						data.TMVRG[i].value,
-						data.TMVRG[i].balance,
-						data.TMVRG[i].date,
-						"<a data-toggle='tooltip' title='Ver detalles de registro'><button onclick='getDetailRegister("+data.TMVRG[i].id+")' data-toggle='modal' data-target='#myModalDetailRegister' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
-						"<a data-toggle='tooltip'  type='button'  title='Eliminar registro'><button onclick=\'deleteRegister("+JSON.stringify(data.TMVRG[i].id)+','+JSON.stringify(data.TMVRG[i].register)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateRegistro' title='Actualizar registro'><button onclick=\'getRubroImplicadoRD("+JSON.stringify(data.TMVRG[i].id)+','+JSON.stringify(data.TMVRG[i].register)+")\' data-toggle='modal' data-target='#myModalRubroImplicadoRegister' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+				},
 				
-						])
-					}
-					tableListMovementRegister.draw( false );
-					
-				}else{
-					swal("No se puede actualizar el rubro implicado en registro", "Ya que el valor dígitado es mayor al del saldo", "error");
-					
-				} 	
-			}
+				dataType: 'json',
+				
+				success: function (data) {
 
+					getRubroImplicadoRD(register,numberRegister);
+					generateDisponibilty();
+				}
 		});
+
 	}else{
-		var newValueOperated = parseInt(oldValue) - parseInt(newValue);
-		console.log(newValueOperated)                                                                                     
-		$.ajax({
-			url: '{% url "updateDetailRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
-			data: {
-				'id':id,
-				'origin':  originID,
-				'register': register,
-				'rubroID': rubroID,
-				'newValueOperated': newValueOperated,
-				'oldValue': oldValue,
-				'newValue': newValue,
-			},
-			
-			dataType: 'json',
-			
-			success: function (data) {
-				console.log(data)
-
-				if(data.CREATE == "TRUE"){
-
-					var table = $('#datatableRubroImplicadoRegister').DataTable(); 
-					var rows = table.rows().remove().draw();
-					for (var i=0; i<data.DRG.length; i++){
-
-					table.row.add( [
-					data.DRG[i].rubro,
-					data.DRG[i].description,
-					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' value="+data.DRG[i].value+"  id=valueDataUpdateDR"+data.DRG[i].id+" class='form-control'>",
-					data.DRG[i].budgetEject,
-					data.DRG[i].balance,
-					
-					"<a data-toggle='tooltip'  id='deleteDetailRegister' title='Eliminar rubro implicado en registro'><button onclick=\'deleteDR("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].rubro)+','+register+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					"<a data-toggle='tooltip'  id='updateDatailRegister' title='Actualizar rubro implicado en registro'><button onclick=\'updateDetailRegister("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].id)+','+JSON.stringify(data.DRG[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-					])
-					totalDetailReg = totalDetailReg + data.DRG[i].balance;
-					totalDetailRegister = totalDetailRegister + data.DRG[i].value;				
-					}
-					table.draw( false );
-
-					$("#totalBalanceDR").text("SALDO: "+ totalDetailReg);	
-					$("#totalRegisterDR").text("REGISTRO: "+ totalDetailRegister);    
-
-					swal("Actualización exitosa!", "Continua con tu proceso!", "success");
-
-					$("#textTableRubrosRegister").text("Rubros de registro de "+nameOrigin);
-					$("#divTabRegisterText").text("Lista de registros realizados del presupuesto de "+nameOrigin); 
-					var tableListMovementRegister = $('#dataTableGetRegisters').DataTable(); 
-					var rows = tableListMovementRegister.rows().remove().draw();
-					for (var i=0; i<data.TMVRG.length; i++){
-
-						tableListMovementRegister.row.add( [
-						data.TMVRG[i].register,
-						data.TMVRG[i].observation,
-						data.TMVRG[i].value,
-						data.TMVRG[i].balance,
-						data.TMVRG[i].date,
-						"<a data-toggle='tooltip' title='Ver detalles de registro'><button onclick='getDetailRegister("+data.TMVRG[i].id+")' data-toggle='modal' data-target='#myModalDetailRegister' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
-						"<a data-toggle='tooltip'  type='button'  title='Eliminar registro'><button onclick=\'deleteRegister("+JSON.stringify(data.TMVRG[i].id)+','+JSON.stringify(data.TMVRG[i].register)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateRegistro' title='Actualizar registro'><button onclick=\'getRubroImplicadoRD("+JSON.stringify(data.TMVRG[i].id)+','+JSON.stringify(data.TMVRG[i].register)+")\' data-toggle='modal' data-target='#myModalRubroImplicadoRegister' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-				
-						])
-					}
-					tableListMovementRegister.draw( false );
-					
-				}else{
-					swal("No se puede actualizar el rubro implicado en registro", "Ya que el valor dígitado es mayor al del saldo", "error");
-					
-				} 
-		}
-	});
-	}
+		swal("El valor de registro "+ registerChange+" no puede ser mayor al valor de la disponibilidad "+ disponibilityChange, " Por favor verifique su operación", "error");
+	}	
 }
 //-----------parte de obligación-----------
 function getDataToObligation(){
@@ -2746,6 +2609,46 @@ function deleteObligation(id, numero){
 	});
 }
 
+function getRubroImplicadoObligation(id,obligation){
+	var totalDetailOblig=0;
+	var totalDetailObligation=0;
+	$.ajax({
+			url: '{% url "getRubroImpDetailObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'obligation':id,
+			},
+			
+			dataType: 'json',
+			
+			success: function (data) {
+				console.log(data)
+
+				var table = $('#datatableRubroImplicadoObligation').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.OB.length; i++){
+
+				table.row.add( [
+				data.OB[i].rubro,
+				data.OB[i].description,			
+				"<label type='number' id=valueDisponibilityUpdateDOblig"+data.OB[i].id+">"+ JSON.stringify(data.OB[i].value)+"</label>",
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' value="+data.OB[i].budgetEject+"  id=valueRegisterUpdateDOblig"+data.OB[i].id+" class='form-control'>",
+				"<label type='number' id=valueBalanceUpdateDOblig"+data.OB[i].id+">"+ JSON.stringify(data.OB[i].balance)+"</label>",
+
+				"<a data-toggle='tooltip'  id='deleteDetailObligation' title='Eliminar rubro implicado en obligación'><button onclick=\'DeleteRIDO("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].rubro)+','+obligation+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
+				"<a data-toggle='tooltip'  id='updateDatailObligation' title='Actualizar rubro implicado en obligación'><button onclick=\'updateDetailObligation("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].id)+','+JSON.stringify(data.OB[i].value)+','+JSON.stringify(data.OB[i].budgetEject)+','+obligation+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+				])
+				totalDetailOblig = totalDetailOblig + data.OB[i].balance;
+				totalDetailObligation = totalDetailObligation + data.OB[i].value;
+							
+			}
+			table.draw( false );
+
+			$("#totalBalanceObligation").text("SALDO: "+ totalDetailOblig);	
+			$("#totalObligationImp").text("OBLIGACIÓN: "+ totalDetailObligation);
+
+		}
+	});
+} 
 function DeleteRIDO(id,obligationID,rubro,obligation){
 	var totalDetailOblig=0;
 	var totalDetailObligation=0;
@@ -2791,7 +2694,7 @@ function DeleteRIDO(id,obligationID,rubro,obligation){
 						])
 					}
 					table.draw( false );
-					swal("El rubro implicado en la obligacion número " + register + " y su obligacion se ha eliminado con éxito."," Continua con tu proceso ","success");
+					swal("El rubro implicado en la obligación número " + register + " y su obligacion se ha eliminado con éxito."," Continua con tu proceso ","success");
 
 	
 				}else{
@@ -2808,7 +2711,7 @@ function DeleteRIDO(id,obligationID,rubro,obligation){
 						data.OB[i].balance,
 
 						"<a data-toggle='tooltip'  id='deleteDetailObligation' title='Eliminar rubro implicado en obligación'><button onclick=\'DeleteRIDO("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].rubro)+','+obligation+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateDatailObligation' title='Actualizar rubro implicado en obligación'><button onclick=\'updateDetailObligation("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].id)+','+JSON.stringify(data.OB[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
+						"<a data-toggle='tooltip'  id='updateDatailObligation' title='Actualizar rubro implicado en obligación'><button onclick=\'updateDetailObligation("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].id)+','+JSON.stringify(data.OB[i].value)+','+JSON.stringify(data.OB[i].budgetEject)+','+obligation+','+JSON.stringify(data.OB[i].balance)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
 						])
 						totalDetailOblig = totalDetailOblig + data.OB[i].balance;
 						totalDetailObligation = totalDetailObligation + data.OB[i].value;				
@@ -2816,7 +2719,7 @@ function DeleteRIDO(id,obligationID,rubro,obligation){
 					table.draw( false );
 					 
 					$("#totalBalanceObligation").text("SALDO: "+ totalDetailOblig);	
-					$("#totalObligation").text("OBLIGACIÓN: "+ totalDetailObligation);
+					$("#totalObligationImp").text("OBLIGACIÓN: "+ totalDetailObligation);
 					swal("El rubro implicado en la obligacion número " + register + "  se ha eliminado con éxito."," ","success");
 
 				}
@@ -2827,206 +2730,40 @@ function DeleteRIDO(id,obligationID,rubro,obligation){
 	}
 	});
 }
-function getRubroImplicadoObligation(id,obligation){
-	var totalDetailOblig=0;
-	var totalDetailObligation=0;
-	$.ajax({
-			url: '{% url "getRubroImpDetailObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
-			data: {
-				'obligation':id,
-			},
-			
-			dataType: 'json',
-			
-			success: function (data) {
 
-				var table = $('#datatableRubroImplicadoObligation').DataTable(); 
- 				var rows = table.rows().remove().draw();
-				for (var i=0; i<data.OB.length; i++){
-
-				table.row.add( [
-				data.OB[i].rubro,
-				data.OB[i].description,
-				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' value="+data.OB[i].value+"  id=valueDataUpdateOblig"+data.OB[i].id+" class='form-control'>",
-				data.OB[i].budgetEject,
-				data.OB[i].balance,
-
-				"<a data-toggle='tooltip'  id='deleteDetailObligation' title='Eliminar rubro implicado en obligación'><button onclick=\'DeleteRIDO("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].rubro)+','+obligation+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-				"<a data-toggle='tooltip'  id='updateDatailObligation' title='Actualizar rubro implicado en obligación'><button onclick=\'updateDetailObligation("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].id)+','+JSON.stringify(data.OB[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-				])
-				totalDetailOblig = totalDetailOblig + data.OB[i].balance;
-				totalDetailObligation = totalDetailObligation + data.OB[i].value;				
-			}
-			table.draw( false );
-
-			$("#totalBalanceObligation").text("SALDO: "+ totalDetailOblig);	
-			$("#totalObligation").text("OBLIGACIÓN: "+ totalDetailObligation);
-
-		}
-	});
-} 
-function updateDetailObligation(id,obligation,rubroID,oldValue){
+function updateDetailObligation(id,obligation,rubroID,register,oldValue,numberOblig,balance){
 
 	var totalDetailOblig=0;
 	var totalDetailObligation=0;
 	var oldValue;
-	var valueDataUpdateOblig =  "#valueDataUpdateOblig"+rubroID; //ESTE ES EL VALOR nuevo
-	var newValue =  parseInt($(valueDataUpdateOblig).val());
-	var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
+	var registerChange =   parseInt($("#valueDisponibilityUpdateDOblig"+rubroID).text()); 
+	var newBalance =  registerChange-parseInt($("#valueRegisterUpdateDOblig"+rubroID).val());
+	var newValueObligationChange = parseInt($("#valueRegisterUpdateDOblig"+rubroID).val()); //ESTE ES EL VALOR nuevo
+	var balanceChange =  parseInt($( "#valueBalanceUpdateDOblig"+rubroID).text());  
 
-	console.log(id)
-	console.log(obligation)
-	console.log(oldValue)
-	console.log(rubroID)
-	console.log(valueDataUpdateOblig)
-	console.log(newValue)
-
-	alert("por favor funciona jajajajajajaj")
-	if(oldValue<newValue){
-
-		var newValueOperated = parseInt(oldValue) - parseInt(newValue) * -1;
-		console.log(newValueOperated)
+	if(newValueObligationChange<register){
 		$.ajax({
 			url: '{% url "updateDetailObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
 				'id':id,
-				'origin':  originID,
-				'obligation': obligation,
-				'rubroID': rubroID,
-				'newValueOperated': newValueOperated,
+				'obligation':obligation,
+				'sendValue':newValueObligationChange,
 				'oldValue': oldValue,
-				'newValue': newValue,
+				'balance': balance,
+				'newBalance': newBalance
 			},
-			
-			dataType: 'json',
-			
+				
+			dataType: 'json',				
 			success: function (data) {
 				console.log(data)
-				if(data.CREATE == "TRUE"){
+				getRubroImplicadoRD(id,numberOblig);
+				generateDisponibilty();
 
-					var table = $('#datatableRubroImplicadoDisponibility').DataTable(); 
-					var rows = table.rows().remove().draw();
-					for (var i=0; i<data.OB.length; i++){
-
-					table.row.add( [
-					data.OB[i].rubro,
-					data.OB[i].description,
-					"<input type='text'   onkeypress='return validaNumericos(event)'/  size='10' value="+data.OB[i].value+"  id=valueDataUpdateOblig"+data.OB[i].id+" class='form-control'>",
-					data.OB[i].budgetEject,
-					data.OB[i].balance,
-
-					"<a data-toggle='tooltip'  id='deleteDetailObligation' title='Eliminar rubro implicado en obligación'><button onclick=\'DeleteRIDO("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].rubro)+','+obligation+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					"<a data-toggle='tooltip'  id='updateDatailObligation' title='Actualizar rubro implicado en obligación'><button onclick=\'updateDetailObligation("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].id)+','+JSON.stringify(data.OB[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-					])
-					totalDetailOblig = totalDetailOblig + data.OB[i].balance;
-					totalDetailObligation = totalDetailObligation + data.OB[i].value;			
-					}
-					table.draw( false );
-
-					$("#totalBalanceObligation").text("SALDO: "+ totalDetailOblig);	
-					$("#totalObligation").text("OBLIGACIÓN: "+ totalDetailObligation);    
-
-					swal("Actualización exitosa!", "Continua con tu proceso!", "success");
-
-					$("#textTableRubrosObligText").text("Rubros de obligación de "+nameOrigin);
-					$("#divTabObligationText").text("Lista de obligaciones realizados del presupuesto de "+nameOrigin); 
-					var tableListMovementOblig = $('#dataTableGetObligation').DataTable(); 
-					var rows = tableListMovementOblig.rows().remove().draw();
-					for (var i=0; i<data.TMVOB.length; i++){
-
-						tableListMovementOblig.row.add( [
-						data.TMVOB[i].obligation,
-						data.TMVOB[i].observation,
-						data.TMVOB[i].value,
-						data.TMVOB[i].balance,
-						data.TMVOB[i].date,
-						"<a data-toggle='tooltip' title='Ver detalles de obligación'><button onclick='getDetailObligation("+data.TMVOB[i].id+")' data-toggle='modal' data-target='#myModalDetailObligation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
-						"<a data-toggle='tooltip' type='button' title='Eliminar obligación'><button onclick=\'deleteObligation("+JSON.stringify(data.TMVOB[i].id)+','+JSON.stringify(data.TMVOB[i].obligation)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateObligation' title='Actualizar obligación'><button onclick=\'getRubroImplicadoObligation("+JSON.stringify(data.TMVOB[i].id)+','+JSON.stringify(data.TMVOB[i].obligation)+")\' data-toggle='modal' data-target='#myModalRubroImplicadoObligation' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-				
-						])
-					}
-					tableListMovementOblig.draw( false );
-					
-				}else{
-					swal("No se puede actualizar el rubro implicado en obligación", "Ya que el valor dígitado es mayor al del saldo", "error");
-					
-				} 	
 			}
 		});
 	}else{
-		var newValueOperated = parseInt(oldValue) - parseInt(newValue);
-		console.log(newValueOperated)                                                                                     
-		$.ajax({
-			url: '{% url "updateDetailObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
-			data: {
-				'id':id,
-				'origin':  originID,
-				'obligation': obligation,
-				'rubroID': rubroID,
-				'newValueOperated': newValueOperated,
-				'oldValue': oldValue,
-				'newValue': newValue,
-			},
-			
-			dataType: 'json',
-			
-			success: function (data) {
-				console.log(data)
-
-				if(data.CREATE == "TRUE"){
-
-					var table = $('#datatableRubroImplicadoDisponibility').DataTable(); 
-					var rows = table.rows().remove().draw();
-					for (var i=0; i<data.OB.length; i++){
-
-					table.row.add( [
-					data.OB[i].rubro,
-					data.OB[i].description,
-					"<input type='text'   onkeypress='return validaNumericos(event)'/  size='10' value="+data.OB[i].value+"  id=valueDataUpdateOblig"+data.OB[i].id+" class='form-control'>",
-					data.OB[i].budgetEject,
-					data.OB[i].balance,
-					
-					"<a data-toggle='tooltip'  id='deleteDetailObligation' title='Eliminar rubro implicado en obligación'><button onclick=\'DeleteRIDO("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].rubro)+','+obligation+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-					"<a data-toggle='tooltip'  id='updateDatailObligation' title='Actualizar rubro implicado en obligación'><button onclick=\'updateDetailObligation("+JSON.stringify(data.OB[i].idObligation)+','+id+','+JSON.stringify(data.OB[i].id)+','+JSON.stringify(data.OB[i].value)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-					])
-					totalDetailOblig = totalDetailOblig + data.OB[i].balance;
-					totalDetailObligation = totalDetailObligation + data.OB[i].value;				
-					}
-					table.draw( false );
-
-					$("#totalBalanceObligation").text("SALDO: "+ totalDetailOblig);	
-					$("#totalObligation").text("OBLIGACIÓN: "+ totalDetailObligation);    
-
-					swal("Actualización exitosa!", "Continua con tu proceso!", "success");
-
-					$("#textTableRubrosObligText").text("Rubros de obligación de "+nameOrigin);
-					$("#divTabObligationText").text("Lista de obligaciones realizados del presupuesto de "+nameOrigin); 
-					var tableListMovementOblig = $('#dataTableGetObligation').DataTable(); 
-					var rows = tableListMovementOblig.rows().remove().draw();
-					for (var i=0; i<data.TMVOB.length; i++){
-
-						tableListMovementOblig.row.add( [
-						data.TMVOB[i].obligation,
-						data.TMVOB[i].observation,
-						data.TMVOB[i].value,
-						data.TMVOB[i].balance,
-						data.TMVOB[i].date,
-						"<a data-toggle='tooltip' title='Ver detalles de obligación'><button onclick='getDetailObligation("+data.TMVOB[i].id+")' data-toggle='modal' data-target='#myModalDetailObligation' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
-						"<a data-toggle='tooltip' type='button' title='Eliminar obligación'><button onclick=\'deleteObligation("+JSON.stringify(data.TMVOB[i].id)+','+JSON.stringify(data.TMVOB[i].obligation)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateObligation' title='Actualizar obligación'><button onclick=\'getRubroImplicadoObligation("+JSON.stringify(data.TMVOB[i].id)+','+JSON.stringify(data.TMVOB[i].obligation)+")\' data-toggle='modal' data-target='#myModalRubroImplicadoObligation' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-				
-						])
-					}
-					tableListMovementOblig.draw( false );
-					
-				}else{
-					swal("No se puede actualizar el rubro implicado en obligación", "Ya que el valor dígitado es mayor al del saldo", "error");
-					
-				} 
-			}
-		});
-	}
+		swal("El valor de obligación "+ newValueObligationChange+" no puede ser mayor al valor de la disponibilidad "+ disponibilityChange, " Por favor verifique su operación", "error");
+	}	
 }
 
 function cancels(option){
@@ -3371,6 +3108,7 @@ $("#dateObligation").change(function(){
     }
 })
 $(document).on('change', '#registerObligation', function(event) {
+	registerSec = $("#registerObligation").val();
 	$.ajax({
 			url: '{% url "fillRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
@@ -3583,6 +3321,9 @@ function createRegister(option){
 							$("#observationObligation").val(observation);
 							$("#dateObligation").val(date); 						
 							dateValidationR =  date;
+							$("#registerObligation").val(data.ID);
+							
+							registerSecDispo = data.ID;
 							selectRegisterToObligation(JSON.stringify(data.ID));
 							getDataToObligation();
 
@@ -3691,7 +3432,7 @@ function selectRegister(id){
 }
 function selectRegisterToObligation(id){
 	$('#registerObligation> option[value='+id+']').attr('selected', 'selected');
-	registerSec = id;
+	registerSec = $("#registerObligation").val();
 	$.ajax({
 			url: '{% url "fillRegister"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
@@ -3788,7 +3529,11 @@ function operateBalanceObligation(id,rubro,value,idRegister,valueP){
 				console.log(addObligation)
 				console.log(totalOperateArrayObligation)
 		}
-		$.ajax({
+		tableAccountsObligation(id,valueAccount);
+			} 
+}	
+function tableAccountsObligation(id,valueAccount){
+	$.ajax({
 					url: '{% url "getAccountsByRubro"  0 %}'.replace('0', localStorage.getItem('userID')),
 					data: {
 						'bussines':localStorage.getItem('idBussines'), 
@@ -3808,15 +3553,35 @@ function operateBalanceObligation(id,rubro,value,idRegister,valueP){
 							response.AC[i].typeAccount,			
 							response.AC[i].document,
 							"<input type='text'  onkeypress='return validaNumericos(event)'/ value='"+valueAccount+"'  size='10'   id=obligationAccount"+response.AC[i].id+" class='form-control' name='obligationAccountInput'>",
-							"<a data-toggle='tooltip' title='Aceptar valores cuenta'><button type='button' onclick=\'createArrayAccount("+JSON.stringify(id)+','+JSON.stringify(valueAccount)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+							"<a data-toggle='tooltip' title='Aceptar valores cuenta'><button type='button' onclick=\'createArrayAccount("+JSON.stringify(id)+','+JSON.stringify(valueAccount)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"+			
+							"<a title='Actualizar cuenta' data-toggle='modal' data-target='#myModalAccountButton'><button onclick=\'searchAccountsButton("+JSON.stringify(response.AC[i].id)+','+valueAccount+','+id+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil' aria-hidden='true'></i></button></a>"												
+							
 							])
 						}
 						table.draw( false );
 					}
 				});
-			} 
-}	
+}
 
+function selectAccount(id,valueAccount,idTypeAccountUpdate,rubro){
+
+	arrayIdAccount.length=0;
+	$.ajax({
+			url: '{% url "updateAccountToObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussinesId': localStorage.getItem('idBussines'),            
+				'id': id,
+				'idTypeAccountUpdate':idTypeAccountUpdate
+			},
+			dataType: 'json',
+			success: function (data) {
+				
+				tableAccountsObligation(rubro,valueAccount);
+				$('#myModalAccountButton').modal('toggle');
+
+			}
+	});
+}
 
 function createArrayAccount(obligationID,valueAcount){
 	var table = $('#dataTableGetAccountsObligation').DataTable(); 
@@ -3827,9 +3592,9 @@ function createArrayAccount(obligationID,valueAcount){
 	data.each(function (value, index) {	
 		
 		if(value[2]=='Debito'){
-			debit =  parseInt($("#obligationAccount"+arrayIdAccount[0]).val());
+			debit =  parseInt($("#obligationAccount"+arrayIdAccount[0].id).val());
 		}else{
-			credit = parseInt($("#obligationAccount"+arrayIdAccount[1]).val());	
+			credit = parseInt($("#obligationAccount"+arrayIdAccount[1].id).val());	
 		}	
     });
 	console.log(credit)
@@ -3837,8 +3602,8 @@ function createArrayAccount(obligationID,valueAcount){
 
 	if(debit==credit){
 		if(debit==valueAcount &&  credit==valueAcount){
-			accountsWithValues.push({"accountID": arrayIdAccount[0],"obligationID": obligationID,"typeAccount":"Debito","value":valueAcount})
-			accountsWithValues.push({"accountID": arrayIdAccount[1],"obligationID": obligationID,"typeAccount":"Credito","value":valueAcount})
+			accountsWithValues.push({"accountID": arrayIdAccount[0].id,"obligationID": obligationID,"typeAccount":"Debito","value":valueAcount})
+			accountsWithValues.push({"accountID": arrayIdAccount[1].id,"obligationID": obligationID,"typeAccount":"Credito","value":valueAcount})
 
 		}else{
 			swal({
@@ -3849,8 +3614,8 @@ function createArrayAccount(obligationID,valueAcount){
 			dangerMode: true,
 			}).then((willDelete) => { 
 			if (willDelete) {
-				accountsWithValues.push({"accountID": arrayIdAccount[0],"obligationID": obligationID,"typeAccount":"Debito","value":debit});
-				accountsWithValues.push({"accountID": arrayIdAccount[1],"obligationID": obligationID,"typeAccount":"Credito","value":debit}) 		 		
+				accountsWithValues.push({"accountID": arrayIdAccount[0].id,"obligationID": obligationID,"typeAccount":"Debito","value":debit});
+				accountsWithValues.push({"accountID": arrayIdAccount[1].id,"obligationID": obligationID,"typeAccount":"Credito","value":debit}) 		 		
 			}
 			});	
 		}
@@ -3861,9 +3626,42 @@ function createArrayAccount(obligationID,valueAcount){
 
 
 }
+function searchAccountsButton(id,valueAccount,rubro){
 
+
+	$.ajax({
+		url: '{% url "getSearchAccountButton"  0 %}'.replace('0', localStorage.getItem('userID')),
+		data: {
+			'bussinesId': localStorage.getItem('idBussines'),            
+			'idAC': localStorage.getItem('idAC')
+
+		},
+		dataType: 'json',
+		success: function (data) {
+			console.log(data)
+
+			var table = $('#datatableAccountButton').DataTable(); 
+			 var rows = table.rows().remove().draw();
+			for (var i=0; i<data.ACCOUNT.length; i++){
+
+			table.row.add( [
+			data.ACCOUNT[i].code,
+			data.ACCOUNT[i].description,
+			"<a data-toggle='tooltip' title='Actualizar cuenta'><button id="+JSON.stringify(data.ACCOUNT[i].id)+" onclick=\'selectAccount("+id+','+valueAccount+','+JSON.stringify(data.ACCOUNT[i].id)+','+rubro+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+			])
+			
+		}
+		table.draw( false );
+		}
+	});
+}
 
 function createObligation(option){
+	console.log(registerSec)
+	if(registerSec == null){
+		console.log("entre")
+		registerSec = registerSecDispo;
+	}
 	if(option==1){
 		if(totalObligation==0){
 		swal("No puede guardar la obligacion sin valores", "Por favor ingrese la obligacion", "error");

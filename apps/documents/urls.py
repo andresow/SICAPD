@@ -44,4 +44,6 @@ urlpatterns = [
     url(r'ajax/getDetailObligation/(?P<pkUser>\d+)/', GetDetailObligation.as_view(), name='getDetailObligation'),
     url(r'ajax/getRubroImpDetailObligation/(?P<pkUser>\d+)/', GetRubroImpDetailObligation.as_view(), name='getRubroImpDetailObligation'),
     url(r'ajax/updateDetailObligation/(?P<pkUser>\d+)/', UpdateDetailObligation.as_view(), name='updateDetailObligation'),
+    url(r'ajax/updateAccountToObligation/(?P<pkUser>\d+)/', UpdateAccountToObligation.as_view(), name='updateAccountToObligation'),
+
 ]

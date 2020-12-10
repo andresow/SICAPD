@@ -42,5 +42,8 @@ urlpatterns = [
     url(r'ajax/changeWindowsInformDetailBank/(?P<pkUser>\d+)/', ChangeWindowsInformDetailBank.as_view(), name='changeWindowsInformDetailBank'),
     url(r'ajax/importAccountsBD/(?P<pkUser>\d+)/', ImportAccountsBD.as_view(), name='importAccountsBD'),
 
+    url(r'ajax/searchAccountButton/(?P<pkUser>\d+)/', SearchAccountButton.as_view(), name='searchAccountButton'),
+
+    url(r'ajax/getSearchAccountButton/(?P<pkUser>\d+)/', GetSearchAccountButton.as_view(), name='getSearchAccountButton'),
     
 ]
