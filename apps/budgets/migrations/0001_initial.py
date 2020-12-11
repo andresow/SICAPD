@@ -16,6 +16,7 @@ class Migration(migrations.Migration):
             name='Account',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('accountPeriod', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='budgets.AccountPeriod')),
                 ('code', models.CharField(max_length=100)),
                 ('description', models.CharField(max_length=100)),
                 ('state', models.CharField(choices=[('Activo', 'Activo'), ('Inactivo', 'Inactivo')], max_length=100)),
@@ -312,9 +313,5 @@ class Migration(migrations.Migration):
             name='bussines',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='budgets.Bussines'),
         ),
-        migrations.AddField(
-            model_name='account',
-            name='accountPeriod',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='budgets.AccountPeriod'),
-        ),
+        
     ]
