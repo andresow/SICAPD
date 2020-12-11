@@ -12,6 +12,17 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        
+        migrations.CreateModel(
+            name='AccountPeriod',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
+                ('state', models.CharField(choices=[('Activo', 'Activo'), ('Inactivo', 'Inactivo')], max_length=100)),
+                ('initialDate', models.DateField()),
+                ('finalDate', models.DateField()),
+            ],
+        ),
         migrations.CreateModel(
             name='Account',
             fields=[
@@ -26,16 +37,6 @@ class Migration(migrations.Migration):
                 ('dateCreation', models.DateField(auto_now_add=True)),
                 ('level', models.IntegerField()),
                 ('accountFather', models.BigIntegerField(null=True)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='AccountPeriod',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('state', models.CharField(choices=[('Activo', 'Activo'), ('Inactivo', 'Inactivo')], max_length=100)),
-                ('initialDate', models.DateField()),
-                ('finalDate', models.DateField()),
             ],
         ),
         migrations.CreateModel(
