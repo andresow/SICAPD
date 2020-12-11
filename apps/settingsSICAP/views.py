@@ -452,12 +452,13 @@ class DeleteAll(LoginRequiredMixin, View):
             return JsonResponse({"RUBRO": list(rubroList)})
         elif option=='14':
             deleteAccount = Account.objects.get(id=request.GET.get('id'))
-            accountExists = valueAccountObligation.objects.filter(accountRubro__account_id=request.GET.get('id')).exists()
+            accountExists = ValuesAccountObligation.objects.filter(account__account_id=request.GET.get('id')).exists()
+            print(accountExists)
             if accountExists == False:
                 deleteAccount.delete()
-                return JsonResponse({'ELIMINADO': 'TRUE'})
+                return JsonResponse({'ELIMINADO': "TRUE"})
             else:
-                return JsonResponse({"ELIMINADO": 'FALSE'})
+                return JsonResponse({"ELIMINADO": "FALSE"})
             
         elif option=='15':
             informBank = InformBank.objects.get(id=request.GET.get('id'))
