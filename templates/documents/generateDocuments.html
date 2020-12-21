@@ -309,7 +309,7 @@
 				<div class="form-row">
 					<div class="col-6" >
 						<label class="checkbox-inline">Sección de derechos economicos o personales
-							<input style=" width: 30px; height: 30px; " type="checkbox" value="">
+							<input style=" width: 30px; height: 30px; " onclick="changeRE()" type="checkbox" value="">
 						</label>
 						</select>
 					</div>					
@@ -443,9 +443,32 @@
 	</div>
 </div>
 <div id="divVoucherPayment" class="container-fluid" style="display:none">
-	<div class="card mb-4">
+
+	<div>
+		<form id="addFilter">
+			<div class="form-check">
+				<input class="form-check-input"  onclick="getFilter()" type="radio" name="filterCheck" id="exampleRadios1" value="DOCUMENT" checked>
+				<label class="form-check-label" for="exampleRadios1" style="font-size: 150%">
+				  Buscar por cedula
+				</label>
+			  </div> 
+			  <div class="form-check">
+				<input class="form-check-input" onclick="getFilter()" type="radio" name="filterCheck" id="exampleRadios2" value="NAME">
+				<label class="form-check-label" for="exampleRadios2" style="font-size: 150%">
+				  Buscar por nombre
+				</label>
+			  </div>
+			<br>
+			<div class="form-group" id="div_filter" >
+				<label id="id_label_filter">Escriba su documento</label>
+				<input type="text" name="name" maxlength="100" class="form-control col-6"  id="id_input_filter">
+			</div>
+		</form>	
+	</div>
+	<div class="card mb-4" id="postSelection"  style="display:none">
 		<div class="card-header"><i class="fas fa-table mr-1"></i>Generar comprobante de pago</div>
 		<div class="card-body">
+			
 				<div class="form-row">
 					<div class="col-6">
 						<label>Número de comprobante de pago:</label>
@@ -459,7 +482,7 @@
 				<br>
 				<div class="form-row">
 					<div class="col-6" >
-						<label>Obligación: </label><button type="button" onclick="getObligationVoucher()" data-toggle="modal" data-target="#myModalObligation" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
+						<label>Obligación: </label>
 						<select class="form-control" name="selectObligationVoucher" id="selectObligationVoucher" >
 						</select>
 					</div>		
@@ -472,7 +495,7 @@
 				<br>		
 				<div class="form-row">
 					<div class="col-6" >
-						<label>Tipo de documento:</label><button type="button"  class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
+						<label>Tipo de documento:</label><button type="button" onclick="getTypeDocument()" data-toggle="modal" data-target="#myModalTypeDocuments" class="btn btn-primary btn-sm" style="font-size:16px"><i class="fa fa-search-plus"></i></button>
 						<select class="form-control" name="typeDocument" id="typeDocument" >
 						</select>
 					</div>						
@@ -484,8 +507,124 @@
 				</div>	
 				<br>					
 				<div class="form-row">
+					<div  class="container-fluid mb-3" style="float:left">
+						<div class="card" >
+						<div class="card-header" id="textTableRubrosObligText"><i class="fas fa-table mr-1" ></i>Rubros de obligación</div>
+							<div class="card-body" >
+								<div class="table-responsive">
+									<table class="table table-bordered dataTable" id="dataTableVoucher" cellspacing="0" 
+										role="grid" aria-describedby="dataTable_info">
+										
+										<thead>
+											<tr>
+												<th>Rubro</th>
+												<th>Descripcion</th>
+												<th>Valor obligacion</th>
+												<th>Valor </th>
+												<th>Saldo</th>
+												<th>Acciones</th>
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>
+												<th>Rubro</th>
+												<th>Descripcion</th>	
+												<th>Valor obligacion</th>
+												<th>Valor</th>
+												<th>Saldo</th>
+												<th>Acciones</th>
+											</tr>
+										</tfoot>
+										</table>
+								</div>
+								<div class="form-row col-12 mb-2">
+									<div class="col-8" >
+										<h6  id="totalVoucherPaymentBalance" for="totalVoucherPaymenBalance" align="center">COMPROBANTE DE PAGO: 0</h6>
+									</div>
+									<div class="col-4" >
+										<h6  id="totalVoucherPaymen" for="totalVoucherPaymen">SALDO: 0</h6>														
+									</div>								
+								</div>	
+							</div>
+						</div>
+						<br>
+						<br>
+						<div  class="container-fluid mb-3" style="float:left">
+							<div class="card" >
+							<div class="card-header" ><i class="fas fa-table mr-1" ></i>Descuentos</div>
+							<div class="card-body" >
+									<button  onclick="getDiscountsManuals()" id="addDiscount" data-toggle="modal" data-target="#myModalDiscount" class="genric-btn primary small">Agregar Descuentos</button>               
+									<div class="table-responsive">
+										<table class="table table-bordered dataTable" id="dataTableGetDiscounts" cellspacing="0" 
+											role="grid" aria-describedby="dataTable_info">
+											
+											<thead>
+												<tr>
+													<th>Decuento</th>	
+													<th>Código cuenta</th>	
+													<th>Acumula</th>
+													<th>Tipo de descuento</th>
+													<th>Base de calculo</th>
+													<th>Valor</th>
+													<th>Acciones</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>Decuento</th>	
+													<th>Código cuenta</th>	
+													<th>Acumula</th>
+													<th>Tipo de descuento</th>
+													<th>Base de calculo</th>
+													<th>Valor</th>
+													<th>Acciones</th>
+												</tr>
+											</tfoot>
+											</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="countingToVoucher" style="display:none">
+							<div  class="container-fluid mb-3" style="float:left">
+								<div class="card" >
+								<div class="card-header" ><i class="fas fa-table mr-1" ></i>Asientos contables</div>
+									<div class="card-body" >
+										<button  onclick="searchAccountsButtonToVoucher()" data-toggle="modal" data-target="#myModalAccountVoucher" class="genric-btn primary small">Agregar Cuenta</button>               
+										<div class="table-responsive">
+											<table class="table table-bordered dataTable" id="datatableAccountToVoucher" cellspacing="0" 
+												role="grid" aria-describedby="dataTable_info">
+												
+												<thead>
+													<tr>
+														<th>ID</th>
+														<th>Descripción</th>
+														<th>Debito</th>
+														<th>Credito</th>
+														<th>Documento</th>
+													</tr>
+												</thead>
+												<tfoot>
+													<tr>
+														<th>ID</th>
+														<th>Descripción</th>
+														<th>Debito</th>
+														<th>Credito</th>
+														<th>Documento</th>
+													</tr>
+												</tfoot>
+												</table>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>
+						<div>
+							<button onclick="finishDiscounts()" div="finishDiscounts" type="button" class="btn btn-primary">Terminar descuentos</button>
+						</div> 	
+					</div>
 					<div>
-						<button onclick="createObligation(1)" type="button" class="btn btn-primary">Guardar comprobante de pago</button>
+						<button onclick="createVoucherPayment()" type="button" class="btn btn-primary">Guardar comprobante de pago</button>
 						<button type="button" class="btn btn-secondary">Cancelar</button>
 					</div>					
 				</div>  
@@ -527,6 +666,54 @@
 											<th>Presupuesto inicial</th>
 											<th>Presupuesto real</th>
 											<th>Presupuesto por ejecutar</th>
+											<th>Seleccionar</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+								</font>
+	
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+<div class="modal fade bd-example-modal-lg" id="myModalDiscount" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de descuentos para seleccionar</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid" >
+						<div class="card" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Descuentos</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<font size="2" face="Arial" >
+
+								<table style="width:70%" class="table table-bordered dataTable " id="dataTableSelectDiscount" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>Descuento</th>	
+											<th>Acumula</th>
+											<th>Tipo de descuento</th>
+											<th>Base de calculo</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Descuento</th>	
+											<th>Acumula</th>
+											<th>Tipo de descuento</th>
+											<th>Base de calculo</th>
 											<th>Seleccionar</th>
 										</tr>
 									</tfoot>
@@ -778,6 +965,52 @@
 											<th>Tipo de identificación</th>
 											<th>Identificación</th>
 											<th>Teléfono</th>
+											<th>Seleccionar</th>
+										</tr>
+									</tfoot>
+										<tbody>
+											<h1></h1>
+										</tbody>
+									</table>
+									
+							</div>	
+							</div>
+						</div>
+					</div> 
+                </div>
+            </div>         
+        </div>  
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="myModalTypeDocuments" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de documentos</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+						<div class="card-header " ><i class="fas fa-table mr-1" ></i>Documentos</div>
+						<div class="card-body" >
+							<div class="table-responsive">
+								<table class="table table-bordered dataTable " id="dataTableTypeDocumentsVC" cellspacing="0" 
+									role="grid" aria-describedby="dataTable_info">	
+									<thead>
+										<tr>
+											<th>Codigo</th>
+											<th>Nombre</th>
+											<th>Description</th>
+											<th>Categoria</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Codigo</th>
+											<th>Nombre</th>
+											<th>Description</th>
+											<th>Categoria</th>
 											<th>Seleccionar</th>
 										</tr>
 									</tfoot>
@@ -1111,11 +1344,54 @@
             </div>         
         </div>  
 </div>
+<div class="modal fade bd-example-modal-lg" id="myModalAccountVoucher" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id=>Lista de cuentas</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+                            <div class="card-header "><i class="fas fa-table mr-1" ></i>Seleccione la cuenta</div>
+                                <div class="card-body" >
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered dataTable" id="datatableAccountButtonVoucher" cellspacing="0" 
+                                            role="grid" aria-describedby="dataTable_accountButton">	
+                                            <thead>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </tfoot>
+                                                <tbody>
+                                                    <h1></h1> 
+                                    
+                                                </tbody>
+
+                                        </table>
+                                    </div>		
+                                </div>
+                        
+                            </div>  
+				    </div>  
+                </div>
+        </div>         
+    </div>  
+</div>
 <div class="modal fade bd-example-modal-lg" id="myModalAccountButton" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Lista de cuentas para seleccionar</h4>
+          <h4 class="modal-title" id=>Lista de cuentas para seleccionar</h4>
             </div>
                 <div class="modal-body">
 					<div  class="container-fluid " >
@@ -1154,7 +1430,100 @@
         </div>         
     </div>  
 </div>
+<div class="modal fade bd-example-modal-lg" id="myModalResult" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Resultado de la busquedad</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+                            <div class="card-header " id="listResults"><i class="fas fa-table mr-1" ></i>Seleccione la cuenta para remplazar</div>
+                                <div class="card-body" >
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered dataTable" id="datatableResultsFilter" cellspacing="0" 
+                                            role="grid" aria-describedby="dataTable_resultsFilter">	
+                                            <thead>
+                                                <tr>
+													<th>Nombre</th>	
+													<th>Apellido</th>	
+													<th>Tipo de identificacion</th>
+													<th>Identificacion</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Nombre</th>	
+													<th>Apellido</th>	
+													<th>Tipo de identificacion</th>
+													<th>Identificacion</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </tfoot>
+                                                <tbody>
+                                                    <h1></h1> 
+                                    
+                                                </tbody>
 
+                                        </table>
+                                    </div>		
+                                </div>
+                        
+                            </div>  
+				    </div>  
+                </div>
+        </div>         
+    </div>  
+</div>
+<div class="modal fade bd-example-modal-lg" id="myModalResultObligations" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Resultado de la busquedad</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+                            <div class="card-header " id="listResults"><i class="fas fa-table mr-1" ></i>Seleccione la obligacion</div>
+                                <div class="card-body" >
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered dataTable" id="datatableResultsFilterObligation" cellspacing="0" 
+                                            role="grid" aria-describedby="dataTable_resultsFilterObligation">	
+                                            <thead>
+                                                <tr>
+													<th>Obligacion</th>	
+													<th>Observacion</th>	
+													<th>Fecha</th>
+													<th>Origin</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Obligacion</th>	
+													<th>Observacion</th>	
+													<th>Fecha</th>
+													<th>Origin</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </tfoot>
+                                                <tbody>
+                                                    <h1></h1> 
+                                    
+                                                </tbody>
+
+                                        </table>
+                                    </div>		
+                                </div>
+                        
+                            </div>  
+				    </div>  
+                </div>
+        </div>         
+    </div>  
+</div>
 <script>
 
 var originID=0;
@@ -1173,6 +1542,10 @@ var addObligation=[];
 var totalObligation=0;
 var totalOperateObligation=0;
 var totalOperateArrayObligation=[];
+var totalOperateArrayVoucher=[];
+var addVoucher=[];
+var totalVoucher=0;
+var totalOperateVoucher=0;
 var disponibilitySec;
 var registerSec;
 var registerSecDispo;
@@ -1180,8 +1553,16 @@ var accountsWithValues =[]
 var arrayIdAccount=[]
 var dateValidation;
 var dateValidationR;
-
+var checkEconomicsRight="FALSE";
 var disponibilityID;
+var discountsResponse=[];
+var discountsRepeat=[];
+var arrayIdsVoucher=[];
+var accontsToVoucher=[];
+var totalCreditos = 0;
+var idDebitos=[];
+var totalDebitos=0;
+var counter = 0;
 
 $(document).ready(function() {
 		$('#dataTableTest').DataTable( {
@@ -1206,6 +1587,22 @@ $(document).ready(function() {
 		  "language": idioma_español,
 		  
 			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#datatableAccountToVoucher').DataTable( {
+			
+		  "destroy":true,
+		  "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            } ],
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',	
+		
 		  }
 		  );		 	
 } );
@@ -1364,7 +1761,33 @@ $(document).ready(function() {
 		  }
 		  );		 	
 } );
-
+$(document).ready(function() {
+		$('#dataTableVoucher').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+$(document).ready(function() {
+		$('#dataTableGetDiscounts').DataTable( {
+			
+		  "destroy":true,
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+		  );		 	
+} );
+function changeRE(){
+	if(checkEconomicsRight=="FALSE"){
+		checkEconomicsRight="TRUE";
+	}else{
+		checkEconomicsRight="FALSE";
+	}
+}
 function loadTest() {	
 	$.ajax({
 		url: '{% url "getVoucher"  0 %}'.replace('0', localStorage.getItem('userID')),
@@ -1392,13 +1815,13 @@ function loadTest() {
 					<input  onclick="getRadioButon()" value="COMPROBANTEPAGO" type="radio" class="custom-control-input" id="COMPROBANTEPAGO" name="typeComprobante">
 					<label class="custom-control-label" for="COMPROBANTEPAGO">COMPROBANTE DE PAGO</label>
 				</div>`)
-		for (var i=0; i<data.VH.length; i++){
+		/* for (var i=0; i<data.VH.length; i++){
 			$('#separator')
 			.append(`<div class="custom-control custom-radio custom-control-inline">
 			<input onclick="getRadioButon()" type="radio" class="custom-control-input" value="`+data.VH[i].name+`" id="`+data.VH[i].name+`"name="typeComprobante">
 			<label class="custom-control-label" for="`+data.VH[i].name+`">`+data.VH[i].name+`</label>
 			</div>`)
-			}
+			} */
 		}			
 	});		
 }
@@ -1429,7 +1852,15 @@ function getRadioButon(){
 		
 	}
 }
-
+function getFilter(){
+	if($('input[name=filterCheck]:checked', '#addFilter').val()=="DOCUMENT"){	  
+		$("#div_filter").show();
+		$("#id_label_filter").text('Ingrese el documento');
+	}else{
+		$("#div_filter").show();
+		$("#id_label_filter").text('Ingrese el nombre');
+	}
+}
 function generateButton(){
 	var nameOrigin = $('input[name=origins]:checked', '#addVoucher').val();
 	var nameVoucher = $('input[name=typeComprobante]:checked', '#addVoucher').val();
@@ -1781,7 +2212,8 @@ function generateDisponibilty(){
 		$("#divRegister").css("display", "none");
 		$("#divObligation").css("display", "none");
 		$("#divVoucherPayment").css("display", "block");
-		getDataToVoucherPayment();
+		$("#div_filter").hide();
+		getDataToGenerateVoucher();
 	}
 														
 }
@@ -2141,13 +2573,11 @@ function updateRID(id,disponibility,rubroID,oldValue,budgetEject,numberDisponibi
 }
 
 function getFinishProcessUpdateRID(){
-
 	if(data.CREATE == "TRUE"){
 		swal("Actualización exitosa!", "Continua con tu proceso!", "success");
 	}else{
 		swal("La Actualización no se pudo realizar!", "verificar tu operación y continua con tu proceso!", "success");
 	}
-
 }
 //-----------------------parte de registro para no perderce-----------
 function getDataToRegister(){
@@ -2316,21 +2746,19 @@ function getRubroImplicadoRD(id,register){
 				'register':id,
 			},
 			
-			dataType: 'json',
-			
+			dataType: 'json',	
 			success: function (data) {
 
 				var table = $('#datatableRubroImplicadoRegister').DataTable(); 
  				var rows = table.rows().remove().draw();
 				for (var i=0; i<data.DRG.length; i++){
 
-				table.row.add( [
+				table.row.add([
 				data.DRG[i].rubro,
 				data.DRG[i].description, 
 				"<label type='number' id=valueDisponibilityUpdateDR"+data.DRG[i].id+">"+ JSON.stringify(data.DRG[i].value)+"</label>",
 				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10' value="+data.DRG[i].budgetEject+"  id=valueRegisterUpdateDR"+data.DRG[i].id+" class='form-control'>",
 				"<label type='number' id=valueBalanceUpdateDR"+data.DRG[i].id+">"+ JSON.stringify(data.DRG[i].balance)+"</label>",
-
 				"<a data-toggle='tooltip'  id='deleteDetailRegister' title='Eliminar rubro implicado en registro'><button onclick=\'deleteDR("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].rubro)+','+register+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
 				"<a data-toggle='tooltip'  id='updateDatailRegister' title='Actualizar rubro implicado en registro'><button onclick=\'updateDetailRegister("+JSON.stringify(data.DRG[i].registerID)+','+id+','+JSON.stringify(data.DRG[i].id)+','+JSON.stringify(data.DRG[i].value)+','+JSON.stringify(data.DRG[i].budgetEject)+','+register+','+JSON.stringify(data.DRG[i].balance)+")\' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
 				])
@@ -2383,8 +2811,7 @@ function deleteDR(id,registerID,rubro,register){
 						data.RG[i].date,
 						"<a data-toggle='tooltip' title='Ver detalles de registro'><button onclick='getDetailRegister("+data.RG[i].id+")' data-toggle='modal' data-target='#myModalDetailRegister' class='btn btn-primary btn-sm'><i class='fa fa-info-circle' aria-hidden='true'></i></button></a>"+			
 						"<a data-toggle='tooltip'  type='button'  title='Eliminar registro'><button onclick=\'deleteRegister("+JSON.stringify(data.RG[i].id)+','+JSON.stringify(data.RG[i].register)+")\' class='btn btn-primary btn-sm'><i class='fa fa-trash'></i></button></a>"+
-						"<a data-toggle='tooltip'  id='updateRegistro' title='Actualizar registro'><button onclick=\'getRubroImplicadoRD("+JSON.stringify(data.RG[i].id)+','+JSON.stringify(data.RG[i].register)+")\' data-toggle='modal' data-target='#myModalRubroImplicadoRegister' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"
-						
+						"<a data-toggle='tooltip'  id='updateRegistro' title='Actualizar registro'><button onclick=\'getRubroImplicadoRD("+JSON.stringify(data.RG[i].id)+','+JSON.stringify(data.RG[i].register)+")\' data-toggle='modal' data-target='#myModalRubroImplicadoRegister' class='btn btn-primary btn-sm'><i class='fa fa-pencil'></i></button></a>"					
 						])   
 					}
 					table.draw( false );
@@ -2975,6 +3402,39 @@ function getThirdsRg(){
 			}
 		});
 }
+function getTypeDocument(){
+	$.ajax({
+			url: '{% url "getTypeDocument"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+
+				var table = $('#dataTableTypeDocumentsVC').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.VC.length; i++){
+
+				table.row.add( [
+				data.VC[i].code,
+				data.VC[i].name,
+				data.VC[i].description,
+				data.VC[i].category,
+				"<a data-toggle='tooltip' title='Seleccionar tipo de documento'><button onclick=\'selectTypeDocument("+JSON.stringify(data.VC[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+				])
+				
+			}
+			table.draw( false );
+
+			}
+		});
+}
+
+function selectTypeDocument(id){
+	$('#typeDocument> option[value='+id+']').attr('selected', 'selected');
+	$('#myModalTypeDocuments').modal('toggle');
+}
 
 function selectThirds(id,name){
     $('#terceroSelectRegister> option[value='+id+']').attr('selected', 'selected');
@@ -3104,6 +3564,15 @@ $("#dateObligation").change(function(){
 		if(dateValidationR >= valor){
 			swal("Fecha minima posible", dateValidationR, "warning");
 			$("#dateObligation").val(dateValidationR);
+		}		
+    }
+})
+$("#dateVoucherPayment").change(function(){
+    var valor = $(this).val();
+    if(valor!=""){
+		if(dateValidationR >= valor){
+			swal("Fecha minima posible", dateValidationR, "warning");
+			$("#dateVoucherPayment").val(dateValidationR);
 		}		
     }
 })
@@ -3389,7 +3858,7 @@ function getObligationVoucher(){
 				data.OB[i].balance,
 				data.OB[i].date,
 				data.OB[i].observation,
-				"<a data-toggle='tooltip' title='Seleccionar registro'><button  onclick=\'selectObligation("+JSON.stringify(data.OB[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+				"<a data-toggle='tooltip' title='Seleccionar obligacion'><button  onclick=\'selectObligation("+JSON.stringify(data.OB[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
 				])
 				
 			}
@@ -3397,6 +3866,38 @@ function getObligationVoucher(){
 
 			}
 		});
+}
+function selectObligation(id){
+	$('#myModalRegister').modal('toggle');
+	$('#selectObligationVoucher').val(id);
+	$.ajax({
+			url: '{% url "fillObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'obligation':id,
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#observationVoucherPayment").val(data.OBSERVATION); 
+				$("#dateVoucherPayment").val(data.DATE); 
+				dateValidationR = data.DATE; 
+				var table = $('#dataTableObligation').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].obligation,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=voucherPayment"+data.RUBRO[i].id+" class='form-control' name='inputObligation'>",
+				data.RUBRO[i].valueP,
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateVoucherPayment("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idRegister)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			}
+	});
+
 }
 function selectRegister(id){
 	$('#myModalRegister').modal('toggle');
@@ -3597,8 +4098,6 @@ function createArrayAccount(obligationID,valueAcount){
 			credit = parseInt($("#obligationAccount"+arrayIdAccount[1].id).val());	
 		}	
     });
-	console.log(credit)
-	console.log(debit)
 
 	if(debit==credit){
 		if(debit==valueAcount &&  credit==valueAcount){
@@ -3657,9 +4156,8 @@ function searchAccountsButton(id,valueAccount,rubro){
 }
 
 function createObligation(option){
-	console.log(registerSec)
+
 	if(registerSec == null){
-		console.log("entre")
 		registerSec = registerSecDispo;
 	}
 	if(option==1){
@@ -3691,7 +4189,9 @@ function createObligation(option){
 						'value':totalObligation,
 						'balance': totalOperateObligation,
 						'obligations': JSON.stringify(addObligation),
-						'accounts': JSON.stringify(accountsWithValues),						
+						'accounts': JSON.stringify(accountsWithValues),	
+						'third': $("#terceroSelectObligation").val(),
+						'rightsEconomic': checkEconomicsRight,											
 						'register':registerSec
 					},
 					dataType: 'json',
@@ -3748,7 +4248,9 @@ function createObligation(option){
 							'balance': totalOperateObligation,
 							'obligations': JSON.stringify(addObligation),
 							'accounts': JSON.stringify(accountsWithValues),						
-							'register':registerSec
+							'register':registerSec,
+							'third': $("#terceroSelectObligation").val(),
+							'rightsEconomic': checkEconomicsRight
 						},
 						dataType: 'json',
 						success: function (data) {
@@ -3795,18 +4297,11 @@ function getDataToGenerateVoucher(){
 			success: function (data) {
 
 				const $selectTH = document.querySelector("#terceroSelectVoucher");
-				const $select = document.querySelector("#selectObligationVoucher");
-				for (let i = $select.options.length; i >= 0; i--) {
-						$select.remove(i);
-				}
+				
 				for (let i = $selectTH.options.length; i >= 0; i--) {
 						$selectTH.remove(i);
 				}  
 				$('#terceroSelectVoucher').append(`<option  hidden  selected"> Selecciona una opción</option>`);
-				$('#selectObligationVoucher').append(`<option  hidden  selected"> Selecciona una opción</option>`);	
-				for (var i=0; i<data.MV.length; i++){
-					$('#selectObligationVoucher').append('<option value='+data.MV[i].id+'>'+data.MV[i].register+'</option>')
-				}
 				for (var i=0; i<data.TH.length; i++){
 					$('#terceroSelectVoucher').append('<option value='+data.TH[i].id+'>'+data.TH[i].name + " " +data.TH[i].surnames+'</option>')
 				}
@@ -3840,7 +4335,483 @@ function getDataToGenerateVoucher(){
 			}
 	});
 }
+$("#id_input_filter").change(function(){
 
+	$.ajax({
+			url: '{% url "filterToObligation"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'text':$("#id_input_filter").val(),
+				'filter': $('input[name=filterCheck]:checked', '#addFilter').val()
+			},
+			dataType: 'json',
+			success: function (data) {
+				console.log(data)
+				var table = $('#datatableResultsFilter').DataTable(); 
+				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.TH.length; i++){
+
+					table.row.add([
+					data.TH[i].name,
+					data.TH[i].surnames,
+					data.TH[i].identification,
+					data.TH[i].typeIdentification,				
+					"<a data-toggle='tooltip' type='button' title='Seleccionar'><button  onclick=\'selectThirdToVoucher("+JSON.stringify(data.TH[i].id)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"
+					])
+				}
+				table.draw( false );
+				$('#myModalResult').modal('toggle');
+
+			}
+	});	
+})
+
+function selectThirdToVoucher(id){
+	$('#myModalResult').modal('toggle');
+
+	$.ajax({
+			url: '{% url "filterObligationByName"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'id':id
+			},
+			dataType: 'json',
+			success: function (data) {
+				var table = $('#datatableResultsFilterObligation').DataTable(); 
+				var rows = table.rows().remove().draw();
+				const $select = document.querySelector("#selectObligationVoucher");
+				for (let i = $select.options.length; i >= 0; i--) {
+						$select.remove(i);
+				}
+				$('#selectObligationVoucher').append(`<option  hidden  selected"> Selecciona una opción</option>`);	
+				
+				for (var i=0; i<data.MV.length; i++){
+					$('#selectObligationVoucher').append('<option value='+data.MV[i].movement_id+'>'+data.MV[i].movement__obligation+'</option>')
+					table.row.add([
+					data.MV[i].movement__obligation,
+					data.MV[i].movement__observation,
+					data.MV[i].movement__date,
+					data.MV[i].movement__origin,
+					"<a data-toggle='tooltip' type='button' title='Seleccionar'><button  onclick=\'selectObligationsData("+JSON.stringify(data.MV[i].movement_id)+','+ id +")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"
+					])
+				}
+				table.draw( false );
+				
+				$('#myModalResultObligations').modal('toggle');
+	
+			}
+	});	
+}
+function selectObligationsData(id,third){
+	$('#myModalResultObligations').modal('toggle');
+
+	$.ajax({
+			url: '{% url "getObligationsSelect"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'id':id,
+				'bussines':localStorage.getItem('idBussines'),
+			},
+			dataType: 'json',
+			success: function (data) {
+				discountsRepeat = data.DC;
+				accontsToVoucher = data.account;
+				console.log(data.account);
+				$('#observationVoucherPayment').val(data.OBSERVATION);
+				$('#dateVoucherPayment').val(data.DATE);
+				$('#selectObligationVoucher').val(id);
+				$('#selectObligationVoucher').prop('disabled', 'disabled');
+				$('#terceroSelectVoucher').val(third);
+				$('#terceroSelectVoucher').prop('disabled', 'disabled');
+				var table = $('#dataTableVoucher').DataTable(); 
+ 				var rows = table.rows().remove().draw();
+				for (var i=0; i<data.RUBRO.length; i++){
+
+				table.row.add( [
+				data.RUBRO[i].rubro,
+				data.RUBRO[i].description,
+				data.RUBRO[i].value,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=voucher"+data.RUBRO[i].id+" class='form-control' name='inputObligation'>",
+				"<label type='number' id=obligationVoucher"+data.RUBRO[i].id+">"+ JSON.stringify(data.RUBRO[i].valueP)+"</label>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher("+JSON.stringify(data.RUBRO[i].id)+','+JSON.stringify(data.RUBRO[i].rubro)+','+JSON.stringify(data.RUBRO[i].value)+','+JSON.stringify(data.RUBRO[i].idObligation)+','+JSON.stringify(data.RUBRO[i].valueP)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+				arrayIdsVoucher.push(data.RUBRO[i].id);
+
+			}
+			table.draw( false );
+			const $selectVC = document.querySelector("#typeDocument");
+				
+			for (let i = $selectVC.options.length; i >= 0; i--) {
+						$selectVC.remove(i);
+			}  
+			$('#typeDocument').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+			for (var i=0; i<data.VC.length; i++){
+				$('#typeDocument').append('<option value='+data.VC[i].id+'>'+data.VC[i].code + " " +data.VC[i].name+'</option>')
+			}
+			$("#postSelection").css("display", "block");
+
+		}
+	});	
+}
+function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
+	var createId =  "#voucher"+id;
+	var result= "#obligationVoucher"+id
+	var operate=0;
+	var valueRegister = parseInt(value);
+	operate = parseInt(valueP) - parseInt($(createId).val());
+	var valueAccount=parseInt($(createId).val());
+	const found = addVoucher.findIndex(element => element['id'] == id);
+	console.log(parseInt($(createId).val()))
+	if(parseInt($(createId).val())==0){
+		swal("No se puede generar una operacion de valor 0", " " , "error");
+	}else{
+		if(found<0){
+			if(operate<0){
+					swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor de  "+ valueP, " No se puede realizar  la obligacion", "error");
+				}else{
+					$(result).text(operate);
+					addVoucher.push({
+						"idObligation":idObligation,
+						"id": id,
+						"rubro": rubro,
+						"value":parseInt($(createId).val()),
+						"balance":operate
+					})
+					totalOperateArrayVoucher.push({
+						"id": id,
+						"subtotal": operate,
+						"obligation":  parseInt($(createId).val())
+					})
+					totalOperateVoucher = totalOperateVoucher + operate;	
+					totalVoucher = totalVoucher + parseInt($(createId).val());
+					//$("#totalObligation").text("SALDO: "+ totalOperateVoucher);														
+					//$("#totalObligationBalance").text("COMPROBANTE DE PAGO: "+ totalVoucher);														
+
+				}
+				console.log(addVoucher) 
+				console.log(totalOperateArrayVoucher)
+
+			}else{
+
+				if(operate<0){
+					swal("El valor de "+ parseInt($(createId).val())+" es mayor a el valor de  "+ valueP, " No se puede realizar la obligación", "error");
+				}else{
+					$(result).text(operate);
+					addVoucher[found] ={
+						"idObligation":idObligation,
+						"id": id,
+						"rubro": rubro,
+						"value":parseInt($(createId).val()),
+						"balance":operate
+					}
+					totalOperateVoucher = totalOperateVoucher - totalOperateArrayVoucher[found]['subtotal'];	
+					totalVoucher = totalVoucher - totalOperateArrayVoucher[found]['obligation'];
+					totalOperateArrayVoucher[found] = {
+						"id": id,
+						"subtotal": operate,
+						"obligation":  parseInt($(createId).val())
+					}
+					totalOperateVoucher = totalOperateVoucher + totalOperateArrayVoucher[found]['subtotal'];	
+					totalVoucher = totalVoucher + totalOperateArrayVoucher[found]['obligation'];
+					//$("#totalObligation").text("SALDO: "+ totalOperateVoucher);														
+					//$("#totalObligationBalance").text("OBLIGACIÓN: "+ totalVoucher);														
+
+				}
+				console.log(addVoucher)
+				console.log(totalOperateArrayVoucher)
+		}
+	} 
+	console.log(discountsRepeat);
+	var tableDiscount = $('#dataTableGetDiscounts').DataTable(); 
+	var repeat = 0; 
+	for (var i=0; i<discountsRepeat.length; i++){
+		if(discountsRepeat[i].typeDiscount=="PORCENTAJE RANGO"){
+			if(beetween(parseInt($(createId).val()),discountsRepeat[i].initialValue,discountsRepeat[i].finalValue)==true){
+				if(discountsRepeat[i].id!=repeat){
+					tableDiscount.row.add( [
+					discountsRepeat[i].name,
+					discountsRepeat[i].account_code,
+					discountsRepeat[i].acumulate,
+					discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
+					discountsRepeat[i].baseCalculate,
+					parseInt($(createId).val())*(discountsRepeat[i].average)/100,
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+				repeat = discountsRepeat[i].id;
+				}else{
+					repeat = discountsRepeat[i].id;
+				}
+			}
+			
+		}
+		if(discountsRepeat[i].typeDiscount=="FIJO RANGO"){
+			if(beetween(parseInt($(createId).val()),discountsRepeat[i].initialValue,discountsRepeat[i].finalValue)==true){
+				if(discountsRepeat[i].id!=repeat){
+					tableDiscount.row.add( [
+					discountsRepeat[i].name,
+					discountsRepeat[i].account_code,
+					discountsRepeat[i].acumulate,
+					discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
+					discountsRepeat[i].baseCalculate,
+					0,
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+				repeat = discountsRepeat[i].id;
+				}else{
+					repeat = discountsRepeat[i].id;
+				}
+			}
+		}
+		if(discountsRepeat[i].typeDiscount=="PORCENTAJE"){
+			if(discountsRepeat[i].id!=repeat){
+				tableDiscount.row.add( [
+				discountsRepeat[i].name,
+				discountsRepeat[i].account_code,
+				discountsRepeat[i].acumulate,
+				discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
+				discountsRepeat[i].baseCalculate,
+				parseInt($(createId).val())*(discountsRepeat[i].average)/100,
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+				repeat = discountsRepeat[i].id;
+			}else{
+				repeat = discountsRepeat[i].id;
+			}
+		}
+		if(discountsRepeat[i].typeDiscount=="FIJO"){
+			if(discountsRepeat[i].id!=repeat){
+				tableDiscount.row.add( [
+				discountsRepeat[i].name,
+				discountsRepeat[i].account_code,
+				discountsRepeat[i].acumulate,
+				discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
+				discountsRepeat[i].baseCalculate,
+				0,
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+				repeat = discountsRepeat[i].id;
+			}else{
+				repeat = discountsRepeat[i].id;
+			}
+		}
+		
+	}
+	tableDiscount.draw( false );
+}
+
+function beetween(valor,min,max){
+
+	if(valor>=min && valor<=max){
+		console.log(true)
+		return true;
+
+	}else{
+		console.log(false);
+		return false;
+	}
+
+}
+function getDiscountsManuals(){
+	$.ajax({
+			url: '{% url "getDiscountsManuals" 0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines')
+			},
+			dataType: 'json',
+			success: function (data) {
+				var table = $('#dataTableSelectDiscount').DataTable(); 
+				var rows = table.rows().remove().draw();
+
+				for (var i=0; i<data.DC.length; i++){
+
+				table.row.add( [
+				data.DC[i].name,
+				data.DC[i].acumulate,
+				data.DC[i].typeDiscount+" "+data.DC[i].average,
+				data.DC[i].baseCalculate,
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'selectDiscountToVoucher("+JSON.stringify(data.DC[i].id)+","+JSON.stringify(data.DC[i].name)+","+JSON.stringify(data.DC[i].account__code)+","+JSON.stringify(data.DC[i].acumulate)+","+JSON.stringify(data.DC[i].typeDiscount)+","+JSON.stringify(data.DC[i].average)+","+JSON.stringify(data.DC[i].baseCalculate)+","+JSON.stringify(data.DC[i].initialValue)+","+JSON.stringify(data.DC[i].finalValue)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			}
+			table.draw( false );
+			}
+		});
+}
+
+function selectDiscountToVoucher(id,name,account_code,acumulate,typeDiscount,average,baseCalculate,initialValue,finalValue){
+	var tableDiscount = $('#dataTableGetDiscounts').DataTable(); 
+	if(typeDiscount=="PORCENTAJE RANGO"){
+			if(beetween(parseInt($('#voucher'+arrayIdsVoucher[0]).val()),initialValue,finalValue)==true){
+					tableDiscount.row.add( [
+					name,
+					account_code,
+					acumulate,
+					typeDiscount+" "+average,
+					baseCalculate,
+					parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100,
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])	
+			}	
+		}
+		if(typeDiscount=="FIJO RANGO"){
+			if(beetween(parseInt($('#voucher'+arrayIdsVoucher[0]).val()),initialValue,finalValue)==true){
+				tableDiscount.row.add( [
+					name,
+					account_code,
+					acumulate,
+					typeDiscount+" "+average,
+					baseCalculate,
+					parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average,
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+				
+			}
+		}
+		if(typeDiscount=="PORCENTAJE"){
+				tableDiscount.row.add( [
+					name,
+					account_code,
+					acumulate,
+					typeDiscount+" "+average,
+					baseCalculate,
+					parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100,
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			
+		}
+		if(typeDiscount=="FIJO"){
+				tableDiscount.row.add( [
+					name,
+					account_code,
+					acumulate,
+					typeDiscount+" "+average,
+					baseCalculate,
+					parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average,
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+			
+		}
+	$('#myModalDiscount').modal('toggle');	
+	tableDiscount.draw( false );
+
+}
+
+
+function finishDiscounts(){
+	var tableDiscount = $('#dataTableGetDiscounts').DataTable(); 
+	var data = tableDiscount.rows().data();
+	var table = $('#datatableAccountToVoucher').DataTable(); 
+	var rows = table.rows().remove().draw();
+	totalCreditos=0;
+	totalDebitos=0;
+
+    data.each(function (value, index) {
+		table.row.add( [
+			counter,
+
+			value[0],
+			" ",
+			value[5],
+			" ",
+			" "
+		]);
+		totalCreditos = totalCreditos+value[5]
+		counter= counter+1;
+
+	});
+	var repeat=0;
+	table.draw( false );
+
+	for (var i=0; i<accontsToVoucher.length; i++){
+		if(accontsToVoucher.typeAccount=="Debito" && accontsToVoucher.account__document=="Obligacion"){
+
+			if(accontsToVoucher.id==repeat){
+				console.log("omito");
+			}else{
+				table.row.add( [
+				counter,
+				accontsToVoucher[i].account__account__description,
+				" ",
+				accontsToVoucher[i].value,
+				" ",
+				" "
+				]);
+				repeat=accontsToVoucher.id;
+				counter= counter+1;
+
+			}
+		}
+	}
+	table.draw( false );
+	$("#countingToVoucher").css("display", "block");
+
+}
+
+function searchAccountsButtonToVoucher(id,valueAccount,rubro){
+
+	$.ajax({
+		url: '{% url "getSearchAccountButton"  0 %}'.replace('0', localStorage.getItem('userID')),
+		data: {
+			'bussinesId': localStorage.getItem('idBussines'),            
+			'idAC': localStorage.getItem('idAC')
+		},
+		dataType: 'json',
+		success: function (data) {
+			console.log(data)
+
+			var table = $('#datatableAccountButtonVoucher').DataTable(); 
+			var rows = table.rows().remove().draw();
+			for (var i=0; i<data.ACCOUNT.length; i++){
+
+			table.row.add( [
+			data.ACCOUNT[i].code,
+			data.ACCOUNT[i].description,
+			"<a data-toggle='tooltip' title='Seleccionar cuenta'><button id="+JSON.stringify(data.ACCOUNT[i].id)+" onclick=\'selectAccountToVoucher("+JSON.stringify(data.ACCOUNT[i].id)+','+JSON.stringify(data.ACCOUNT[i].description)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+			])
+			
+		}
+		table.draw( false );
+		}
+	});
+}
+
+
+function selectAccountToVoucher(id,description){
+	var table = $('#datatableAccountToVoucher').DataTable();
+	idDebitos.push(id); 
+	table.row.add( [
+				counter,
+				description,
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'   id=accountValue"+id+" class='form-control'>",
+				" ",
+				"<input type='text'    size='10'   id=accountDocument"+id+" class='form-control'>"
+	]).draw(false);
+	counter= counter+1;
+	$('#myModalAccountVoucher').modal('toggle');	
+}
+
+function createVoucherPayment(){
+
+	totalDebitos=0;
+	if(idDebitos.length>0){
+		for (var i=0; i<idDebitos.length; i++){
+			totalDebitos = totalDebitos + parseInt($("#accountValue"+idDebitos[i]).val());
+			if($("#accountDocument"+idDebitos[i]).val()==""){
+				swal("No hay documento", "Por favor llenar el documento", "error");
+			}else{
+				SendCreateVoucherPayment();
+			}
+		}
+	}
+	
+
+}
+
+function SendCreateVoucherPayment(){
+
+	if(totalDebitos==totalCreditos){
+		console.log("sisas");
+	}else{
+		swal("El asiento contable no coincide", "Por favor revisar la operacion", "error");
+	}
+
+}
 </script>
 
 {% endblock %}

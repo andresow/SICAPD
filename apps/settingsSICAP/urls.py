@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'ajax/updateContraOperation/(?P<pkUser>\d+)/', UpdateContraOperation.as_view(), name='updateContraOperation'),
     url(r'ajax/getOriginOperation/(?P<pkUser>\d+)/', GetOriginOperation.as_view(), name='getOriginOperation'),
     url(r'ajax/changeWindowsOperation/(?P<pkUser>\d+)/', ChangeWindowsOperation.as_view(), name='changeWindowsOperation'),
+    url(r'settings/listDiscount/(?P<pk>\d+)/(?P<pkUser>\d+)/$', ListDiscount.as_view() , name='listDiscount'),
+    url(r'ajax/createDiscount/(?P<pkUser>\d+)/$', CreateDiscount.as_view(), name='createDiscount'),
 
     url(r'settings/listAccount/(?P<pk>\d+)/(?P<pkUser>\d+)/$', ListAccount.as_view() , name='listAccount'),
     url(r'ajax/createAccount/(?P<pkUser>\d+)/$', CreateAccount.as_view(), name='createAccount'),

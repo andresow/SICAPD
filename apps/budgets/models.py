@@ -203,6 +203,9 @@ class Account(models.Model):
     accountFather = models.BigIntegerField(null=True)
 
 
+    def __str__(self):
+        return '{}'.format(self.code + "  "+ self.description) 
+
 class AccountTypeRubro(models.Model):
 
     bussines = models.ForeignKey(Bussines, null=True, blank=True, on_delete=models.CASCADE)
@@ -238,3 +241,27 @@ class InformBankDetall(models.Model):
     codeInfD = models.CharField(max_length=100)
     descriptionInfD = models.TextField() 
     activity = models.CharField(max_length=100)
+
+
+class OtherDiscount(models.Model):
+
+    name =  models.CharField(max_length=100)
+ 
+class Discount(models.Model):
+
+    CHOICES2 = [('PORCENTAJE RANGO','PORCENTAJE RANGO'),('PORCENTAJE', 'PORCENTAJE'),('FIJO','FIJO'),('FIJO RANGO', 'FIJO RANGO')]
+    CHOICES =  [('MANUAL','MANUAL'),('AUTOMATICO', 'AUTOMATICO')]
+    CHOICES3 = [('SALUD','SALUD'),('RETENCION', 'RETENCION'),('OTROS','OTROS')]
+    CHOICES4 = [('COMPROBANTE','COMPROBANTE'),('REGISTRO', 'REGISTRO')]
+
+    bussines = models.ForeignKey(Bussines, null=True, blank=True, on_delete=models.CASCADE)
+    name =  models.CharField(max_length=100)
+    account = models.ForeignKey(Account, null=True, blank=True, on_delete=models.CASCADE)
+    typeDiscount = models.TextField(max_length=100,choices=CHOICES2)
+    state = models.CharField(max_length=100,choices=CHOICES)
+    acumulate = models.CharField(max_length=100,choices=CHOICES3)
+    baseCalculate = models.CharField(max_length=100,choices=CHOICES4)
+    average = models.BigIntegerField()
+    initialValue = models.BigIntegerField(null=True)
+    finalValue = models.BigIntegerField(null=True)
+    acumulateOther=  models.ForeignKey(OtherDiscount, null=True, blank=True, on_delete=models.CASCADE)

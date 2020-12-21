@@ -81,6 +81,7 @@
 								<li><a id="createAccount " href="#" style="color:rgb(0,0,0);" onclick="redirect(9);return false;" >Cuenta</a></li>
 								<li><a id="createPC " href="#" style="color:rgb(0,0,0);" onclick="redirect(10);return false;" >Parametrización Ppto Contable</a></li>	
 								<li><a id="createPC " href="#" style="color:rgb(0,0,0);" onclick="redirect(11);return false;" >Informes bancarios</a></li>	
+								<li><a id="createPC " href="#" style="color:rgb(0,0,0);" onclick="redirect(12);return false;" >Descuentos</a></li>	
 							</ul>
 						</li>
 						<li><a href="#" style="color:rgb(0,0,0);">Movimientos</a>
@@ -232,6 +233,9 @@
 			}	
 			if(option==11){
 				window.location.href = "https://sicapdeploys.herokuapp.com/settings/listInformBank/"+localStorage.getItem('idBussines')+"/"+localStorage.getItem('userID');	
+			}	
+			if(option==12){
+				window.location.href = "https://sicapdeploys.herokuapp.com/settings/listDiscount/"+localStorage.getItem('idBussines')+"/"+localStorage.getItem('userID');	
 			}					
 		}
 	</script>

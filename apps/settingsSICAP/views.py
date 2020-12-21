@@ -450,16 +450,16 @@ class DeleteAll(LoginRequiredMixin, View):
         elif option=='13':
             disponibility = Movement.objects.get(id=request.GET.get('disponibility'))            
             return JsonResponse({"RUBRO": list(rubroList)})
+
         elif option=='14':
             deleteAccount = Account.objects.get(id=request.GET.get('id'))
-            accountExists = ValuesAccountObligation.objects.filter(account__account_id=request.GET.get('id')).exists()
-            print(accountExists)
-            if accountExists == False:
+            accountingSeatExists = ValuesAccountObligation.objects.filter(account__account_id=request.GET.get('id')).exists()
+            if accountingSeatExists == False:
+                deleteAccount = Account.objects.get(id=request.GET.get('id'))
                 deleteAccount.delete()
                 return JsonResponse({'ELIMINADO': "TRUE"})
             else:
-                return JsonResponse({"ELIMINADO": "FALSE"})
-            
+                return JsonResponse({"ELIMINADO": "FALSE"})      
         elif option=='15':
             informBank = InformBank.objects.get(id=request.GET.get('id'))
             informBank.delete()
@@ -488,6 +488,10 @@ class DeleteAll(LoginRequiredMixin, View):
             else:    
                 listRegister = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="REGISTRO").values('id','date','value','balance','register','observation')
                 return JsonResponse({"DRG": list(rubroList),"RG": list(listRegister)})   
+        elif option=='20':
+            discount = Discount.objects.get(id=request.GET.get('id'))
+            discount.delete()
+            return JsonResponse({'ELIMINADO': 'TRUE'})
         else:
             obligation = Movement.objects.get(id=request.GET.get('obligationID'))  
             rubroObligation = RubroMovement.objects.get(id=request.GET.get('id'))
@@ -610,28 +614,39 @@ class UpdateAccount(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = '/login/'
-    def  get(self, request, *args, **kwargs): 
+    def  get(self, request, *args, **kwargs):
+        print('hola cuentas') 
+        print(request.GET.get('corriente'))
+        print(request.GET.get('id'))
         
         updateAccount = Account.objects.get(id=request.GET.get('id'))
         code=request.GET.get('code').upper()
         if request.GET.get('equalCode') == 'TRUE':
     
             updateAccount.description = request.GET.get('description').upper()
-            updateAccount.nature = request.GET.get('nature')
+            updateAccount.nature = request.GET.get('nature').upper()
+            updateAccount.typeAccount = request.GET.get('typeAccount').upper()
             updateAccount.level = request.GET.get('level')
+            updateAccount.state = request.GET.get('state').upper()
+            updateAccount.corriente = request.GET.get('corriente').upper()
             updateAccount.save() 
-            return JsonResponse({'CREATE':"TRUE"})
+            return JsonResponse({'UPDATE':"TRUE"})
         else:
-            accountExist = Account.objects.filter(code=request.GET.get('code').upper(),bussines_id=request.GET.get('bussinesId')).exists()
-            if accountExist == False:
+            accountExist = Account.objects.filter(code=request.GET.get('code').upper(),bussines_id=request.GET.get('bussinesId'),accountPeriod_id=request.GET.get('idAC')).exists()
+            AccountingSeatObligExist = ValuesAccountObligation.objects.get(account__account_id=request.GET.get('id'),accountPeriod_id=request.GET.get('idAC')).exists()
+            if accountExist == False and AccountingSeatObligExist == False:
                 updateAccount.code = code
-                updateAccount.description = request.GET.get('description').upper()
-                updateAccount.nature = request.GET.get('nature')
+                uupdateAccount.description = request.GET.get('description').upper()         
+                updateAccount.nature = request.GET.get('nature').upper()
+                updateAccount.typeAccount = request.GET.get('typeAccount').upper()
                 updateAccount.level = request.GET.get('level')
+                updateAccount.state = request.GET.get('state').upper()
+                updateAccount.corriente = request.GET.get('corriente').upper()
                 updateAccount.save()  
-                return JsonResponse({'CREATE':"TRUE"})
+                return JsonResponse({'UPDATE':"TRUE"})
             else:
-                return JsonResponse({'CREATE':"FALSE"}) 
+                return JsonResponse({'ACCOUNTINGSEAT':"TRUE"})
+
 
 def generateAccounting(request,pkUser):
 
@@ -830,7 +845,6 @@ class UpdateInformBank(LoginRequiredMixin, View):
                 return JsonResponse({'CREATE':"FALSE"})
 
 class ChangeWindowsInformDetailBank(LoginRequiredMixin, View):
-    print('hola soy')
 
     login_url = '/login/'
     redirect_field_name = '/login/'
@@ -898,7 +912,6 @@ def searchImport(request, account,accountPeriod,discount):
         return discount
 
 class SearchAccountButton(LoginRequiredMixin, View):
-    print('hola soy')
 
     login_url = '/login/'
     redirect_field_name = '/login/'
@@ -907,7 +920,6 @@ class SearchAccountButton(LoginRequiredMixin, View):
         accountSearch = request.GET.get('account') #esta linea es para un diccionario
         accounts = Account.objects.filter(account__startswith=accountSearch,accountPeriod_id=accountPeriod) #lista de objectos medicamentos
         accounts = [ account_serializer(account) for account in accounts ] # lista de diccionario
-        print(accounts)
         return HttpResponse(json.dumps(accounts), content_type='application/json')
 
     def account_serializer(account):
@@ -919,8 +931,52 @@ class GetSearchAccountButton(LoginRequiredMixin,View):
     redirect_field_name = '/login/'
 
     def get(self, request, *args, **kwargs):
-        print('hola función obtener cuenta')
-        print(request.GET.get('idAC'))
+   
         accounts = Account.objects.filter(accountPeriod_id=request.GET.get('idAC')).values('id','code', 'description')
         return JsonResponse({"ACCOUNT": list(accounts)})   
 
+class ListDiscount(LoginRequiredMixin, ListView):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+    model = Discount
+    queryset= model.objects.order_by('name')
+    template_name = 'settings/listDiscount.html'
+
+    def get_context_data(self):
+        context = super(ListDiscount, self).get_context_data()
+        context['DiscountForm'] = DiscountForm
+        return context  
+
+    def get_queryset(self):
+        queryset = super(ListDiscount, self).get_queryset()
+        return Discount.objects.filter(bussines_id=self.kwargs['pk'])
+
+
+class CreateDiscount(LoginRequiredMixin, View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+        name=request.GET.get('name')
+
+        discount = Discount.objects.filter(name=name.upper()).exists()
+        if discount == False:
+            discount = Discount.objects.create(
+            bussines_id = request.GET.get('bussines_id'), 
+            name=request.GET.get('name').upper(), 
+            account_id=request.GET.get('account_id'), 
+            typeDiscount=request.GET.get('typeDiscount').upper(), 
+            state=request.GET.get('state').upper(), 
+            acumulate = request.GET.get('acumulate').upper(), 
+            baseCalculate = request.GET.get('baseCalculate').upper(), 
+            average = request.GET.get('average'), 
+            initialValue = request.GET.get('initialValue'), 
+            finalValue = request.GET.get('finalValue')
+
+        )
+            return JsonResponse({'CREATE':"TRUE"})
+        else:
+            return JsonResponse({'CREATE':"FALSE"})

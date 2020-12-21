@@ -74,21 +74,21 @@
                       role="grid" aria-describedby="dataTable_Account" style="width: 100%;">
                     
                     <thead>
-                        <tr>
-                            <th>Tipo cuenta</th>
+                        <tr>           
                             <th>Código</th>
                             <th>Descripción</th>
                             <th>Naturaleza</th>
+                            <th>Tipo cuenta</th>
                             <th>Corriente</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Tipo cuenta</th>
                             <th>Código</th>
                             <th>Descripción</th>
                             <th>Naturaleza</th>
+                            <th>Tipo cuenta</th>
                             <th>Corriente</th>
                             <th>Acciones</th>
                         </tr>
@@ -97,10 +97,11 @@
                         {% if object_list %}
                         {% for account in object_list %}                        
                               <tr>      
-                                <td>{{account.typeAccount}}</td>                                            
+                                                                           
                                 <td>{{account.code}}</td>                        
                                 <td>{{account.description}}</td>
                                 <td>{{account.nature}}</td>
+                                <td>{{account.typeAccount}}</td> 
                                 <td>{{account.corriente}}</td>
                                 <td>
                         </div>
@@ -111,7 +112,7 @@
                         </button>
                       </a>
                       <a href="#" data-toggle="tooltip" id="updateAccount"  title="Actualizar cuenta">
-                        <button onclick="changeTypeUpdateAccount('{{account.id}}','{{account.code}}','{{account.description}}','{{account.nature}}','{{account.level}}')"data-toggle="modal" data-target="#myModalAccountUpdate" class="btn btn-primary btn-sm">
+                        <button onclick="changeTypeUpdateAccount('{{account.id}}','{{account.code}}','{{account.description}}','{{account.nature}}','{{account.typeAccount}}','{{account.level}}','{{account.state}}','{{account.corriente}}')"data-toggle="modal" data-target="#myModalAccountUpdate" class="btn btn-primary btn-sm">
                         <i class="fa fa-pencil"></i>
                         </button>
                       </a> 
@@ -141,7 +142,7 @@
                             <div class="form-group"><label for="id_description">Descripción</label><input type="text" name="description" maxlength="100" class="form-control" placeholder="Descripción" title="" required="" id="id_description"></div>
 
                             <div class="form-group"><label for="id_nature">Natural</label><input type="text" name="nature" maxlength="100" class="form-control" placeholder="Natural" title="" required="" id="id_nature" disabled></div>
-                            <div class="form-group"><label for="id_typeAccount">Tipó de cuenta</label><select name="typeAccount" class="form-control" title="" required="" id="id_typeAccount">
+                            <div class="form-group"><label for="id_typeAccount">Tipo de cuenta</label><select name="typeAccount" class="form-control" title="" required="" id="id_typeAccount">
                             <option value="" selected="">---------</option>
 
                             <option value="M">Mayor</option>
@@ -219,20 +220,20 @@
 										role="grid" aria-describedby="dataTable_informDetailRubro">	
 										<thead>
 											<tr>
-												<th>Tipo cuenta</th>
-												<th>Codigo</th>
-												<th>Descripcion</th>																				
+												<th>Código</th>
+												<th>Descripción</th>																				
                                                 <th>Naturaleza</th>
+                                                <th>Tipo cuenta</th>
                                                 <th>Corriente</th>
 												<th>Observaciones</th>																																										
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
-												<th>Tipo cuenta</th>
-												<th>Codigo</th>
-												<th>Descripcion</th>																				
+												<th>Código</th>
+												<th>Descripción</th>																				
                                                 <th>Naturaleza</th>
+                                                <th>Tipo cuenta</th>
                                                 <th>Corriente</th>
 												<th>Observaciones</th>
 											</tr>
@@ -298,7 +299,7 @@ function getAccount(id){
     accountId =  id; 
  
 }
-function changeTypeUpdateAccount(id, code, description, nature, level){
+function changeTypeUpdateAccount(id,code,description,nature,typeAccount,level,state,corriente){
     accountId =  id;
     accountCurrentCode = code;
     
@@ -308,8 +309,14 @@ function changeTypeUpdateAccount(id, code, description, nature, level){
     descriptionAUpdate.value = description;
     var natureAUpdate = document.getElementById("id_natureAccountUpdate");
     natureAUpdate.value = nature;
+    var typeAccountUpdate = document.getElementById("id_typeAccountUpdate");
+    typeAccountUpdate.value = typeAccount; 
     var levelAUpdate = document.getElementById("id_levelAccountUpdate");
     levelAUpdate.value = level;
+    var stateAUpdate = document.getElementById("id_stateAccountUpdate");
+    stateAUpdate.value = state;
+    var corrienteAUpdate = document.getElementById("id_corrienteAccountUpdate");
+    corrienteAUpdate.value = corriente;
 }
 
 $("form#addAccount").submit(function() {
@@ -410,11 +417,14 @@ $("form#addAccount").submit(function() {
 $("form#formAPUpdateAccount").submit(function() {
      
     var codeAUpdate = $('input[name="codeAccountUpdate"]').val();
-    var descriptionAUpdate = $('input[name="descriptionAccountUpdate"]').val();
+    var descriptionAUpdate = $('input[name="descriptionAccountUpdate"]').val();   
     var natureAUpdate = $('input[name="natureAccountUpdate"]').val();
+    var typeAccountUpdate = $('input[name="typeAccountUpdate"]').val();
     var levelAUpdate = $('input[name="levelAccountUpdate"]').val();
+    var stateAUpdate = $('input[name="stateAccountUpdate"]').val();
+    var corrienteAUpdate = $('input[name="corrienteAccountUpdate"]').val();
 
-    if (codeAUpdate, descriptionAUpdate, natureAUpdate, levelAUpdate) {
+    if (code,codeAUpdate,descriptionAUpdate,typeAccountUpdate,natureAUpdate,levelAUpdate,stateAUpdate,corrienteAUpdate) {
 
         // Create Ajax Call
         if(accountCurrentCode==codeAUpdate){
@@ -423,20 +433,27 @@ $("form#formAPUpdateAccount").submit(function() {
                 url: '{% url "updateAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
                 data: {
                     'bussinesId': localStorage.getItem('idBussines'),
+                    'accountPeriod': localStorage.getItem('idAC'),
                     'equalCode': 'TRUE',
                     'id': accountId,
                     'code': codeAUpdate,
                     'description': descriptionAUpdate,
                     'nature': natureAUpdate,
+                    'typeAccount': typeAccountUpdate,
                     'level': levelAUpdate,
+                    'state': stateAUpdate,
+                    'corriente': corrienteAUpdate,
                     
                 },
                 dataType: 'json',
                 success: function (data) {                   
-                    if(data.CREATE == "TRUE"){
+                    if(data.UPDATE == "TRUE"){
                         $("#dataTableAccount").load(" #dataTableAccount");
                         swal("Actualización exitosa!", "Continua con tu proceso!", "success");
                         $('#myModalAccountUpdate').modal('toggle');
+                    if (data.ACCOUNTINGSEAT=="TRUE"){
+                        swal("No puede actualizar esta cuenta "+ code + " posee asientos contables", "Por favor verifica", "error");			
+				    }
                     }else{
                         swal("No se puede actualizar la cuenta", "Ya existe una cuenta con este código", "error");
                         $('#myModalAccountUpdate').modal('toggle');
@@ -449,20 +466,27 @@ $("form#formAPUpdateAccount").submit(function() {
             url: '{% url "updateAccount"  0 %}'.replace('0', localStorage.getItem('userID')),
             data: {
                 'bussinesId': localStorage.getItem('idBussines'),
+                'accountPeriod': localStorage.getItem('idAC'),
                 'equalCode': 'FALSE',
                 'id': accountId,
                 'code': codeAUpdate,
                 'description': descriptionAUpdate,
                 'nature': natureAUpdate,
+                'typeAccount': typeAccountUpdate,
                 'level': levelAUpdate,
+                'state': stateAUpdate,
+                'corriente': corrienteAUpdate,
                 
             },
             dataType: 'json',
             success: function (data) {               
-                if(data.CREATE == "TRUE"){
+                if(data.UPDATE == "TRUE"){
                     $("#dataTableAccount").load(" #dataTableAccount");
                     swal("Actualización exitosa!", "Continua con tu proceso!", "success");
                     $('#myModalAccountUpdate').modal('toggle');
+                if (data.ACCOUNTINGSEAT=="TRUE"){
+                    swal("No puede actualizar esta cuenta "+ code + " posee asientos contables", "Por favor verifica", "error");			
+				}
                 }else{
                     swal("No se puede actualizar la cuenta", "Ya existe una cuenta con este código", "error");
                     $('#myModalAccountUpdate').modal('toggle');
@@ -499,14 +523,14 @@ function deleteAccount(id, code){
             dataType: 'json',
             success: function (data) { 
                 console.log(data)
-                if(data.ELIMINADO='TRUE'){
+                if (data.ELIMINADO=="TRUE"){
                     $("#dataTableAccount").load(" #dataTableAccount");
                     swal("La cuenta número " + code + " se ha eliminado con éxito.", {
                     icon: "success",
                     });
 
                 }else{
-                    swal("No puede eliminar cuenta, posee asientos contables", "Por favor verifica", "error");
+                    swal("No puede eliminar cuenta "+ code + " posee asientos contables", "Por favor verifica", "error");
                 }
                 
             }
@@ -752,7 +776,7 @@ var ExcelToJSON = function() {
 				"TC": JSON.parse(json_object)[i].tipocu,
 				"CD": JSON.parse(json_object)[i].codigo,
 				"DC": JSON.parse(json_object)[i].descri,
-                "NT": nature,
+                "NT": nature,  
                 "CO": corrient,
 			})
 
@@ -760,7 +784,7 @@ var ExcelToJSON = function() {
                     JSON.parse(json_object)[i].tipocu,
                     JSON.parse(json_object)[i].codigo,
                     JSON.parse(json_object)[i].descri,
-                    nature,
+                    nature,  
                     corrient,
                     "<label type='number' id=import"+JSON.parse(json_object)[i].codigo+"></label>",			
             ])  

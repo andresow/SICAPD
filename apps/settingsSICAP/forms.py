@@ -126,7 +126,7 @@ class AccountForm(forms.ModelForm):
         labels = {
                 'code': 'Código',
                 'description': 'Descripción',
-                'typeAccount': 'Tipó de cuenta',
+                'typeAccount': 'Tipo de cuenta',
                 'nature': 'Natural',
                 'level': 'Nivel',
                 'state': 'Estado',
@@ -136,11 +136,49 @@ class AccountForm(forms.ModelForm):
         widgets = { 				
                 'Código':forms.TextInput(),
                 'Descripción':forms.TextInput(),
-                'Tipó de cuenta':forms.TextInput(),
+                'Tipo de cuenta':forms.TextInput(),
                 'Naturaleza':forms.TextInput(),
                 'Nivel':forms.TextInput(),  
                 'Estado':forms.TextInput(),
                 'Corriente':forms.TextInput(),               
+        }
+
+class DiscountForm(forms.ModelForm):
+        
+
+    class Meta:
+        model = Discount
+        fields = [
+                'name',
+                'account',
+                'typeDiscount',
+                'state',
+                'baseCalculate',
+                'average',
+                'initialValue',
+                'finalValue'
+        ]
+        
+        labels = {
+                'name': 'Nombre',
+                'account': 'Cuenta',
+                'typeDiscount': 'Tipo de descuento',
+                'state': 'Estado',
+                'baseCalculate': 'Base calculo',
+                'average': 'Porcentaje',
+                'initialValue': 'Valor inicial',
+                'finalValue': 'Valor final'               
+        }
+
+        widgets = { 				
+                'Nombre':forms.TextInput(),
+                'Cuenta':forms.TextInput(),
+                'Tipo de descuento':forms.TextInput(),
+                'Estado':forms.TextInput(),
+                'Base calculo':forms.TextInput(),
+                'Porcentaje':forms.TextInput(),  
+                'Valor inicial':forms.TextInput(),
+                'Valor final':forms.TextInput(),               
         }
 
 class ByAccountUpdate(forms.Form):
@@ -226,16 +264,26 @@ class ByBudgetOriginForm(forms.Form):
 
 class AccountUpdate(forms.Form):
 
+        CHOICES = [('ACTIVO','ACTIVO'),('INACTIVO', 'INACTIVO')]
+        CHOICES2 = [('M','M'),('A', 'A')]
+
         codeAccountUpdate = forms.CharField()
         descriptionAccountUpdate = forms.CharField()
-        natureAccountUpdate = forms.CharField()          
-        levelAccountUpdate= forms.CharField()
+        natureAccountUpdate = forms.CharField(widget=forms.TextInput(attrs={'disabled':'disabled'}))
+        typeAccountUpdate = forms.ChoiceField(choices=CHOICES2)                
+        levelAccountUpdate= forms.CharField(widget=forms.TextInput(attrs={'disabled':'disabled'})) 
+        stateAccountUpdate = forms.ChoiceField(choices=CHOICES)
+        corrienteAccountUpdate = forms.CharField(widget=forms.TextInput(attrs={'disabled':'disabled'}))          
         
         def __init__(self, *args, **kwargs):
                 super(AccountUpdate, self).__init__(*args, **kwargs)
                 
                 self.fields['codeAccountUpdate'].label = 'Código'
                 self.fields['descriptionAccountUpdate'].label = 'Descripción'
-                self.fields['natureAccountUpdate'].label = 'Natural'
+                self.fields['natureAccountUpdate'].label = 'Natural' 
+                self.fields['typeAccountUpdate'].label = 'Tipo de cuenta'             
                 self.fields['levelAccountUpdate'].label = 'Nivel'
+                self.fields['stateAccountUpdate'].label = 'Estado'
+                self.fields['corrienteAccountUpdate'].label = 'Corriente'
+               
 

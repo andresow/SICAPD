@@ -1,0 +1,391 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+{% block main %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="loader-page-great">
+    
+    <div class="loader-page ">
+    </div>
+</div>
+
+<div id="accountsDivs" class="container-fluid">
+    <h1 class="mt-4">Lista de cuentas</h1>
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Lista de descuentos</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <button data-toggle="modal" data-target="#myModalDiscount" type="button" class="genric-btn primary small">Añadir descuento</button>              
+                <table class="table table-bordered dataTable" id="dataTableDiscount" width="100%" cellspacing="0"
+                      role="grid" aria-describedby="dataTable_Account" style="width: 100%;">
+                    
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cuenta</th>
+                            <th>Tipo de descuento</th>
+                            <th>Estado</th>
+                            <th>Acumula</th>
+                            <th>Base calculo</th>
+                            <th>Porcentaje</th>
+                            <th>Valor inicial</th>
+                            <th>Valor final</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cuenta</th>
+                            <th>Tipo de descuento</th>
+                            <th>Estado</th>
+                            <th>Acumula</th>
+                            <th>Base calculo</th>
+                            <th>Porcentaje</th>
+                            <th>Valor inicial</th>
+                            <th>Valor final</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if object_list %}
+                        {% for discount in object_list %}                        
+                              <tr>      
+                                <td>{{discount.name}}</td>                                            
+                                <td>{{discount.account}}</td>                        
+                                <td>{{discount.typeDiscount}}</td>
+                                <td>{{discount.state}}</td>
+                                <td>{{discount.acumulate}}</td>
+                                <td>{{discount.baseCalculate}}</td>
+                                <td>{{discount.average}}</td>
+                                <td>{{discount.initialValue}}</td>
+                                <td>{{discount.finalValue}}</td>
+                                <td>
+                        </div>
+                      </div>
+                      <a href="#" data-toggle="tooltip"   title="Eliminar descuento">
+                        <button onclick="deleteDiscount('{{discount.id}}','{{discount.name}}')" class="btn btn-primary btn-sm"  >
+                        <i class="fa fa-trash"></i>
+                        </button>
+                      </a>
+                      <a href="#" data-toggle="tooltip" id="updateAccount"  title="Actualizar descuento">
+                        <button class="btn btn-primary btn-sm">
+                        <i class="fa fa-pencil"></i>
+                        </button>
+                      </a> 
+                                </td>
+                              </tr>
+                            {% endfor %}
+                            {% else %}
+                            <h1 class="black-color">No hay cuentas registradas de esta empresa</h1>
+                            {% endif %}  
+                    </tbody>
+                </table>
+        </div>
+
+<div class="modal fade" id="myModalDiscount" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Añadir nueva cuenta</h4>
+                </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <form id="addDuscount" action="">
+                                {% csrf_token %}
+
+                                <input type="hidden" name="csrfmiddlewaretoken" value="rzfXPlOBbSueEaqQq12ydkOcDi0SJII8TNBmtOZ95nQbeAPBsqQbLeyXQS8ThnoJ">
+                                <div class="form-group"><label for="id_name">Nombre</label><input type="text" name="name" maxlength="100" class="form-control" placeholder="Nombre" title="" required="" id="id_name"></div>
+    <div class="form-group"><label for="id_account">Cuenta</label><button id="searchAccountButton" type="button" onclick="searchAccountsButton()" class="btn btn-primary btn-sm fa fa-search" title="Buscar Cuenta" data-toggle="modal" data-target="#myModalAccountButton"></button>
+        <select name="account" class="form-control" title="" id="id_account">               
+        </select>
+    </div>
+    <div class="form-group"><label for="id_typeDiscount">Tipo de descuento</label><select name="typeDiscount" class="form-control" title="" required="" id="id_typeDiscount">
+        <option  hidden  selected> Selecciona una opción</option>    
+    
+      <option value="PORCENTAJE RANGO">PORCENTAJE PRANGO</option>
+    
+      <option value="PORCENTAJE">PORCENTAJE</option>
+    
+      <option value="FIJO">FIJO</option>
+    
+      <option value="FIJO RANGO">FIJO RANGO</option>
+    
+    </select></div>
+    <div class="form-group"><label for="id_state">Estado</label><select name="state" class="form-control" title="" required="" id="id_state">
+        <option  hidden  selected> Selecciona una opción</option>    
+    
+      <option value="MANUAL">MANUAL</option>
+    
+      <option value="AUTOMATICO">AUTOMATICO</option>
+    
+    </select></div>
+    <div class="form-group"><label for="id_acumulate">Tipo de descuento</label><select name="acumulate" class="form-control" title="" required="" id="id_acumulate">
+      <option  hidden  selected> Selecciona una opción</option>    
+    
+      <option value="SALUD">SALUD</option>
+    
+      <option value="RETENCION">RETENCION</option>
+    
+      <option value="OTROS">OTROS</option>
+        
+    </select></div>
+    <div class="form-group"><label for="id_baseCalculate">Base calculo</label><select name="baseCalculate" class="form-control" title="" required="" id="id_baseCalculate">
+      <option  hidden  selected> Selecciona una opción</option>    
+      <option value="COMPROBANTE">COMPROBANTE</option>
+    
+      <option value="REGISTRO">REGISTRO</option>
+    
+    </select></div>
+    <div class="form-group" id="div_id_average"><label for="id_average" id="variant_value">Porcentaje</label><input type="number" name="average" min="-9223372036854775808" max="9223372036854775807" class="form-control" placeholder="Valor" title="" required="" id="id_average" ></div>
+    <div class="form-group" id="div_id_initialValue"><label for="id_initialValue">Valor inicial</label><input type="number" name="initialValue" min="-9223372036854775808" max="9223372036854775807" class="form-control" placeholder="Valor inicial" title="" required="" id="id_initialValue"></div>
+    <div class="form-group" id="div_id_finalValue"><label for="id_finalValue">Valor final</label><input type="number" name="finalValue" min="-9223372036854775808" max="9223372036854775807" class="form-control" placeholder="Valor final" title="" required="" id="id_finalValue"></div>                               
+                            </form>  
+                            <div id="divCreateDiscount" class="form-group">
+                                <button id="btnCreateDiscount" onclick="createDiscount()" class="genric-btn success circle">Registrar descuento</button>
+                                <button type="submit" class="genric-btn default circle" data-dismiss="modal">Cancelar</button>
+                            </div>  
+                        </div>
+                    </div>
+        </div>     
+    </div>  
+</div>
+
+</div>
+<div class="modal fade bd-example-modal-lg" id="myModalAccountButton" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Lista de cuentas para seleccionar</h4>
+            </div>
+                <div class="modal-body">
+					<div  class="container-fluid " >
+						<div class="card mb" >
+                            <div class="card-header " id="listAccountButton"><i class="fas fa-table mr-1" ></i>Seleccione la cuenta para remplazar</div>
+                                <div class="card-body" >
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered dataTable" id="datatableAccountButton" cellspacing="0" 
+                                            role="grid" aria-describedby="dataTable_accountButton">	
+                                            <thead>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Código</th>	
+                                                    <th>Descripción</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </tfoot>
+                                                <tbody>
+                                                    <h1></h1> 
+                                    
+                                                </tbody>
+
+                                        </table>
+                                    </div>		
+                                </div>
+                        
+                            </div>  
+				    </div>  
+                </div>
+        </div>         
+    </div>  
+</div>
+<script>
+$(document).ready(function() {
+	$('#dataTableDiscount').DataTable( {
+			
+		  "language": idioma_español,
+		  
+			dom: 'Bfrtip',			
+		  }
+          
+		  );		 	
+
+    $('#datatableAccountButton').DataTable( {
+			
+            "language": idioma_español,
+            
+              dom: 'Bfrtip',			
+            }
+            
+    );	       	 	
+    $.ajax({
+        url: '{% url "getAccountSettings"  0 %}'.replace('0', localStorage.getItem('userID')),
+        data: {
+            'bussinesId': localStorage.getItem('idBussines'),
+            'idAC': localStorage.getItem('idAC'),
+
+        },
+        dataType: 'json',
+        success: function (data) {
+            const $select = document.querySelector("#id_account");
+        
+            for (let i = $select.options.length; i >= 0; i--) {
+                $select.remove(i);
+            }
+            $('#id_account').append(`<option  hidden  selected"> Selecciona una opción</option>`);
+            for (var i=0; i<data.ACC.length; i++){
+            $('#id_account').append(`<option value="${data.ACC[i].id}">${data.ACC[i].code}`+' '+ `${data.ACC[i].description} </option>`);
+            }						
+        }       
+    });
+    $("#div_id_average").hide();
+    $("#div_id_initialValue").hide();
+    $("#div_id_finalValue").hide();
+
+    $('#id_typeDiscount').change(function(){
+        if($('#id_typeDiscount').val()=="PORCENTAJE RANGO"){
+            $("#variant_value").text("Porcentaje");
+            $("#div_id_average").show();
+            $("#div_id_initialValue").show();
+            $("#div_id_finalValue").show();
+            $("#id_initialValue").val(0);
+            $("#id_finalValue").val(0);
+        }
+        if($('#id_typeDiscount').val()=="FIJO RANGO"){
+            $("#variant_value").text("Valor fijo");
+            $("#div_id_average").show();
+            $("#div_id_initialValue").show();
+            $("#div_id_finalValue").show();
+            $("#id_initialValue").val(0);
+            $("#id_finalValue").val(0);
+        }
+        if($('#id_typeDiscount').val()=="PORCENTAJE"){
+            $("#id_initialValue").val(0);
+            $("#id_finalValue").val(0);
+            $("#div_id_initialValue").hide();
+            $("#div_id_finalValue").hide();
+            $("#variant_value").text("Porcentaje");
+            $("#div_id_average").show();     
+        }
+        if($('#id_typeDiscount').val()=="FIJO"){
+            $("#id_initialValue").val(0);
+            $("#id_finalValue").val(0);
+            $("#div_id_initialValue").hide();
+            $("#div_id_finalValue").hide();
+            $("#variant_value").text("Valor fijo");
+            $("#div_id_average").show();
+         
+        }
+    });
+
+});
+function searchAccountsButton(){
+
+
+    $.ajax({
+        url: '{% url "getSearchAccountButton"  0 %}'.replace('0', localStorage.getItem('userID')),
+        data: {
+            'bussinesId': localStorage.getItem('idBussines'),            
+            'idAC': localStorage.getItem('idAC')
+
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+
+            var table = $('#datatableAccountButton').DataTable(); 
+            var rows = table.rows().remove().draw();
+            for (var i=0; i<data.ACCOUNT.length; i++){
+
+            table.row.add( [
+            data.ACCOUNT[i].code,
+            data.ACCOUNT[i].description,
+            "<a data-toggle='tooltip' title='Seleccionar cuenta'><button id="+JSON.stringify(data.ACCOUNT[i].id)+" onclick=\'selectAccount("+JSON.stringify(data.ACCOUNT[i].id)+','+JSON.stringify(data.ACCOUNT[i].code)+','+JSON.stringify(data.ACCOUNT[i].description)+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"														
+            ])
+            
+        }
+        table.draw( false );
+
+
+        }
+    });
+} 
+
+function selectAccount(id){
+    $("#id_account").val(id);
+    $('#myModalAccountButton').modal('toggle');
+    $("#id_average").show();
+}
+
+function createDiscount(){
+
+    $.ajax({
+        url: '{% url "createDiscount"  0 %}'.replace('0', localStorage.getItem('userID')),
+        data: {
+            'bussines_id': localStorage.getItem('idBussines'),            
+            'name': $("#id_name").val(), 
+            'account_id': $("#id_account").val(),            
+            'typeDiscount': $("#id_typeDiscount").val(), 
+            'state': $("#id_state").val(),            
+            'acumulate': $("#id_acumulate").val(), 
+            'baseCalculate': $("#id_baseCalculate").val(),            
+            'average': $("#id_average").val(), 
+            'initialValue': $("#id_initialValue").val(),            
+            'finalValue': $("#id_finalValue").val()
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+            $("#dataTableDiscount").load(" #dataTableDiscount");
+            if(data.CREATE == "TRUE"){
+                swal("Creado exitoso del descuento", "Continua con tu proceso!", "success");
+                $('#myModalDiscount').modal('toggle');
+            }
+            else{
+                swal("No se puede crear el descuento", "Ya existe un descuento con este nombre", "error");
+                $('#myModalDiscount').modal('toggle');
+            }       
+        }
+    });
+}
+
+function deleteDiscount(id, name){
+    swal({
+    title: "Desea eliminar el descuento " + name + "?",
+    text: "Al confirmar este acción, el descuento " + name + " sera eliminado.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+    })
+    .then((willDelete) => {
+    if (willDelete) {
+
+        $.ajax({
+                    url: '{% url "deleteAll"  0 %}'.replace('0', localStorage.getItem('userID')),
+                    data: {
+                        'id': id,
+                        'option': '20'
+                    },
+                    dataType: 'json',
+                    success: function (data) { 
+                        console.log(data)
+                        if (data.ELIMINADO=="TRUE"){
+                            $("#dataTableDiscount").load(" #dataTableDiscount");
+                            swal("El descuento " + name + " se ha eliminado con éxito.", {
+                            icon: "success",
+                            });
+
+                        }
+                        
+                    }
+                });
+        }
+    });
+}
+
+</script>
+{% endblock %}
