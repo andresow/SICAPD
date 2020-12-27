@@ -265,3 +265,17 @@ class Discount(models.Model):
     initialValue = models.BigIntegerField(null=True)
     finalValue = models.BigIntegerField(null=True)
     acumulateOther=  models.ForeignKey(OtherDiscount, null=True, blank=True, on_delete=models.CASCADE)
+
+class DiscountMovement(models.Model):
+
+    discount = models.ForeignKey(Discount, null=True, blank=True, on_delete=models.CASCADE)
+    movement = models.ForeignKey(Movement, null=True, blank=True, on_delete=models.CASCADE)
+    base = models.BigIntegerField(null=True)
+    value = models.BigIntegerField(null=True)
+
+class MovementAcount(models.Model):
+
+    movement = models.ForeignKey(Movement, null=True, blank=True, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, null=True, blank=True, on_delete=models.CASCADE)
+    debito = models.BigIntegerField(null=True)
+    credito = models.BigIntegerField(null=True)

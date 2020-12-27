@@ -51,5 +51,6 @@ urlpatterns = [
     url(r'ajax/getObligationsSelect/(?P<pkUser>\d+)/', GetObligationsSelect.as_view(), name='getObligationsSelect'),
     url(r'ajax/getDiscountsManuals/(?P<pkUser>\d+)/', GetDiscountsManuals.as_view(), name='getDiscountsManuals'),
     url(r'ajax/getTypeDocument/(?P<pkUser>\d+)/', GetTypeDocument.as_view(), name='getTypeDocument'),
+    url(r'ajax/createVoucherPayment/(?P<pkUser>\d+)/', CreateVoucherPayment.as_view(), name='createVoucherPayment'),
 
 ]

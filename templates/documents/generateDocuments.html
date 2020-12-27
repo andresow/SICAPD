@@ -538,11 +538,11 @@
 										</table>
 								</div>
 								<div class="form-row col-12 mb-2">
-									<div class="col-8" >
-										<h6  id="totalVoucherPaymentBalance" for="totalVoucherPaymenBalance" align="center">COMPROBANTE DE PAGO: 0</h6>
+									<div class="col-8" >		 								
+										<h6  id="totalVoucher" for="totalVoucher" align="center">COMPROBANTE DE PAGO: 0</h6>
 									</div>
 									<div class="col-4" >
-										<h6  id="totalVoucherPaymen" for="totalVoucherPaymen">SALDO: 0</h6>														
+										<h6  id="totalVoucherBalance" for="totalVoucherBalance">SALDO: 0</h6>														
 									</div>								
 								</div>	
 							</div>
@@ -560,7 +560,8 @@
 											
 											<thead>
 												<tr>
-													<th>Decuento</th>	
+													<th>ID</th>	
+													<th>Descuento</th>	
 													<th>Código cuenta</th>	
 													<th>Acumula</th>
 													<th>Tipo de descuento</th>
@@ -571,6 +572,7 @@
 											</thead>
 											<tfoot>
 												<tr>
+													<th>ID</th>	
 													<th>Decuento</th>	
 													<th>Código cuenta</th>	
 													<th>Acumula</th>
@@ -1559,6 +1561,8 @@ var discountsResponse=[];
 var discountsRepeat=[];
 var arrayIdsVoucher=[];
 var accontsToVoucher=[];
+var addDiscounts=[];
+var addAccount=[];
 var totalCreditos = 0;
 var idDebitos=[];
 var totalDebitos=0;
@@ -1775,6 +1779,7 @@ $(document).ready(function() {
 		$('#dataTableGetDiscounts').DataTable( {
 			
 		  "destroy":true,
+		 
 		  "language": idioma_español,
 		  
 			dom: 'Bfrtip',			
@@ -4400,9 +4405,23 @@ function selectThirdToVoucher(id){
 			}
 	});	
 }
+function getSerialVoucherPayment(){
+	$.ajax({
+			url: '{% url "getSerialVoucherPayment"  0 %}'.replace('0', localStorage.getItem('userID')),
+			data: {
+				'bussines':localStorage.getItem('idBussines'),
+				'origin': originID
+			},
+			dataType: 'json',
+			success: function (data) {
+				$("#numberVoucherPayment").val(data.VP); 
+
+			}
+	});
+}
 function selectObligationsData(id,third){
 	$('#myModalResultObligations').modal('toggle');
-
+	getSerialVoucherPayment();
 	$.ajax({
 			url: '{% url "getObligationsSelect"  0 %}'.replace('0', localStorage.getItem('userID')),
 			data: {
@@ -4458,7 +4477,6 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 	operate = parseInt(valueP) - parseInt($(createId).val());
 	var valueAccount=parseInt($(createId).val());
 	const found = addVoucher.findIndex(element => element['id'] == id);
-	console.log(parseInt($(createId).val()))
 	if(parseInt($(createId).val())==0){
 		swal("No se puede generar una operacion de valor 0", " " , "error");
 	}else{
@@ -4481,12 +4499,10 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 					})
 					totalOperateVoucher = totalOperateVoucher + operate;	
 					totalVoucher = totalVoucher + parseInt($(createId).val());
-					//$("#totalObligation").text("SALDO: "+ totalOperateVoucher);														
-					//$("#totalObligationBalance").text("COMPROBANTE DE PAGO: "+ totalVoucher);														
+					$("#totalVoucher").text("SALDO: "+ totalOperateVoucher);			 
+					$("#totalVoucherBalance").text("COMPROBANTE DE PAGO: "+ totalVoucher);														
 
 				}
-				console.log(addVoucher) 
-				console.log(totalOperateArrayVoucher)
 
 			}else{
 
@@ -4510,15 +4526,12 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 					}
 					totalOperateVoucher = totalOperateVoucher + totalOperateArrayVoucher[found]['subtotal'];	
 					totalVoucher = totalVoucher + totalOperateArrayVoucher[found]['obligation'];
-					//$("#totalObligation").text("SALDO: "+ totalOperateVoucher);														
-					//$("#totalObligationBalance").text("OBLIGACIÓN: "+ totalVoucher);														
+					$("#totalVoucher").text("SALDO: "+ totalOperateVoucher);														
+					$("#totalVoucherBalance").text("OBLIGACIÓN: "+ totalVoucher);														
 
 				}
-				console.log(addVoucher)
-				console.log(totalOperateArrayVoucher)
 		}
 	} 
-	console.log(discountsRepeat);
 	var tableDiscount = $('#dataTableGetDiscounts').DataTable(); 
 	var repeat = 0; 
 	for (var i=0; i<discountsRepeat.length; i++){
@@ -4526,14 +4539,16 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 			if(beetween(parseInt($(createId).val()),discountsRepeat[i].initialValue,discountsRepeat[i].finalValue)==true){
 				if(discountsRepeat[i].id!=repeat){
 					tableDiscount.row.add( [
+					discountsRepeat[i].id,
 					discountsRepeat[i].name,
 					discountsRepeat[i].account_code,
 					discountsRepeat[i].acumulate,
 					discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
 					discountsRepeat[i].baseCalculate,
-					parseInt($(createId).val())*(discountsRepeat[i].average)/100,
-					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($(createId).val())*(discountsRepeat[i].average)/100+"  id=discountValue"+discountsRepeat[i].id+" class='form-control'>",
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+discountsRepeat[i].id+','+discountsRepeat[i].baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
+				addDiscounts.push({"id":discountsRepeat[i].id,"base": parseInt($(createId).val()),"value":parseInt($(createId).val())*(discountsRepeat[i].average)/100})
 				repeat = discountsRepeat[i].id;
 				}else{
 					repeat = discountsRepeat[i].id;
@@ -4545,14 +4560,16 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 			if(beetween(parseInt($(createId).val()),discountsRepeat[i].initialValue,discountsRepeat[i].finalValue)==true){
 				if(discountsRepeat[i].id!=repeat){
 					tableDiscount.row.add( [
+					discountsRepeat[i].id,
 					discountsRepeat[i].name,
 					discountsRepeat[i].account_code,
 					discountsRepeat[i].acumulate,
 					discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
 					discountsRepeat[i].baseCalculate,
-					0,
-					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($(createId).val())-average+"  id=discountValue"+discountsRepeat[i].id+" class='form-control'>",
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+discountsRepeat[i].id+','+discountsRepeat[i].baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
+				addDiscounts.push({"id":discountsRepeat[i].id,"base":parseInt($(createId).val()),"value":parseInt($(createId).val())-average})
 				repeat = discountsRepeat[i].id;
 				}else{
 					repeat = discountsRepeat[i].id;
@@ -4562,14 +4579,16 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 		if(discountsRepeat[i].typeDiscount=="PORCENTAJE"){
 			if(discountsRepeat[i].id!=repeat){
 				tableDiscount.row.add( [
+				discountsRepeat[i].id,
 				discountsRepeat[i].name,
 				discountsRepeat[i].account_code,
 				discountsRepeat[i].acumulate,
 				discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
 				discountsRepeat[i].baseCalculate,
-				parseInt($(createId).val())*(discountsRepeat[i].average)/100,
-				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($(createId).val())*(discountsRepeat[i].average)/100+"  id=discountValue"+discountsRepeat[i].id+" class='form-control'>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+discountsRepeat[i].id+','+discountsRepeat[i].baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
+				addDiscounts.push({"id":discountsRepeat[i].id,"base":parseInt($(createId).val()),"value":parseInt($(createId).val())*(discountsRepeat[i].average)/100})
 				repeat = discountsRepeat[i].id;
 			}else{
 				repeat = discountsRepeat[i].id;
@@ -4578,15 +4597,17 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 		if(discountsRepeat[i].typeDiscount=="FIJO"){
 			if(discountsRepeat[i].id!=repeat){
 				tableDiscount.row.add( [
+				discountsRepeat[i].id,
 				discountsRepeat[i].name,
 				discountsRepeat[i].account_code,
 				discountsRepeat[i].acumulate,
 				discountsRepeat[i].typeDiscount+" "+discountsRepeat[i].average,
 				discountsRepeat[i].baseCalculate,
-				0,
-				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'operateBalanceVoucher()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($(createId).val())-average+"  id=discountValue"+discountsRepeat[i].id+" class='form-control'>",
+				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+discountsRepeat[i].id+','+discountsRepeat[i].baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
 				repeat = discountsRepeat[i].id;
+				addDiscounts.push({"id":discountsRepeat[i].id,"base": parseInt($(createId).val()),"value":parseInt($(createId).val())-average})
 			}else{
 				repeat = discountsRepeat[i].id;
 			}
@@ -4599,11 +4620,8 @@ function operateBalanceVoucher(id,rubro,value,idObligation,valueP){
 function beetween(valor,min,max){
 
 	if(valor>=min && valor<=max){
-		console.log(true)
 		return true;
-
 	}else{
-		console.log(false);
 		return false;
 	}
 
@@ -4616,6 +4634,7 @@ function getDiscountsManuals(){
 			},
 			dataType: 'json',
 			success: function (data) {
+				console.log(data)
 				var table = $('#dataTableSelectDiscount').DataTable(); 
 				var rows = table.rows().remove().draw();
 
@@ -4639,59 +4658,72 @@ function selectDiscountToVoucher(id,name,account_code,acumulate,typeDiscount,ave
 	if(typeDiscount=="PORCENTAJE RANGO"){
 			if(beetween(parseInt($('#voucher'+arrayIdsVoucher[0]).val()),initialValue,finalValue)==true){
 					tableDiscount.row.add( [
+					id,
 					name,
 					account_code,
 					acumulate,
 					typeDiscount+" "+average,
 					baseCalculate,
-					parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100,
-					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
-				])	
+					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100+"  id=discountValue"+id+" class='form-control'>",
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+id+','+baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+				])
+				addDiscounts.push({"id":id,"base": $('#voucher'+arrayIdsVoucher[0]).val(),"value":parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100})	
 			}	
 		}
 		if(typeDiscount=="FIJO RANGO"){
 			if(beetween(parseInt($('#voucher'+arrayIdsVoucher[0]).val()),initialValue,finalValue)==true){
 				tableDiscount.row.add( [
+					id,
 					name,
 					account_code,
 					acumulate,
 					typeDiscount+" "+average,
 					baseCalculate,
-					parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average,
-					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average+"  id=discountValue"+id+" class='form-control'>",
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+id+','+baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
-				
+				addDiscounts.push({"id":id,"base": $('#voucher'+arrayIdsVoucher[0]).val(),"value":parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average})
+
 			}
 		}
 		if(typeDiscount=="PORCENTAJE"){
 				tableDiscount.row.add( [
+					id,
 					name,
 					account_code,
 					acumulate,
 					typeDiscount+" "+average,
 					baseCalculate,
-					parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100,
-				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100+"  id=discountValue"+id+" class='form-control'>",
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+id+','+baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
-			
+				addDiscounts.push({"id":id,"base": $('#voucher'+arrayIdsVoucher[0]).val(),"value":parseInt($('#voucher'+arrayIdsVoucher[0]).val())*(average)/100})
+
 		}
 		if(typeDiscount=="FIJO"){
 				tableDiscount.row.add( [
+					id,
 					name,
 					account_code,
 					acumulate,
 					typeDiscount+" "+average,
 					baseCalculate,
-					parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average,
-				"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'x()\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
+					"<input type='text'  onkeypress='return validaNumericos(event)'/   size='10'  value="+parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average+"  id=discountValue"+id+" class='form-control'>",
+					"<a data-toggle='tooltip' title='Validar operación'><button type='button' onclick=\'discountsChange("+id+','+baseCalculate+")\' class='btn btn-primary btn-sm'><i class='fa fa-check' aria-hidden='true'></i></button></a>"			
 				])
-			
+				addDiscounts.push({"id":id,"base": $('#voucher'+arrayIdsVoucher[0]).val(),"value":parseInt($('#voucher'+arrayIdsVoucher[0]).val())-average})
+
 		}
 	$('#myModalDiscount').modal('toggle');	
 	tableDiscount.draw( false );
 
 }
 
+function discountsChange(id,baseCalculate){
+
+	const found = addDiscounts.findIndex(element => element['id'] == id);
+	addDiscounts[found] ={"id":id,"base": baseCalculate,"value":parseInt($('#discountValue'+id).val())}
+}
 
 function finishDiscounts(){
 	var tableDiscount = $('#dataTableGetDiscounts').DataTable(); 
@@ -4705,13 +4737,13 @@ function finishDiscounts(){
 		table.row.add( [
 			counter,
 
-			value[0],
+			value[1],
 			" ",
-			value[5],
+			parseInt($('#discountValue'+value[0]).val()),
 			" ",
 			" "
 		]);
-		totalCreditos = totalCreditos+value[5]
+		totalCreditos = totalCreditos+parseInt($('#discountValue'+value[0]).val())
 		counter= counter+1;
 
 	});
@@ -4719,11 +4751,13 @@ function finishDiscounts(){
 	table.draw( false );
 
 	for (var i=0; i<accontsToVoucher.length; i++){
+		
 		if(accontsToVoucher.typeAccount=="Debito" && accontsToVoucher.account__document=="Obligacion"){
 
 			if(accontsToVoucher.id==repeat){
 				console.log("omito");
 			}else{
+				addAccount.push({"id":id});
 				table.row.add( [
 				counter,
 				accontsToVoucher[i].account__account__description,
@@ -4753,7 +4787,6 @@ function searchAccountsButtonToVoucher(id,valueAccount,rubro){
 		},
 		dataType: 'json',
 		success: function (data) {
-			console.log(data)
 
 			var table = $('#datatableAccountButtonVoucher').DataTable(); 
 			var rows = table.rows().remove().draw();
@@ -4775,6 +4808,7 @@ function searchAccountsButtonToVoucher(id,valueAccount,rubro){
 function selectAccountToVoucher(id,description){
 	var table = $('#datatableAccountToVoucher').DataTable();
 	idDebitos.push(id); 
+	addAccount.push({"id":id});
 	table.row.add( [
 				counter,
 				description,
@@ -4785,6 +4819,7 @@ function selectAccountToVoucher(id,description){
 	counter= counter+1;
 	$('#myModalAccountVoucher').modal('toggle');	
 }
+
 
 function createVoucherPayment(){
 
@@ -4800,17 +4835,82 @@ function createVoucherPayment(){
 		}
 	}
 	
-
 }
 
 function SendCreateVoucherPayment(){
 
 	if(totalDebitos==totalCreditos){
-		console.log("sisas");
+		if(totalVoucher==0){
+			swal("No puede guardar el pago  sin valores", "Por favor ingrese el pago", "error");
+		}
+		else{
+		 	swal({
+			title: "Desea terminar el pago ?",
+			text: "Al confirmar esta acción, el pago sera guardado",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			}).then((willDelete) => { 
+			if (willDelete) {
+
+				var paymentCode = $('input[name="numberVoucherPayment"]').val();
+				var observation = $('textarea[name="observationVoucherPayment"]').val();
+				var date = $('input[name="dateVoucherPayment"]').val();
+				
+				if (paymentCode,observation,date) {
+					// Create Ajax Call
+					$.ajax({
+						url: '{% url "createVoucherPayment"  0 %}'.replace('0', localStorage.getItem('userID')),
+						data: {
+							'bussines':localStorage.getItem('idBussines'), 
+							'obligation': $('#selectObligationVoucher').val(),
+							'paymentCode': paymentCode,
+							'origin': originID,
+							'date': date,
+							'observation': observation,
+							'value':totalVoucher,
+							'balance': totalOperateVoucher,
+							'typeDocument': $('#typeDocument').val(),
+							'payments': JSON.stringify(addVoucher),
+							'discounts': JSON.stringify(addDiscounts),
+							'accounts': JSON.stringify(addAccount)
+
+						},
+						dataType: 'json',
+						success: function (data) {
+
+							$("#divVoucherPayment").css("display", "none");
+							$("#countingToVoucher").css("display", "none");
+							$("#postSelection").css("display", "none");
+
+							swal("Creado exitoso del comprobante de pago!", "Continua con tu proceso!", "success");
+							$('textarea[name="observationVoucherPayment"]').val("");
+							addDiscounts.length=0;
+							totalVoucher=0;
+							addAccount.length=0;
+							addVoucher.length=0;
+							totalOperateVoucher=0;
+							var table = $('#dataTableVoucher').DataTable(); 
+							var rows = table.rows().remove().draw();
+							var tableD = $('#dataTableGetDiscounts').DataTable(); 
+							var rowsD = tableD.rows().remove().draw();
+							var tableAC = $('#datatableAccountToVoucher').DataTable(); 
+							var rowsAC = tableAC.rows().remove().draw();	 
+							$("#totalVoucher").text("SALDO: "+ totalVoucher);														
+							$("#totalVoucherBalance").text("OBLIGACIÓN: "+ totalOperateVoucher);		
+						}
+					});
+				} else {
+					alert("Por favor llene todos los campos");
+				}
+				return false;
+			}
+			});
+		}		
 	}else{
 		swal("El asiento contable no coincide", "Por favor revisar la operacion", "error");
-	}
-
+	} 
+		
 }
 </script>
 

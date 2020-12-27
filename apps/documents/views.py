@@ -649,7 +649,7 @@ class CreateObligation(LoginRequiredMixin,View):
                     register.save() 
 
             return JsonResponse({"CREATE": "TRUE","ID":newObligation.id})
-
+ 
 
 class GetDataToVoucherPayment(LoginRequiredMixin,View):
 
@@ -662,25 +662,6 @@ class GetDataToVoucherPayment(LoginRequiredMixin,View):
         movement = Movement.objects.filter(bussines_id=request.GET.get('bussines'),origin_id=request.GET.get('origin'), concept="OBLIGACION").values('register','id')
         obligations = Movement.objects.filter(bussines_id=request.GET.get('bussines'),origin_id=request.GET.get('origin'), concept="VOUCHER").values('vouchePayment','id','value','balance','observation','date')
         return JsonResponse({"TH": list(third),"MV":list(movement),"VP":list(obligations)}) 
-
-class GetSerialVoucherPayment(LoginRequiredMixin,View):
-
-    login_url = '/login/'
-    redirect_field_name = '/login/'
-
-    def get(self, request, *args, **kwargs):
-    
-        today = datetime.now()
-        voucherPayment = Movement.objects.filter(concept="VOUCHER", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).exists()
-
-        if voucherPayment == False:
-            voucherPaymentFormat = str(3040)+str(today.year)+str(today.month)+str(today.day)+str(0)
-            movements = Movement.objects.filter(origin_id=request.GET.get('origin'),concept="VOUCHER").values('id','value','balance','vouchePayment','observation')
-            return JsonResponse({"VP": voucherPaymentFormat,"MV": list(movements)})
-        else:        
-            lastRegister = Movement.objects.filter(concept="VOUCHER", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()
-            movements = Movement.objects.filter(origin_id=request.GET.get('origin'))
-            return JsonResponse({"VP": lastRegister.vouchePayment+1,"MV": list(movements)})
 
 #--------------Disponibilidad----------
 class GetDetallsDisponibility(LoginRequiredMixin,View):
@@ -849,7 +830,6 @@ class GetRubroImpDetailObligation(LoginRequiredMixin,View):
         rubroMov = RubroMovement.objects.filter(movement_id=request.GET.get('obligation')).values('id','nameRubro','value','balance','valueP')
         globalObligation = Movement.objects.get(id=request.GET.get('obligation'))
         rubroList = []
-        print(globalObligation.register)
        
         for x in range(0,len(list(rubroMov))):
             
@@ -962,9 +942,9 @@ class GetObligationsSelect(LoginRequiredMixin,View):
             for x in range(0,len(list(account))):
                 accountToSend.append({"code":list(account)[x]['account__account__code'],"id":list(account)[x]['account__account__id']})
         for x in range(0,len(list(accountToSend))):
-            discount = Discount.objects.filter(state='AUTOMATICO',account_id=list(accountToSend)[x]['id']).values('account__code','name','account','typeDiscount','state','acumulate','baseCalculate','average','initialValue','finalValue')
+            discount = Discount.objects.filter(state='AUTOMATICO',account_id=list(accountToSend)[x]['id']).values('account__code','name','account','typeDiscount','state','acumulate','baseCalculate','average','initialValue','finalValue','id')
             for x in range(0,len(list(discount))):
-                discountToSend.append({"name":list(discount)[x]['name'],"account_code":list(discount)[x]['account__code'],"account":list(discount)[x]['account'],"typeDiscount":list(discount)[x]['typeDiscount'],"state":list(discount)[x]['state'],"acumulate":list(discount)[x]['acumulate'],"baseCalculate":list(discount)[x]['baseCalculate'],"average":list(discount)[x]['average'],"initialValue":list(discount)[x]['initialValue'],"finalValue":list(discount)[x]['finalValue']})
+                discountToSend.append({"id":list(discount)[x]['id'],"name":list(discount)[x]['name'],"account_code":list(discount)[x]['account__code'],"account":list(discount)[x]['account'],"typeDiscount":list(discount)[x]['typeDiscount'],"state":list(discount)[x]['state'],"acumulate":list(discount)[x]['acumulate'],"baseCalculate":list(discount)[x]['baseCalculate'],"average":list(discount)[x]['average'],"initialValue":list(discount)[x]['initialValue'],"finalValue":list(discount)[x]['finalValue']})
         rubroList = []
         for x in range(0,len(list(rubroMovement))):
             rubro = Rubro.objects.get(id=list(rubroMovement)[x]['nameRubro'])
@@ -978,7 +958,7 @@ class GetDiscountsManuals(LoginRequiredMixin,View):
     redirect_field_name = '/login/'
 
     def get(self, request, *args, **kwargs):
-        discount = Discount.objects.filter(state='MANUAL',bussines_id=request.GET.get('bussines')).values('account__code','name','account','typeDiscount','state','acumulate','baseCalculate','average','initialValue','finalValue')
+        discount = Discount.objects.filter(state='MANUAL',bussines_id=request.GET.get('bussines')).values('id','account__code','name','account','typeDiscount','state','acumulate','baseCalculate','average','initialValue','finalValue')
         return JsonResponse({"DC": list(discount)}) 
 
 class GetTypeDocument(LoginRequiredMixin,View):
@@ -990,3 +970,73 @@ class GetTypeDocument(LoginRequiredMixin,View):
 
         voucher = Voucher.objects.filter(bussines_id=request.GET.get('bussines')).values('code','name','description','category','id')        
         return JsonResponse({"VC": list(voucher)}) 
+
+class CreateVoucherPayment(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+
+
+        today = datetime.now()
+        payments = json.loads(request.GET.get('payments'))
+        discounts = json.loads(request.GET.get('discounts'))
+        accounts = json.loads(request.GET.get('accounts'))
+        bussines=Bussines.objects.get(id=request.GET.get('bussines'))
+        voucher = Movement.objects.filter(concept="COMPROBANTE", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).exists()
+
+        if voucher == False:
+            voucherPaymentFormat = str(3040)+str(today.year)+str(today.month)+str(today.day)+str(0)
+            newVoucher = Movement.objects.create(
+                    bussines=bussines,concept="COMPROBANTE",value=request.GET.get('value'),balance=request.GET.get('balance'),
+                    date=today,obligation=request.GET.get('obligation'),vouchePayment=request.GET.get('paymentCode'),origin=Origin.objects.get(id=request.GET.get('origin')),observation=request.GET.get('observation')
+            )
+            
+            for x in range(0,len(payments)):
+                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation='COMPROBANTE',value=payments[x]['value'],balance=payments[x]['balance'],date=request.GET.get('date'),nameRubro=payments[x]['id']) 
+                rubroMov = RubroMovement.objects.create(bussines=bussines,value=payments[x]['value'],valueP=payments[x]['value'],balance=payments[x]['balance'],date=request.GET.get('date'),nameRubro=payments[x]['id'],movement=newVoucher) 
+                obligation = RubroMovement.objects.get(id=payments[x]['idObligation'])
+                obligation.valueP = obligation.valueP-payments[x]['value']
+                obligation.save()
+
+            for x in range(0,len(discounts)):
+                discountMovement = DiscountMovement.objects.create(discount_id=discounts[x]['id'],movement_id=newVoucher.id,base=discounts[x]['base'],value=discounts[x]['value'])              
+            for x in range(0,len(accounts)):
+                movementAcount = MovementAcount.objects.create(movement_id=newVoucher.id,account_id=accounts[x]['id'],debito=request.GET.get('debito'),credito=request.GET.get('credito'))              
+            return JsonResponse({"CREATE": "TRUE"})
+        else:        
+            lastVoucher = Movement.objects.filter(concept="COMPROBANTE", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()         
+            newVoucher = Movement.objects.create(
+                    bussines=bussines,concept="COMPROBANTE",value=request.GET.get('value'),balance=request.GET.get('balance'),
+                    date=today,obligation=request.GET.get('obligation'),vouchePayment=lastVoucher.vouchePayment+1,origin=Origin.objects.get(id=request.GET.get('origin')),observation=request.GET.get('observation')
+            )
+            for x in range(0,len(payments)):
+                rubroBalanceOperation = RubroBalanceOperation.objects.create(bussines=bussines,typeOperation='COMPROBANTE',value=payments[x]['value'],balance=payments[x]['balance'],date=request.GET.get('date'),nameRubro=payments[x]['id']) 
+                rubroMov = RubroMovement.objects.create(bussines=bussines,value=payments[x]['value'],valueP=payments[x]['value'],balance=payments[x]['balance'],date=request.GET.get('date'),nameRubro=payments[x]['id'],movement=newVoucher) 
+                obligation = RubroMovement.objects.get(id=payments[x]['idObligation'])
+                obligation.valueP = obligation.valueP-payments[x]['value']
+                obligation.save()
+            for x in range(0,len(discounts)):
+                discountMovement = DiscountMovement.objects.create(discount_id=discounts[x]['id'],movement_id=newVoucher.id,base=discounts[x]['base'],value=discounts[x]['value'])              
+            for x in range(0,len(accounts)):
+                movementAcount = MovementAcount.objects.create(movement_id=newVoucher.id,account_id=accounts[x]['id'],debito=request.GET.get('debito'),credito=request.GET.get('credito'))              
+
+            return JsonResponse({"CREATE": "TRUE"})
+
+class GetSerialVoucherPayment(LoginRequiredMixin,View):
+
+    login_url = '/login/'
+    redirect_field_name = '/login/'
+
+    def get(self, request, *args, **kwargs):
+    
+        today = datetime.now()
+        voucherPayment = Movement.objects.filter(concept="COMPROBANTE", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).exists()
+
+        if voucherPayment == False:
+            voucherPaymentFormat = str(3040)+str(today.year)+str(today.month)+str(today.day)+str(0)
+            return JsonResponse({"VP": voucherPaymentFormat})
+        else:        
+            lastRegister = Movement.objects.filter(concept="COMPROBANTE", bussines_id=request.GET.get('bussines'), origin_id=request.GET.get('origin'),date=today).last()
+            return JsonResponse({"VP": lastRegister.vouchePayment+1})
