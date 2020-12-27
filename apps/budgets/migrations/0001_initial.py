@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
     ]
-
+    print("si")
     operations = [
         migrations.CreateModel(
             name='Account',
